@@ -1,0 +1,26 @@
+<div>
+  <div class="row">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon aria-label="Torna indietro">arrow_back</mat-icon>
+    </button>
+
+    <div class="col-md-8 offset-md-2 search-results-wrapper">
+      <mat-card>
+        <mat-card-content>
+          <h2>
+            Risultati della ricerca
+          </h2>
+
+          <mat-list>
+            <mat-list-item role="listitem">Posizioni acquistabili: {{purchaseRequest.number}}</mat-list-item>
+            <mat-list-item role="listitem">Costo totale: {{purchaseRequest.cost}}</mat-list-item>
+          </mat-list>
+
+          <button mat-raised-button color="primary" (click)="purchase()" [disabled]="purchaseRequest.number === 0">
+            Procedi all'acquisto
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div>
+  <div class="row">
+    <div class="col-md-8 offset-md-2 home-wrapper">
+      <mat-card>
+        <mat-card-content>
+          <h2>
+            Home
+          </h2>
+          <mat-list>
+            <mat-list-item role="listitem" *ngIf="!isLogin()">
+              <button mat-icon-button (click)="goRegister()" class="register-button">
+                <mat-icon aria-label="Register">person_add</mat-icon>Registrazione
+              </button>
+            </mat-list-item>
+            <mat-list-item role="listitem" *ngIf="!isLogin()">
+              <button mat-icon-button (click)="goLogin()" class="login-button">
+                <mat-icon aria-label="Login">lock</mat-icon>Login
+              </button>
+            </mat-list-item>
+            <mat-list-item role="listitem" *ngIf="isLogin()">
+              <button mat-icon-button (click)="goLogin()" class="logout-button">
+                <mat-icon aria-label="Logout">exit_to_app</mat-icon>Logout
+              </button>
+            </mat-list-item>
+            <mat-list-item role="listitem" *ngIf="isLogin()">
+              <button mat-icon-button (click)="goUser()" class="login-button">
+                <mat-icon aria-label="User">account_circle</mat-icon>Utente
+              </button>
+            </mat-list-item>
+            <mat-list-item role="listitem">
+              <button mat-icon-button (click)="goFilter()" class="login-button">
+                <mat-icon aria-label="Filter">map</mat-icon>Acquista Posizioni
+              </button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

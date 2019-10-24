@@ -1,0 +1,45 @@
+<div>
+  <div class="row">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon aria-label="Torna indietro">arrow_back</mat-icon>
+    </button>
+
+    <div class="col-md-8 offset-md-2 account-wrapper">
+      <mat-card>
+        <mat-card-content>
+          <h2>
+            Login
+          </h2>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" >
+            <mat-form-field class="login-full-width">
+              <input matInput placeholder="Username"
+                     formControlName="username"
+                     [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+                     class="login-full-width"
+              >
+              <mat-error *ngIf="f.username.errors && f.username.errors.required">
+                Il nome utente è <strong>richiesto</strong>!
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="login-full-width">
+              <input matInput type="password" placeholder="Password"
+                     formControlName="password"
+                     [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                     class="login-full-width"
+              >
+              <mat-error *ngIf="f.password.errors && f.password.errors.required">
+                La password è <strong>richiesta</strong>!
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" class="login-btn" (click)="onSubmit()">
+              Accedi
+            </button>
+            <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

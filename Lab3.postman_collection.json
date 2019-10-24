@@ -1,0 +1,402 @@
+{
+	"info": {
+		"_postman_id": "3dba9832-50e7-4232-a214-770d09f28b78",
+		"name": "Lab3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get token to perform signup",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "register-app",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "register-app:secret@localhost:8080/oauth/token",
+					"host": [
+						"localhost"
+					],
+					"auth": {
+						"user": "register-app",
+						"password": "secret"
+					},
+					"port": "8080",
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInVzZXJfbmFtZSI6Im5lc2xpbmVzbGk5MyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MjY3MDQ2MTYsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiIxNjBiZjgyNS1jMzc0LTRhZjctYTNmMS0xYmMzZWNkMmQ4OWIiLCJjbGllbnRfaWQiOiJ0cnVzdGVkLWFwcCJ9.-5GYWiOImTCxxqmcIZXAHHWFKODBg8MHQ9wpWL2Nq_U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"neslinesli94\",\n\t\"password\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/api/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInNjb3BlIjpbInJlYWQiXSwiZXhwIjoxNTI2OTc2MjQwLCJhdXRob3JpdGllcyI6WyJST0xFX1JFR0lTVEVSIl0sImp0aSI6IjY2YTY4OTQwLWU0ZjMtNDQ1Yy05MTAwLWRmMTA1ZjE5YjY4ZiIsImNsaWVudF9pZCI6InJlZ2lzdGVyLWFwcCJ9._WIN8mr3mQN-TJl9iEDWR7bTXBjvyfKn8QpzkS19Hpk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"admin\",\n\t\"password\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/api/register-admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"register-admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch new access token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "neslinesli93",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "trusted-app:secret@localhost:8080/oauth/token",
+					"host": [
+						"localhost"
+					],
+					"auth": {
+						"user": "trusted-app",
+						"password": "secret"
+					},
+					"port": "8080",
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInVzZXJfbmFtZSI6Im5lc2xpbmVzbGk5MyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MjY5NzYzMjAsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiJjYTNmMzg1Zi03MmU2LTRmMmItOTI1Zi1mMDM3NDI5YTNkMzciLCJjbGllbnRfaWQiOiJ0cnVzdGVkLWFwcCJ9.BZBmlHmnalTt2T8Ue3aKI2s83i35Pqhktcb7ZoCaWBE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/api/me",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get positions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInVzZXJfbmFtZSI6Im5lc2xpbmVzbGk5MyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MjY5NzYzMjAsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiJjYTNmMzg1Zi03MmU2LTRmMmItOTI1Zi1mMDM3NDI5YTNkMzciLCJjbGllbnRfaWQiOiJ0cnVzdGVkLWFwcCJ9.BZBmlHmnalTt2T8Ue3aKI2s83i35Pqhktcb7ZoCaWBE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/api/positions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"positions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save positions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInVzZXJfbmFtZSI6Im5lc2xpbmVzbGk5MyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MjY5NDMzMzIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiI1NTQ4MjNhZC0zYjA5LTRlNmQtYTExOC0wOTNjNzRlYjlhNDgiLCJjbGllbnRfaWQiOiJ0cnVzdGVkLWFwcCJ9.5jWLI3W67f2mSH_nxl2rvGe6hsPfuBD9V6QS6yhquF8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"latitude\": 41.898813,\n\t\"longitude\": 12.490503,\n\t\"timestamp\": 1523454320\n}, {\n\t\"latitude\": 41.898820,\n\t\"longitude\": 12.490493,\n\t\"timestamp\": 1523454340\n}]"
+				},
+				"url": {
+					"raw": "localhost:8080/api/positions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"positions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Purchase request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInVzZXJfbmFtZSI6Im5lc2xpbmVzbGk5MyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MjY5NzYzMjAsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiJjYTNmMzg1Zi03MmU2LTRmMmItOTI1Zi1mMDM3NDI5YTNkMzciLCJjbGllbnRfaWQiOiJ0cnVzdGVkLWFwcCJ9.BZBmlHmnalTt2T8Ue3aKI2s83i35Pqhktcb7ZoCaWBE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"longitude\": 11.022168,\n\t\"latitude\": 41.713189\n}, {\n\t\"longitude\": 12.344361,\n\t\"latitude\": 43.223135\n}, {\n\t\"longitude\": 14.49533,\n\t\"latitude\": 41.807605\n},\n{\n\t\"longitude\": 13.235735,\n\t\"latitude\": 40.419887\n}, {\n\t\"longitude\": 11.022168,\n\t\"latitude\": 41.713189\n}]"
+				},
+				"url": {
+					"raw": "localhost:8080/api/purchases/request?from=1523454200&to=1523454500",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"purchases",
+						"request"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "1523454200"
+						},
+						{
+							"key": "to",
+							"value": "1523454500"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Purchase confirm",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInVzZXJfbmFtZSI6Im5lc2xpbmVzbGk5MyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MjY5NDMzMzIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiI1NTQ4MjNhZC0zYjA5LTRlNmQtYTExOC0wOTNjNzRlYjlhNDgiLCJjbGllbnRfaWQiOiJ0cnVzdGVkLWFwcCJ9.5jWLI3W67f2mSH_nxl2rvGe6hsPfuBD9V6QS6yhquF8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"longitude\": 11.022168,\n\t\"latitude\": 41.713189\n}, {\n\t\"longitude\": 12.344361,\n\t\"latitude\": 43.223135\n}, {\n\t\"longitude\": 14.49533,\n\t\"latitude\": 41.807605\n},\n{\n\t\"longitude\": 13.235735,\n\t\"latitude\": 40.419887\n}, {\n\t\"longitude\": 11.022168,\n\t\"latitude\": 41.713189\n}]"
+				},
+				"url": {
+					"raw": "localhost:8080/api/purchases/confirm?from=1523454200&to=1523454500",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"purchases",
+						"confirm"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "1523454200"
+						},
+						{
+							"key": "to",
+							"value": "1523454500"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user positions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTUyNjk3NjI3NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DVVNUT01FUiIsIlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXSwianRpIjoiMGNjNWM2ZDMtMTUwNS00NWQ1LWIxZTctMWU3MTdkYjcwYTI4IiwiY2xpZW50X2lkIjoidHJ1c3RlZC1hcHAifQ.nTAXmmWCkcOtZ_ilvEHQpmNlCtK_Xh7BQtBxWDUd1L4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/api/users/5afeefce2e07c124900b73fc/positions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"5afeefce2e07c124900b73fc",
+						"positions"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
