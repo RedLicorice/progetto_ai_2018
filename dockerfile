@@ -1,8 +1,6 @@
 FROM openjdk:8
 #FROM openjdk:8-jre-alpine
-ADD /target/lab3-0.0.1-SNAPSHOT.jar lab3.jar
-#COPY /classes/artifacts/lab3_jar/lab3.jar /usr/src/lab3/
-#WORKDIR /usr/src/lab3
+ADD ./target/artifacts/progetto_2018_jar/progetto_2018.jar entrypoint.jar
+
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "lab3.jar"]
-#CMD ["java", "-jar", "lab3.jar"]
+ENTRYPOINT ["java", "-jar", "entrypoint.jar"]

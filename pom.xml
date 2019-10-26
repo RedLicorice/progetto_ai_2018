@@ -4,12 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>it.polito.ai</groupId>
-  <artifactId>lab3</artifactId>
+	<artifactId>progetto_2018</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
-	<name>lab3</name>
-  <description>Lab3: REST server authenticated with Oauth2, where users can save and query geospatial data saved on mongodb</description>
+	<name>progetto_2018</name>
+	<description>Lab3: REST server authenticated with Oauth2, where users can save and query geospatial data saved on mongodb</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -87,6 +86,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>it.polito.ai.App</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

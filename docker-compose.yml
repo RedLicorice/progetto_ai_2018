@@ -1,23 +1,24 @@
 version: '3'
 services:
   db:
-    image: mongo:latest
+    image: 'mongo:latest'
     container_name: mongodb
     environment:
-      - MONGO_DATA_DIR=/data/db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
     volumes:
-      - ./tmp/configdb:/data/configdb
+      - './docker-config/mongodb:/data/configdb'
     ports:
-      - 27017:27017
-  lab3:
-    container_name: lab3
+      - '27017:27017'
+  backend:
+    container_name: backend
     build:
       context: .
       dockerfile: dockerfile
-    image: lab3:latest
+    image: 'backend:latest'
     expose:
       - 8080
     ports:
-      - 8080:8080
+      - '8080:8080'
     depends_on:
       - db
