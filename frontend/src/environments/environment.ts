@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://192.168.99.100:8080/api',
-  trusted_url: 'http://trusted-app:secret@192.168.99.100:8080/oauth/token',
-  register_url: 'http://register-app:secret@192.168.99.100:8080/oauth/token'
+  api_url: 'http://localhost:8080/api',
+  trusted_url: 'http://trusted-app:secret@localhost:8080/oauth/token',
+  register_url: 'http://register-app:secret@localhost:8080/oauth/token'
 };
 
 /*

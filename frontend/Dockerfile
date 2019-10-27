@@ -26,3 +26,4 @@ CMD ng serve --host 0.0.0.0
 # expose port 80
 EXPOSE 4200
 EXPOSE 80
+VOLUME /app/node_modules
