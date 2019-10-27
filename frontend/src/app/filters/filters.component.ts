@@ -8,7 +8,8 @@ import { PositionsService } from '../_services/positions.service';
 @Component({
   selector: 'app-filters',
   templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.css']
+  styleUrls: ['./filters.component.css'],
+  providers: [PositionsService]
 })
 export class FiltersComponent implements OnInit {
   // slider stuff
