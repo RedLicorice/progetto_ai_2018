@@ -4,23 +4,28 @@
       <mat-icon aria-label="Torna indietro">arrow_back</mat-icon>
     </button>
 
-    <div class="col-md-8 offset-md-2 search-results-wrapper">
+    <ng-template class="col-md-8 offset-md-2 search-results-wrapper">
       <mat-card>
         <mat-card-content>
           <h2>
             Risultati della ricerca
           </h2>
+          <ng-template *ngIf="!purchaseRequest; else dataFetched">
+            <img  src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            <span>Loading..</span>
+          </ng-template>
+          <ng-template #dataFetched>
+            <mat-list>
+              <mat-list-item role="listitem">Posizioni acquistabili: {{purchaseRequest.number}}</mat-list-item>
+              <mat-list-item role="listitem">Costo totale: {{purchaseRequest.cost}}</mat-list-item>
+            </mat-list>
 
-          <mat-list>
-            <mat-list-item role="listitem">Posizioni acquistabili: {{purchaseRequest.number}}</mat-list-item>
-            <mat-list-item role="listitem">Costo totale: {{purchaseRequest.cost}}</mat-list-item>
-          </mat-list>
-
-          <button mat-raised-button color="primary" (click)="purchase()" [disabled]="purchaseRequest.number === 0">
-            Procedi all'acquisto
-          </button>
+            <button mat-raised-button color="primary" (click)="purchase()" [disabled]="purchaseRequest.number === 0">
+              Procedi all'acquisto
+            </button>
+          </ng-template>
         </mat-card-content>
       </mat-card>
-    </div>
+    </ng-template>
   </div>
 </div>

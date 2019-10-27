@@ -9,7 +9,8 @@ import { PurchaseRequest } from '../_models/PurchaseRequest';
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.css']
+  styleUrls: ['./results.component.css'],
+  providers: [PositionsService]
 })
 export class ResultsComponent implements OnInit {
   purchaseRequest: PurchaseRequest;
@@ -18,6 +19,7 @@ export class ResultsComponent implements OnInit {
 
   ngOnInit() {
     if (!this.positionsService.canPurchase) {
+      console.error("PositionService denied purchase!");
       this.router.navigate(['']);
     } else {
       this.getPositionsNumber();

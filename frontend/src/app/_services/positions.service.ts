@@ -17,7 +17,7 @@ export class PositionsService {
   private polygonCoordinates: L.LatLng[] = [];
 
   // internal stuff, used for routing
-  canPurchase = false;
+  canPurchase = false; // Why is this hardwired?
 
   constructor() {}
 
