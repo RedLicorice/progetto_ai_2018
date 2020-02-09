@@ -1,0 +1,30 @@
+pipeline {
+  agent {
+    dockerfile {
+      filename 'dockerfile.build'
+    }
+    
+  }
+  stages {
+    stage('compile') {
+      steps {
+        sh 'mvn clean install'
+      }
+    }
+    stage('archive') {
+      steps {
+        parallel(
+          // "Junit": {
+            // junit 'target/surefire-reports/*.xml'
+            
+          // },
+          "Archive": {
+            archiveArtifacts(artifacts: 'target/*.jar', onlyIfSuccessful: true, fingerprint: true)
+            //archiveArtifacts(artifacts: 'target/Nadia*javadoc.jar', fingerprint: true)
+            
+          }
+        )
+      }
+    }
+  }
+}
