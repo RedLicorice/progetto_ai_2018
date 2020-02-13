@@ -7,6 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
+/*
+*   MrLicorice:
+*   This should refer to an archive, not to single positions.
+*   I would not allow multiple purchases (we'd have to handle cart etc for the same functionality)
+*   Instead let's make the purchase process quick and simple, so it won't be an issue.
+* */
 @Document(collection="purchases")
 public class Purchase {
 

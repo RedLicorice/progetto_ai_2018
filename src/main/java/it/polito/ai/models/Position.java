@@ -8,6 +8,12 @@ import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/*
+*   MrLicorice:
+*   This only represents a POINT not a PATH!
+*   It is separated from "Archive", used for showing full-precision archives
+*    to the users who purchased them or to their owner
+* */
 @Document(collection="positions")
 public class Position {
 

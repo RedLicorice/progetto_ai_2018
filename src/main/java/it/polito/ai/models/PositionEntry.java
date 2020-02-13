@@ -3,6 +3,10 @@ package it.polito.ai.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/*
+*   MrLicorice:
+*   Used for positions ingestion, this is not persisted.
+* */
 public class PositionEntry {
 
     @JsonIgnore
