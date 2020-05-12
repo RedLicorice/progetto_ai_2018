@@ -21,13 +21,13 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @GetMapping(path = "/api/me", produces = "application/json" )
+    @GetMapping(path = "/me", produces = "application/json" )
     public Account me() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return accountService.findAccountByUsername(username);
     }
 
-    @PostMapping(path = "/api/register", produces = "application/json")
+    @PostMapping(path = "/register", produces = "application/json")
     public ResponseEntity<?> register(@RequestBody Account account) {
         try {
             account.grantAuthority("ROLE_USER");
@@ -39,7 +39,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping(path = "/api/register-admin", produces = "application/json")
+    @PostMapping(path = "/register-admin", produces = "application/json")
     public ResponseEntity<?> registerAdmin(@RequestBody Account account) {
         try {
             if(accountService.existsAccountByRole("ADMIN")){

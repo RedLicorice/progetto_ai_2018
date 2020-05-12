@@ -2,15 +2,19 @@ package it.polito.ai.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 
+import java.util.*;
+
 /*
-*   ToDO: Implement the rest of the model.
 *    An archive shall:
 *       - Refer to the instances of Position included in the archive
 *       - Include an (approximated) list of points corresponding to the positions
@@ -31,8 +35,76 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 public class Archive {
     @Id
     private String id;
-    private String userId; //Owner of this archive
-    private Boolean isDeleted; // If true, archive is not available for purchase
-    private long createdAt; // When the archive was submitted
 
+    private String userId; //Owner of this archive
+
+    private Boolean isDeleted; // If true, archive is not available for purchase
+
+    // List of positions/timestamps for purchasers/owner
+    private Map<Long, GeoJsonPoint> realPositions;
+
+    // Approximated positions and timestamps
+    private List<GeoJsonPoint> positions;
+    private List<Long> timestamps;
+
+    // When the archive has been uploaded
+    @CreatedDate
+    private Date createdAt;
+    // When the archive is updated (ie soft deleted)
+    @LastModifiedDate
+    private Date modifiedAt;
+
+    public long getFirstPositionTimestamp(){
+        Set<Long> t = realPositions.keySet();
+        return Collections.min(t);
+    }
+
+    public long getLastPositionTimestamp(){
+        Set<Long> t = realPositions.keySet();
+        return Collections.max(t);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Map<Long, GeoJsonPoint> getRealPositions() {
+        return realPositions;
+    }
+
+    public void setRealPositions(Map<Long, GeoJsonPoint> realPositions) {
+        this.realPositions = realPositions;
+    }
+
+    public List<GeoJsonPoint> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<GeoJsonPoint> positions) {
+        this.positions = positions;
+    }
+
+    public List<Long> getTimestamps() {
+        return timestamps;
+    }
+
+    public void setTimestamps(List<Long> timestamps) {
+        this.timestamps = timestamps;
+    }
 }

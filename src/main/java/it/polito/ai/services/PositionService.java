@@ -13,9 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PositionService {
@@ -43,8 +41,7 @@ public class PositionService {
         return result;
     }
 
-    @Transactional
-    public void savePositions(String userId, List<PositionEntry> positions) throws InvalidPositionException {
+    public List<Position> checkPositions(String userId, List<PositionEntry> positions) throws InvalidPositionException {
         List<PositionEntry> userPositions = this.getPositions(userId, Optional.empty(), Optional.empty());
 
         int startIndex;
@@ -77,14 +74,63 @@ public class PositionService {
         }
 
         // if we get here, all the submitted positions are valid
+        List<Position> realPositions = new ArrayList<Position>(positions.size());
         for (PositionEntry position: positions) {
             Position p = new Position();
             p.setUserId(userId);
             p.setPoint(new GeoJsonPoint(position.getLongitude(), position.getLatitude()));
             p.setTimestamp(position.getTimestamp());
 
-            positionRepo.save(p);
+            realPositions.add(p);
         }
+        return realPositions;
+    }
+
+    @Transactional
+    public List<Position> savePositions(String userId, List<PositionEntry> positions) throws InvalidPositionException {
+        List<PositionEntry> userPositions = this.getPositions(userId, Optional.empty(), Optional.empty());
+
+        int startIndex;
+        PositionEntry lastValidPosition = null;
+        if (userPositions.size() > 0) {
+            lastValidPosition = userPositions.get(userPositions.size() - 1);
+            startIndex = 0;
+        } else {
+            lastValidPosition = positions.get(0);
+            startIndex = 1;
+        }
+
+        if (lastValidPosition == null) {
+            throw new InvalidPositionException("Invalid last position");
+        }
+
+        if (!lastValidPosition.checkIfValid()) {
+            throw new InvalidPositionException("Invalid last position");
+        }
+
+        // check that all the positions are valid
+        PositionEntry previous = lastValidPosition;
+        for (int i = startIndex; i < positions.size(); i++) {
+            PositionEntry current = positions.get(i);
+            if (!current.checkIfValid() || current.getTimestamp() < previous.getTimestamp() || current.getSpeed(previous) > THRESHOLD) {
+                throw new InvalidPositionException("Position " + (i + 1) + " is not valid");
+            }
+
+            previous = current;
+        }
+
+        // if we get here, all the submitted positions are valid
+        List<Position> realPositions = new ArrayList<Position>(positions.size());
+        for (PositionEntry position: positions) {
+            Position p = new Position();
+            p.setUserId(userId);
+            p.setPoint(new GeoJsonPoint(position.getLongitude(), position.getLatitude()));
+            p.setTimestamp(position.getTimestamp());
+            positionRepo.save(p);
+
+            realPositions.add(p);
+        }
+        return realPositions;
     }
 
     public List<PositionEntry> getPositions(

@@ -15,11 +15,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 *    to the users who purchased them or to their owner
 * */
 @Document(collection="positions")
-public class Position {
+public class Position implements Comparable<Position> {
 
     @Id
     private String id;
     private String userId;
+
+    private String archiveId;
 
     @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private GeoJsonPoint point;
@@ -47,5 +49,21 @@ public class Position {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getArchiveId() {
+        return archiveId;
+    }
+
+    public void setArchiveId(String archiveId) {
+        this.archiveId = archiveId;
+    }
+
+    @Override
+    public int compareTo(Position position) {
+        long diff = timestamp - position.getTimestamp();
+        if(diff == 0)
+            return 0;
+        return diff > 0 ? 1 : -1;
     }
 }

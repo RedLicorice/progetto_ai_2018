@@ -31,13 +31,13 @@ public class AdminController {
     private PurchaseService purchaseService;
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping(path="/api/users", produces="application/json")
+    @GetMapping(path="/admin/users", produces="application/json")
     public List<Account> getUsers() {
         return accountService.findAll();
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping(path="/api/users/{userId}/positions", produces="application/json")
+    @GetMapping(path="/admin/users/{userId}/positions", produces="application/json")
     public List<PositionEntry> getPositions(
             @PathVariable String userId,
             @RequestParam Optional<Long> from,
@@ -47,7 +47,7 @@ public class AdminController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping(path="/api/users/{userId}/purchases", produces="application/json")
+    @GetMapping(path="/admin/users/{userId}/purchases", produces="application/json")
     public List<Purchase> getPurchases(
             @PathVariable String userId
     ) {
@@ -55,7 +55,7 @@ public class AdminController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping(path="/api/users/grant/{role}/{userId}", produces="application/json")
+    @GetMapping(path="/admin/users/grant/{role}/{userId}", produces="application/json")
     public ResponseEntity<?> grantRole(
             @PathVariable String userId,
             @PathVariable String role
