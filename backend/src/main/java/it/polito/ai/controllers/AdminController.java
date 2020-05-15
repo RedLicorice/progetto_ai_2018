@@ -2,7 +2,7 @@ package it.polito.ai.controllers;
 
 import it.polito.ai.models.*;
 import it.polito.ai.services.AccountService;
-import it.polito.ai.services.PositionService;
+import it.polito.ai.services.ArchiveService;
 import it.polito.ai.services.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import java.util.Optional;
 public class AdminController {
 
     @Autowired
-    private PositionService positionService;
+    private ArchiveService archiveService;
 
     @Autowired
     private AccountService accountService;
@@ -38,12 +38,12 @@ public class AdminController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(path="/admin/users/{userId}/positions", produces="application/json")
-    public List<PositionEntry> getPositions(
+    public List<Archive> getPositions(
             @PathVariable String userId,
             @RequestParam Optional<Long> from,
             @RequestParam Optional<Long> to
     ) {
-        return positionService.getPositions(userId, from, to);
+        return archiveService.getArchives(userId);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

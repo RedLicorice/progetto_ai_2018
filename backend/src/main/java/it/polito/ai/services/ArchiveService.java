@@ -3,7 +3,6 @@ package it.polito.ai.services;
 import it.polito.ai.exceptions.ArchiveNotFoundException;
 import it.polito.ai.exceptions.InvalidPositionException;
 import it.polito.ai.models.Archive;
-import it.polito.ai.models.Position;
 import it.polito.ai.models.PositionEntry;
 import it.polito.ai.repositories.ArchiveRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +80,10 @@ public class ArchiveService {
             throw new ArchiveNotFoundException(archiveId);
         }
         return oa.get();
+    }
+
+    public List<Archive> getArchivesWithinPolygon(String userId){
+        return archiveRepo.findAllByUserIdEquals(userId);
     }
 
     public void deleteArchive(String userId, String archiveId) throws ArchiveNotFoundException {

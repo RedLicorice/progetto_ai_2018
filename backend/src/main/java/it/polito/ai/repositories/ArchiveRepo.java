@@ -1,8 +1,6 @@
 package it.polito.ai.repositories;
 
-import it.polito.ai.models.Account;
 import it.polito.ai.models.Archive;
-import it.polito.ai.models.Position;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;

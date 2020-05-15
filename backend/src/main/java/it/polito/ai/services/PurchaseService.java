@@ -19,17 +19,17 @@ public class PurchaseService {
     private PurchaseRepo purchaseRepo;
 
     @Autowired
-    private PositionService positionService;
+    private AccountService accountService;
 
     @Autowired
-    private AccountService accountService;
+    private ArchiveService archiveService;
 
     public PurchaseResponse requestPurchase(
             List<PositionEntry> positions,
             Long from,
             Long to
     ) {
-        List<PositionEntry> points = positionService.getPositionsWithinPolygon(positions, from, to);
+        List<PositionEntry> points = archiveService.getArchivesWithinPolygon(positions, from, to);
 
         PurchaseResponse response = new PurchaseResponse();
         response.setAmount(points.size() * COST_PER_POSITION);

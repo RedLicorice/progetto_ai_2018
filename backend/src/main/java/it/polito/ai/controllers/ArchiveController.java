@@ -5,7 +5,6 @@ import it.polito.ai.exceptions.InvalidPositionException;
 import it.polito.ai.models.*;
 import it.polito.ai.services.AccountService;
 import it.polito.ai.services.ArchiveService;
-import it.polito.ai.services.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +17,6 @@ import java.util.Optional;
 
 @RestController
 public class ArchiveController {
-
-    @Autowired
-    private PositionService positionService;
 
     @Autowired
     private AccountService accountService;
