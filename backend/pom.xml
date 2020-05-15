@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>it.polito.ai</groupId>
-	<artifactId>progetto_2018</artifactId>
+	<artifactId>mobile_data_marketplace</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>progetto_2018</name>
-	<description>Lab3: REST server authenticated with Oauth2, where users can save and query geospatial data saved on mongodb</description>
+	<name>Mobile Data Marketplace</name>
+	<description>Mobile data marketplace for commercialization of user-provided personal data</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
