@@ -87,6 +87,7 @@ public class StoreService {
         }
         Invoice invoice = new Invoice();
         invoice.setUsername(username);
+        //ToDo: Price should be the sum of each archive's price!
         invoice.setAmount(archives.get().size() * COST_PER_ARCHIVE);
         invoice.setArchives(archives.get());
         invoice.setPaid(false);
@@ -112,21 +113,10 @@ public class StoreService {
         buyer.get().setWallet(buyer.get().getWallet() - invoice.get().getAmount());
         accountRepo.save(buyer.get());
         for(String archive : invoice.get().getArchives()){
-            Optional<Archive> archive = archiveRepo.
-            Optional<Account> seller = accountRepo.findByUsername(sellerUsername);
-            if(!seller.isPresent())
-                throw new UserNotFoundException(sellerUsername);
-            seller.get().setWallet(seller.get().getWallet() + amount);
+            //ToDO: credit each archive's price to its owner and increase purchase count.
         }
-
-
         invoice.get().setPaid(true);
         invoiceRepo.save(invoice.get());
         return invoice.get();
     }
-
-    public List<Purchase> getPurchases(String userId) {
-        return purchaseRepo.findAllByUserIdEquals(userId);
-    }
-
 }
