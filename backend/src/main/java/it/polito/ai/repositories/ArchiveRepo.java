@@ -6,17 +6,8 @@ import org.springframework.data.repository.Repository;
 import java.util.List;
 import java.util.Optional;
 
-public interface ArchiveRepo extends Repository<Archive, String> {
-
-    List<Archive> findAllByUserIdEquals(String userId);
-    Optional<Archive> findById(String id);
-    Optional<Archive> findByIdAndUserIdEquals(String archiveId, String userId);
-    List<Archive> findAllByUserIdEqualsAndTimestampAfter(String userId, long from);
-    List<Archive> findAllByUserIdEqualsAndTimestampBefore(String userId, long to);
-    List<Archive> findAllByUserIdEqualsAndTimestampBetween(String userId, long from, long to);
-    List<Archive> findAllByTimestampBetween(long from, long to);
-
-    Archive save(Archive position);
-
-    void deleteArchiveById(String id);
+public interface ArchiveRepo  extends Repository<Archive, String> {
+    public Archive save(Archive a);
+    public Optional<Archive> findById(String id);
+    public Optional<List<Archive>> findAllByUsername(String username);
 }

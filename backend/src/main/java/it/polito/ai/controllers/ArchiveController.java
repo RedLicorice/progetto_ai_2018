@@ -1,6 +1,6 @@
 package it.polito.ai.controllers;
 
-import it.polito.ai.exceptions.ArchiveNotFoundException;
+import it.polito.ai.exceptions.MeasuresNotFoundException;
 import it.polito.ai.exceptions.InvalidPositionException;
 import it.polito.ai.models.*;
 import it.polito.ai.services.AccountService;
@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class ArchiveController {
@@ -38,7 +37,7 @@ public class ArchiveController {
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(path="/archives", produces="application/json")
     public ResponseEntity<?> store(
-            @RequestBody List<PositionEntry> positionEntries,
+            @RequestBody List<MeasureSubmission> positionEntries,
             Authentication authentication
     ) {
         /*
@@ -68,7 +67,7 @@ public class ArchiveController {
             Archive a = archiveService.getArchive(userId, archiveId);
             return new ResponseEntity<Archive>(a, HttpStatus.OK);
         }
-        catch(ArchiveNotFoundException e) {
+        catch(MeasuresNotFoundException e) {
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
@@ -84,7 +83,7 @@ public class ArchiveController {
         try {
             archiveService.deleteArchive(userId, archiveId);
         }
-        catch(ArchiveNotFoundException e){
+        catch(MeasuresNotFoundException e){
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Object>(HttpStatus.OK);

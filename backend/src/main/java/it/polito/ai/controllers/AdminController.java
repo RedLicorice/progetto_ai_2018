@@ -3,7 +3,7 @@ package it.polito.ai.controllers;
 import it.polito.ai.models.*;
 import it.polito.ai.services.AccountService;
 import it.polito.ai.services.ArchiveService;
-import it.polito.ai.services.PurchaseService;
+import it.polito.ai.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class AdminController {
     private AccountService accountService;
 
     @Autowired
-    private PurchaseService purchaseService;
+    private StoreService purchaseService;
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(path="/admin/users", produces="application/json")

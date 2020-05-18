@@ -23,7 +23,7 @@ public class Purchase {
 
     @JsonIgnore
     private int positionsNumber;
-    private List<PositionEntry> positions;
+    private List<MeasureSubmission> positions;
     private double amount;
 
     public String getUserId() {
@@ -44,11 +44,11 @@ public class Purchase {
         this.positionsNumber = positionsNumber;
     }
 
-    public List<PositionEntry> getPositions() {
+    public List<MeasureSubmission> getPositions() {
         return positions;
     }
 
-    public void setPositions(List<PositionEntry> positions) {
+    public void setPositions(List<MeasureSubmission> positions) {
         this.positions = positions;
     }
 

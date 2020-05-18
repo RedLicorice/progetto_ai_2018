@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 *   MrLicorice:
 *   Used for positions ingestion, this is not persisted.
 * */
-public class PositionEntry {
+public class MeasureSubmission {
 
     @JsonIgnore
     private String userId;
@@ -57,7 +57,7 @@ public class PositionEntry {
     }
 
     //Returns distance between two positions
-    public double getDistance(PositionEntry that) {
+    public double getDistance(MeasureSubmission that) {
         final int R = 6371; // Radius of the earth
 
         double latDistance = Math.toRadians(that.getLatitude() - this.getLatitude());
@@ -71,7 +71,7 @@ public class PositionEntry {
         return distance;
     }
 
-    public double getSpeed(PositionEntry that){
+    public double getSpeed(MeasureSubmission that){
         long time = this.getTimestamp() - that.getTimestamp();
         if (time != 0){
             return (this.getDistance(that)*1000)/time;
