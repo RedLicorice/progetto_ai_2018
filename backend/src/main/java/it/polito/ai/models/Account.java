@@ -122,4 +122,8 @@ public class Account implements UserDetails {
     public void setWallet(double wallet) {
         this.wallet = wallet;
     }
+
+    public void addWallet(double amount) {
+        this.wallet += amount;
+    }
 }

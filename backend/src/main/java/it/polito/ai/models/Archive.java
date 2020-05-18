@@ -39,6 +39,10 @@ public class Archive {
         this.purchases = purchases;
     }
 
+    public void addPurchases(Integer amount) {
+        this.purchases += amount;
+    }
+
     public Integer getPrice() {
         return price;
     }

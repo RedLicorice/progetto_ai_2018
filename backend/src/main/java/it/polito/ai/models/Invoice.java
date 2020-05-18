@@ -12,7 +12,7 @@ public class Invoice {
     private String id;
     private String username;
     private double amount;
-    private List<String> archives;
+    private List<String> archiveIds;
     private Boolean isPaid;
     @CreatedDate
     private Long createdAt;
@@ -23,11 +23,11 @@ public class Invoice {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-    public List<String> getArchives() {
-        return archives;
+    public List<String> getArchiveIds() {
+        return archiveIds;
     }
-    public void setArchives(List<String> archives) {
-        this.archives = archives;
+    public void setArchiveIds(List<String> archives) {
+        this.archiveIds = archives;
     }
 
     public Boolean getPaid() {

@@ -1,11 +1,9 @@
 package it.polito.ai.services;
 
-import it.polito.ai.exceptions.InvoiceNotFoundException;
-import it.polito.ai.exceptions.NoResultsException;
-import it.polito.ai.exceptions.NotEnoughFundsException;
-import it.polito.ai.exceptions.UserNotFoundException;
+import it.polito.ai.exceptions.*;
 import it.polito.ai.models.*;
 import it.polito.ai.repositories.AccountRepo;
+import it.polito.ai.repositories.ArchiveRepo;
 import it.polito.ai.repositories.InvoiceRepo;
 import it.polito.ai.repositories.MeasureRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +29,9 @@ public class StoreService {
 
     @Autowired
     private MeasureRepo measureRepo;
+
+    @Autowired
+    private ArchiveRepo archiveRepo;
 
     @Autowired
     private ArchiveService archiveService;
@@ -95,17 +96,17 @@ public class StoreService {
             GeoJsonPolygon polygon // User selects a subset of displayed data by tracing a polygon on the map
     ) throws NoResultsException
     {
-        Optional<List<String>> archives = measureRepo.findDistinctArchiveByUsernameInAndTimestampBetweenAndPositionWithin(
+        Optional<List<String>> archiveIds = measureRepo.findDistinctArchiveByUsernameInAndTimestampBetweenAndPositionWithin(
                 users, from, to, polygon
         );
-        if(!archives.isPresent()){
+        Optional<List<Archive>> archives = archiveRepo.findAllByIdIn(archiveIds.get());
+        if(!archiveIds.isPresent() || !archives.isPresent()){
             throw new NoResultsException();
         }
         Invoice invoice = new Invoice();
         invoice.setUsername(username);
-        //ToDo: Invoice amount should be the sum of each archive's price!
-        invoice.setAmount(archives.get().size() * COST_PER_ARCHIVE);
-        invoice.setArchives(archives.get());
+        invoice.setAmount(archives.get().stream().mapToDouble(a -> a.getPrice()).sum());
+        invoice.setArchiveIds(archiveIds.get());
         invoice.setPaid(false);
         invoiceRepo.save(invoice);
         return invoice;
@@ -115,7 +116,7 @@ public class StoreService {
     public Invoice payInvoice(
             String username,
             String invoiceId
-    ) throws InvoiceNotFoundException, UserNotFoundException, NotEnoughFundsException
+    ) throws InvoiceNotFoundException, UserNotFoundException, NotEnoughFundsException, ArchiveNotFoundException
     {
         Optional<Invoice> invoice = invoiceRepo.findByIdAndUsername(invoiceId, username);
         if(!invoice.isPresent()){
@@ -128,8 +129,18 @@ public class StoreService {
             throw new NotEnoughFundsException(username, invoice.get().getAmount());
         buyer.get().setWallet(buyer.get().getWallet() - invoice.get().getAmount());
         accountRepo.save(buyer.get());
-        for(String archive : invoice.get().getArchives()){
+        for(String archiveId : invoice.get().getArchiveIds()){
             //ToDO: increase purchase count for each archive and credit price to its owner.
+            Optional<Archive> arc = archiveRepo.findById(archiveId);
+            if(!arc.isPresent())
+                throw new ArchiveNotFoundException(archiveId);
+            Optional<Account> acc = accountRepo.findByUsername(arc.get().getUsername());
+            if(!acc.isPresent())
+                throw new UserNotFoundException(arc.get().getUsername());
+            acc.get().addWallet(arc.get().getPrice());
+            arc.get().addPurchases(1);
+            archiveRepo.save(arc.get());
+            accountRepo.save(acc.get());
         }
         invoice.get().setPaid(true);
         invoiceRepo.save(invoice.get());
