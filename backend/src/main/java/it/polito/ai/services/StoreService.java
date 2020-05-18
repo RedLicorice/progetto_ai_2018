@@ -13,6 +13,8 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,38 +39,52 @@ public class StoreService {
     /*
     * Returns approximate measures by input filters
     * */
-    public List<Measure> searchData(
-            GeoJsonPolygon rect, // The rectangle currently shown in the map
-            List<String> users,
-            Long from,
-            Long to
+    public List<GeoJsonPoint> searchPointsInRect(
+            GeoJsonPolygon rect
     ) throws NoResultsException
     {
-        Optional<List<Measure>> measures_getter = measureRepo.findAllByPositionWithin(rect);
-        if(!measures_getter.isPresent()){
+        Optional<List<Measure>> getter = measureRepo.findAllByPositionWithin(rect);
+        if(!getter.isPresent()) {
             throw new NoResultsException();
         }
-        List<Measure> measures = measures_getter.get();
-        //Apply filters
-        if(!users.isEmpty()){
-            measures.removeIf(m -> (!users.contains(m.getUsername())));
-        }
-        if(from != 0 && to != 0){
-            measures.removeIf(m -> (m.getTimestamp() < from || m.getTimestamp() > to));
-        }
-        // Approximate
-        for(Measure m : measures){
+        List<GeoJsonPoint> result = new LinkedList<>();
+        for(Measure m : getter.get()){
             // Round timestamp to last minute
-            long roundedTimestamp = m.getTimestamp() - m.getTimestamp() % 60;
+            //long roundedTimestamp = m.getTimestamp() - m.getTimestamp() % 60;
             // Round coordinates to second decimal digit
             GeoJsonPoint p = m.getPosition();
             Double lat = Math.round(p.getY() * 100.0) / 100.0;
             Double lng = Math.round(p.getX() * 100.0) / 100.0;
 
-            m.setTimestamp(roundedTimestamp);
-            m.setPosition(new GeoJsonPoint(lng, lat));
+            result.add(new GeoJsonPoint(lng, lat));
         }
-        return measures;
+        return result;
+    }
+
+    public List<Long> searchTimestampsInRect(
+            GeoJsonPolygon rect
+    ) throws NoResultsException
+    {
+        Optional<List<Long>> getter = measureRepo.findDistinctTimestampByPositionWithin(rect);
+        if(!getter.isPresent()) {
+            throw new NoResultsException();
+        }
+        List<Long> result = new LinkedList<>();
+        for(Long ts : getter.get()){
+            result.add(ts - ts % 60);
+        }
+        return result;
+    }
+
+    public List<String> searchUsernamesInRect(
+            GeoJsonPolygon rect
+    ) throws NoResultsException
+    {
+        Optional<List<String>> getter = measureRepo.findDistinctUsernameByPositionWithin(rect);
+        if(!getter.isPresent()) {
+            throw new NoResultsException();
+        }
+        return getter.get();
     }
 
     public Invoice createInvoice(

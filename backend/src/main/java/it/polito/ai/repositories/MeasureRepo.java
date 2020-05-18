@@ -11,6 +11,12 @@ public interface MeasureRepo extends Repository<Measure, String> {
     Optional<List<Measure>> findAllByPositionWithin(
             GeoJsonPolygon polygon
     );
+    Optional<List<String>> findDistinctUsernameByPositionWithin(
+            GeoJsonPolygon polygon
+    );
+    Optional<List<Long>> findDistinctTimestampByPositionWithin(
+            GeoJsonPolygon polygon
+    );
     Optional<List<String>> findDistinctArchiveByUsernameInAndTimestampBetweenAndPositionWithin(
             List<String> users,
             Long begin,
