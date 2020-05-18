@@ -103,7 +103,7 @@ public class StoreService {
         }
         Invoice invoice = new Invoice();
         invoice.setUsername(username);
-        //ToDo: Price should be the sum of each archive's price!
+        //ToDo: Invoice amount should be the sum of each archive's price!
         invoice.setAmount(archives.get().size() * COST_PER_ARCHIVE);
         invoice.setArchives(archives.get());
         invoice.setPaid(false);
@@ -129,7 +129,7 @@ public class StoreService {
         buyer.get().setWallet(buyer.get().getWallet() - invoice.get().getAmount());
         accountRepo.save(buyer.get());
         for(String archive : invoice.get().getArchives()){
-            //ToDO: credit each archive's price to its owner and increase purchase count.
+            //ToDO: increase purchase count for each archive and credit price to its owner.
         }
         invoice.get().setPaid(true);
         invoiceRepo.save(invoice.get());
