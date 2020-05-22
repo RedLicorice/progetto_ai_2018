@@ -130,7 +130,6 @@ public class StoreService {
         buyer.get().setWallet(buyer.get().getWallet() - invoice.get().getAmount());
         accountRepo.save(buyer.get());
         for(String archiveId : invoice.get().getArchiveIds()){
-            //ToDO: increase purchase count for each archive and credit price to its owner.
             Optional<Archive> arc = archiveRepo.findById(archiveId);
             if(!arc.isPresent())
                 throw new ArchiveNotFoundException(archiveId);
