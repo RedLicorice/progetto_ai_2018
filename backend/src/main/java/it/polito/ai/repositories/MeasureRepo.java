@@ -24,7 +24,7 @@ public interface MeasureRepo extends Repository<Measure, String> {
             GeoJsonPolygon polygon
     );
     Optional<List<Measure>> findAllByArchiveId(String archiveId);
-    Optional<List<String>> findDistinctArchiveByUsername(String username);
-    Optional<Measure> findTopByOrderByTimestampByUsername(String username);
+    //Optional<Measure> findTopByOrderByTimestampByUsername(String username);
+    Optional<Measure> findTopByOrderByTimestampAscUsername(String username);
     Measure save(Measure m);
 }

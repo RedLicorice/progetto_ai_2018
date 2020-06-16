@@ -56,7 +56,7 @@ public class MeasureSubmission {
         return true;
     }
 
-    //Returns distance between two positions
+    //Returns distance between two GPS positions in meters
     public double getDistance(MeasureSubmission that) {
         final int R = 6371; // Radius of the earth
 
@@ -72,9 +72,12 @@ public class MeasureSubmission {
     }
 
     public double getSpeed(MeasureSubmission that){
+        // Time between the two measurements in seconds (timestamps are unix epoch)
         long time = this.getTimestamp() - that.getTimestamp();
         if (time != 0){
-            return (this.getDistance(that)*1000)/time;
+            //Distance was multiplied by 1000, we don't want that.
+            // We measure speed in meters per second m/s.
+            return (this.getDistance(that))/time;
         }
 
         return 0;

@@ -49,11 +49,8 @@ public class ArchiveController {
             @RequestBody List<MeasureSubmission> positionEntries,
             Authentication authentication
     ) {
-        Account account = accountService.findAccountByUsername(authentication.getName());
-        String userId = account.getId();
-
         try {
-            Archive a = archiveService.createArchive(userId, positionEntries);
+            Archive a = archiveService.createArchive(authentication.getName(), positionEntries);
             return new ResponseEntity<Object>(a, HttpStatus.CREATED);
         } catch (InvalidPositionException e) {
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -61,7 +58,7 @@ public class ArchiveController {
     }
 
     @PreAuthorize("hasAnyRole('USER')")
-    @GetMapping(path="archive/{archiveId}", produces="application/json")
+    @GetMapping(path="archives/{archiveId}", produces="application/json")
     public ResponseEntity<?> show(
             @PathVariable String archiveId,
             Authentication authentication
@@ -90,7 +87,7 @@ public class ArchiveController {
     }
 
     @PreAuthorize("hasAnyRole('USER')")
-    @RequestMapping(path="archive/{archiveId}", produces="application/json", method=RequestMethod.DELETE)
+    @RequestMapping(path="archives/{archiveId}", produces="application/json", method=RequestMethod.DELETE)
     public ResponseEntity<?> delete(
             @PathVariable String archiveId,
             Authentication authentication

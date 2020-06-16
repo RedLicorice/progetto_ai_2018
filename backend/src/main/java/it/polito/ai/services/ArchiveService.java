@@ -19,7 +19,7 @@ import java.util.*;
 
 @Service
 public class ArchiveService {
-    private static final int SPEED_THRESHOLD = 100;
+    private static final int SPEED_THRESHOLD = 10; // Average sprint speed for humans is 32 km/h which is roughly 9 m/s
     private static final int PRICE_PER_POSITION = 1;
 
     @Autowired
@@ -30,7 +30,7 @@ public class ArchiveService {
 
     // Check that submitted positions are valid
     protected void checkPositions(String username, List<MeasureSubmission> positions) throws InvalidPositionException{
-        Optional<Measure> last = measureRepo.findTopByOrderByTimestampByUsername(username);
+        Optional<Measure> last = measureRepo.findTopByOrderByTimestampAscUsername(username);
         long previous_timestamp = 0;
         if(last.isPresent()){
             previous_timestamp = last.get().getTimestamp();
@@ -40,8 +40,17 @@ public class ArchiveService {
         MeasureSubmission previous = null;
         int i = 0;
         for(MeasureSubmission current: positions){
-            if (!current.checkIfValid() || previous_timestamp > 0 && current.getTimestamp() < previous_timestamp || previous != null && current.getSpeed(previous) > SPEED_THRESHOLD) {
-                throw new InvalidPositionException("Position " + (i + 1) + " is not valid");
+            if (!current.checkIfValid()) {
+                throw new InvalidPositionException("Position " + (i + 1) + " is not valid (check)");
+            }
+            if (previous_timestamp > 0 && current.getTimestamp() < previous_timestamp) {
+                throw new InvalidPositionException("Position " + (i + 1) + " is not valid (timestamp)");
+            }
+            if (previous != null) {
+                double speed = current.getSpeed(previous);
+                if (speed > SPEED_THRESHOLD) {
+                    throw new InvalidPositionException("Position " + (i + 1) + " is not valid (speed "+ (speed) +")");
+                }
             }
             previous = current;
             previous_timestamp = current.getTimestamp();
@@ -58,6 +67,7 @@ public class ArchiveService {
         a.setPurchases(0);
         a.setPrice(positionEntries.size() * PRICE_PER_POSITION);
         a.setMeasures(positionEntries.size());
+        a.setDeleted(false);
         archiveRepo.save(a);
 
         List<Measure> measures = new LinkedList<>();
