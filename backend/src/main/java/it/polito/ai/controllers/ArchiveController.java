@@ -1,10 +1,10 @@
 package it.polito.ai.controllers;
 
-import it.polito.ai.exceptions.MeasuresNotFoundException;
-import it.polito.ai.exceptions.InvalidPositionException;
+import it.polito.ai.exceptions.*;
 import it.polito.ai.models.*;
 import it.polito.ai.services.AccountService;
 import it.polito.ai.services.ArchiveService;
+import it.polito.ai.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +23,24 @@ public class ArchiveController {
     @Autowired
     private ArchiveService archiveService;
 
+    @Autowired
+    private StoreService storeService;
+
     @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(path="/archives", produces="application/json")
     public ResponseEntity<?> index(Authentication authentication
     ) {
-        Account account = accountService.findAccountByUsername(authentication.getName());
-        String userId = account.getId();
 
-        List<Archive> archives = archiveService.getArchives(userId);
-        return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
+        try{
+            List<Archive> archives = archiveService.getArchivesByUsername(authentication.getName());
+            return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
+        }
+        catch(MeasuresNotFoundException e){
+            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+        }
+        catch(UserHasNoArchivesException e){
+            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
+        }
     }
 
     @PreAuthorize("hasAnyRole('USER')")
@@ -40,9 +49,6 @@ public class ArchiveController {
             @RequestBody List<MeasureSubmission> positionEntries,
             Authentication authentication
     ) {
-        /*
-        *
-        * */
         Account account = accountService.findAccountByUsername(authentication.getName());
         String userId = account.getId();
 
@@ -61,13 +67,24 @@ public class ArchiveController {
             Authentication authentication
     ) {
         Account account = accountService.findAccountByUsername(authentication.getName());
-        String userId = account.getId();
-
-        try {
-            Archive a = archiveService.getArchive(userId, archiveId);
-            return new ResponseEntity<Archive>(a, HttpStatus.OK);
+        // If user has purchased the archive
+        if (storeService.hasPurchasedItem(account.getUsername(), archiveId)){
+            try {
+                Archive a = archiveService.getArchive(archiveId);
+                ArchiveDownload ad = archiveService.downloadArchive(a);
+                return new ResponseEntity<ArchiveDownload>(ad, HttpStatus.OK);
+            } catch(ArchiveNotFoundException | MeasuresNotFoundException e){
+                return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+            }
         }
-        catch(MeasuresNotFoundException e) {
+
+        //If the user is the owner of the archive.
+        try {
+            Archive a = archiveService.getUserArchive(account.getUsername(), archiveId);
+            ArchiveDownload ad = archiveService.downloadArchive(a);
+            return new ResponseEntity<ArchiveDownload>(ad, HttpStatus.OK);
+        }
+        catch(MeasuresNotFoundException | ArchiveNotFoundException e) {
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
@@ -83,7 +100,7 @@ public class ArchiveController {
         try {
             archiveService.deleteArchive(userId, archiveId);
         }
-        catch(MeasuresNotFoundException e){
+        catch(ArchiveNotFoundException | MeasuresNotFoundException e){
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Object>(HttpStatus.OK);

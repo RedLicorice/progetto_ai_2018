@@ -17,13 +17,13 @@ public interface MeasureRepo extends Repository<Measure, String> {
     Optional<List<Long>> findDistinctTimestampByPositionWithin(
             GeoJsonPolygon polygon
     );
-    Optional<List<String>> findDistinctArchiveByUsernameInAndTimestampBetweenAndPositionWithin(
+    Optional<List<String>> findDistinctArchiveIdByUsernameInAndTimestampBetweenAndPositionWithin(
             List<String> users,
             Long begin,
             Long end,
             GeoJsonPolygon polygon
     );
-    Optional<List<Measure>> findAllByArchive(String guid);
+    Optional<List<Measure>> findAllByArchiveId(String archiveId);
     Optional<List<String>> findDistinctArchiveByUsername(String username);
     Optional<Measure> findTopByOrderByTimestampByUsername(String username);
     Measure save(Measure m);

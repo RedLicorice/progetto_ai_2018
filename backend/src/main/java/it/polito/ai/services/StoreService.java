@@ -88,7 +88,7 @@ public class StoreService {
         return getter.get();
     }
 
-    public Invoice createInvoice(
+    public List<Invoice> createInvoices(
             String username, // The buyer's username
             List<String> users, // User selects a subset of users from which he wants to buy the archives
             Long from, // User can select a specific time interval for the purchased archivees
@@ -96,20 +96,25 @@ public class StoreService {
             GeoJsonPolygon polygon // User selects a subset of displayed data by tracing a polygon on the map
     ) throws NoResultsException
     {
-        Optional<List<String>> archiveIds = measureRepo.findDistinctArchiveByUsernameInAndTimestampBetweenAndPositionWithin(
+        Optional<List<String>> archiveIds = measureRepo.findDistinctArchiveIdByUsernameInAndTimestampBetweenAndPositionWithin(
                 users, from, to, polygon
         );
         Optional<List<Archive>> archives = archiveRepo.findAllByIdIn(archiveIds.get());
         if(!archiveIds.isPresent() || !archives.isPresent()){
             throw new NoResultsException();
         }
-        Invoice invoice = new Invoice();
-        invoice.setUsername(username);
-        invoice.setAmount(archives.get().stream().mapToDouble(a -> a.getPrice()).sum());
-        invoice.setArchiveIds(archiveIds.get());
-        invoice.setPaid(false);
-        invoiceRepo.save(invoice);
-        return invoice;
+        List<Invoice> invoiceList = new LinkedList<>();
+        for(Archive a : archives.get()){
+            Invoice invoice = new Invoice();
+            invoice.setUsername(username);
+            invoice.setAmount(a.getPrice());
+            invoice.setArchiveId(a.getId());
+            invoice.setPaid(false);
+            invoiceRepo.save(invoice);
+            invoiceList.add(invoice);
+        }
+
+        return invoiceList;
     }
 
     @Transactional
@@ -120,7 +125,7 @@ public class StoreService {
     {
         Optional<Invoice> invoice = invoiceRepo.findByIdAndUsername(invoiceId, username);
         if(!invoice.isPresent()){
-            throw new InvoiceNotFoundException(invoiceId, username);
+            throw new InvoiceNotFoundException("Invoice " + invoiceId + " not found for user " + username);
         }
         Optional<Account> buyer = accountRepo.findByUsername(username);
         if(!buyer.isPresent())
@@ -129,20 +134,48 @@ public class StoreService {
             throw new NotEnoughFundsException(username, invoice.get().getAmount());
         buyer.get().setWallet(buyer.get().getWallet() - invoice.get().getAmount());
         accountRepo.save(buyer.get());
-        for(String archiveId : invoice.get().getArchiveIds()){
-            Optional<Archive> arc = archiveRepo.findById(archiveId);
-            if(!arc.isPresent())
-                throw new ArchiveNotFoundException(archiveId);
-            Optional<Account> acc = accountRepo.findByUsername(arc.get().getUsername());
-            if(!acc.isPresent())
-                throw new UserNotFoundException(arc.get().getUsername());
-            acc.get().addWallet(arc.get().getPrice());
-            arc.get().addPurchases(1);
-            archiveRepo.save(arc.get());
-            accountRepo.save(acc.get());
-        }
+
+        Optional<Archive> arc = archiveRepo.findById(invoice.get().getArchiveId());
+        Optional<Account> acc = accountRepo.findByUsername(arc.get().getUsername());
+        if(!arc.isPresent())
+            throw new ArchiveNotFoundException(invoice.get().getArchiveId());
+
+        if(!acc.isPresent())
+            throw new UserNotFoundException(arc.get().getUsername());
+        acc.get().addWallet(arc.get().getPrice());
+        arc.get().addPurchases(1);
+        archiveRepo.save(arc.get());
+        accountRepo.save(acc.get());
+
         invoice.get().setPaid(true);
         invoiceRepo.save(invoice.get());
         return invoice.get();
+    }
+
+    @Transactional
+    public List<Invoice> getInvoices(
+            String username
+    )
+    {
+        Optional<List<Invoice>> invoices = invoiceRepo.findByUsername(username);
+        //ToDo: Delete unpaid invoices older than 24 hours to avoid cluttering the database
+        return invoices.get();
+    }
+
+    @Transactional
+    public Invoice getInvoice(String username, String invoiceId) throws InvoiceNotFoundException
+    {
+        Optional<Invoice> invoice = invoiceRepo.findByIdAndUsername(invoiceId, username);
+        //ToDo: Delete unpaid invoices older than 24 hours to avoid cluttering the database
+        if(!invoice.isPresent())
+            throw new InvoiceNotFoundException("Invoice " + invoiceId + " not found for user " + username);
+        return invoice.get();
+    }
+
+    public boolean hasPurchasedItem(String username, String archiveId) {
+        Optional<Invoice> invoice = invoiceRepo.findByUsernameAndArchiveId(username, archiveId);
+        if(!invoice.isPresent() || !invoice.get().getPaid())
+            return false;
+        return true;
     }
 }

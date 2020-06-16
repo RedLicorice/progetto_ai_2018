@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Measure {
     @Id
     protected String id; // Unique ID for this measure
-    protected String archive; // GUID of the archive this measure belongs to
+    protected String archiveId; // GUID of the archive this measure belongs to
     protected String username; // Unique username of the user who uploaded this measure
     protected Long timestamp; // When this measure was taken
     protected GeoJsonPoint position; // Geolocation for this measurement
@@ -22,12 +22,12 @@ public class Measure {
         this.id = id;
     }
 
-    public String getArchive() {
-        return archive;
+    public String getArchiveId() {
+        return archiveId;
     }
 
-    public void setArchive(String archive) {
-        this.archive = archive;
+    public void setArchiveId(String archiveId) {
+        this.archiveId = archiveId;
     }
 
     public String getUsername() {

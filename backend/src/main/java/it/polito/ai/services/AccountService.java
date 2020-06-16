@@ -20,7 +20,6 @@ import java.util.Optional;
 
 @Service
 public class AccountService implements UserDetailsService {
-
     @Autowired
     private AccountRepo accountRepo;
 

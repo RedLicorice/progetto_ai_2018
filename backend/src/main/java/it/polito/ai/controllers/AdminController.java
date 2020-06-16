@@ -1,5 +1,8 @@
 package it.polito.ai.controllers;
 
+import it.polito.ai.exceptions.MeasuresNotFoundException;
+import it.polito.ai.exceptions.UserHasNoArchivesException;
+import it.polito.ai.exceptions.UserNotFoundException;
 import it.polito.ai.models.*;
 import it.polito.ai.services.AccountService;
 import it.polito.ai.services.ArchiveService;
@@ -28,30 +31,38 @@ public class AdminController {
     private AccountService accountService;
 
     @Autowired
-    private StoreService purchaseService;
+    private StoreService storeService;
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(path="/admin/users", produces="application/json")
-    public List<Account> getUsers() {
-        return accountService.findAll();
+    public ResponseEntity<?> getUsers() {
+        List<Account> users = accountService.findAll();
+        return new ResponseEntity<List<Account>>(users, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping(path="/admin/users/{userId}/positions", produces="application/json")
-    public List<Archive> getPositions(
-            @PathVariable String userId,
-            @RequestParam Optional<Long> from,
-            @RequestParam Optional<Long> to
+    @GetMapping(path="/admin/users/{username}/archives", produces="application/json")
+    public ResponseEntity<?> getPositions(
+            @PathVariable String username
     ) {
-        return archiveService.getArchives(userId);
+        try {
+            List<Archive> result = archiveService.getArchivesByUsername(username);
+            return new ResponseEntity<List<Archive>>(result, HttpStatus.OK);
+        }
+        catch(MeasuresNotFoundException e){
+            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+        }
+        catch(UserHasNoArchivesException e){
+            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+        }
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping(path="/admin/users/{userId}/purchases", produces="application/json")
-    public List<Purchase> getPurchases(
-            @PathVariable String userId
+    @GetMapping(path="/admin/users/{username}/invoices", produces="application/json")
+    public List<Invoice> getInvoices(
+            @PathVariable String username
     ) {
-        return purchaseService.getPurchases(userId);
+        return storeService.getInvoices(username);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

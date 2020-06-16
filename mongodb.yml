@@ -1,0 +1,12 @@
+version: '3'
+services:
+  db:
+    image: 'mongo:latest'
+    container_name: mongodb
+    # environment:
+      # MONGO_INITDB_ROOT_USERNAME: root
+      # MONGO_INITDB_ROOT_PASSWORD: secret
+    volumes:
+      - './docker-config/mongodb:/data/configdb'
+    ports:
+      - '27017:27017'
