@@ -40,16 +40,31 @@ public class StoreService {
     /*
     * Returns approximate measures by input filters
     * */
-    public List<GeoJsonPoint> searchPointsInRect(
+    public StoreSearchResult searchInRect(
             GeoJsonPolygon rect
     ) throws NoResultsException
     {
-        Optional<List<Measure>> getter = measureRepo.findAllByPositionWithin(rect);
-        if(!getter.isPresent()) {
+        Optional<List<Measure>> positionGetter = measureRepo.findAllByPositionWithin(rect);
+        Optional<List<Long>> timestampGetter = measureRepo.findDistinctTimestampByPositionWithin(rect);
+        Optional<List<String>> usernameGetter = measureRepo.findDistinctUsernameByPositionWithin(rect);
+
+        if(!positionGetter.isPresent()) {
             throw new NoResultsException();
         }
-        List<GeoJsonPoint> result = new LinkedList<>();
-        for(Measure m : getter.get()){
+        if(!timestampGetter.isPresent()) {
+            throw new NoResultsException();
+        }
+        if(!usernameGetter.isPresent()) {
+            throw new NoResultsException();
+        }
+        // Round timestamps to the minute
+        List<Long> timestamps = new LinkedList<>();
+        for(Long ts : timestampGetter.get()){
+            timestamps.add(ts - ts % 60);
+        }
+        // Round positions to second decimal digit
+        List<GeoJsonPoint> positions = new LinkedList<>();
+        for(Measure m : positionGetter.get()){
             // Round timestamp to last minute
             //long roundedTimestamp = m.getTimestamp() - m.getTimestamp() % 60;
             // Round coordinates to second decimal digit
@@ -57,35 +72,14 @@ public class StoreService {
             Double lat = Math.round(p.getY() * 100.0) / 100.0;
             Double lng = Math.round(p.getX() * 100.0) / 100.0;
 
-            result.add(new GeoJsonPoint(lng, lat));
+            positions.add(new GeoJsonPoint(lng, lat));
         }
+        // Build search results
+        StoreSearchResult result = new StoreSearchResult();
+        result.setPoints(positions);
+        result.setTimestamps(timestamps);
+        result.setUsers(usernameGetter.get());
         return result;
-    }
-
-    public List<Long> searchTimestampsInRect(
-            GeoJsonPolygon rect
-    ) throws NoResultsException
-    {
-        Optional<List<Long>> getter = measureRepo.findDistinctTimestampByPositionWithin(rect);
-        if(!getter.isPresent()) {
-            throw new NoResultsException();
-        }
-        List<Long> result = new LinkedList<>();
-        for(Long ts : getter.get()){
-            result.add(ts - ts % 60);
-        }
-        return result;
-    }
-
-    public List<String> searchUsernamesInRect(
-            GeoJsonPolygon rect
-    ) throws NoResultsException
-    {
-        Optional<List<String>> getter = measureRepo.findDistinctUsernameByPositionWithin(rect);
-        if(!getter.isPresent()) {
-            throw new NoResultsException();
-        }
-        return getter.get();
     }
 
     public List<Invoice> createInvoices(

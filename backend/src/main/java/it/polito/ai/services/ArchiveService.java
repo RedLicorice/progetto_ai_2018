@@ -114,11 +114,11 @@ public class ArchiveService {
 
     // Set the deleted flag on the measures belonging to the archive with specified id
     @Transactional
-    public void deleteArchive(String username, String archiveId) throws MeasuresNotFoundException, ArchiveNotFoundException {
+    public Archive toggleDeleteArchive(String username, String archiveId) throws MeasuresNotFoundException, ArchiveNotFoundException {
         Optional<Archive> archive = archiveRepo.findByUsernameAndId(username, archiveId);
         if(!archive.isPresent())
             throw new ArchiveNotFoundException(archiveId);
-        archive.get().setDeleted(true);
+        archive.get().setDeleted(!archive.get().getDeleted());
         archiveRepo.save(archive.get());
 
         Optional<List<Measure>> measures = measureRepo.findAllByArchiveId(archiveId);
@@ -128,6 +128,7 @@ public class ArchiveService {
             m.setDeleted(true);
             measureRepo.save(m);
         }
+        return archive.get();
     }
 
     /*

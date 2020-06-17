@@ -8,6 +8,7 @@ import java.util.Optional;
 
 
 public interface MeasureRepo extends Repository<Measure, String> {
+    //ToDo: Add not deleted condition to these 4 methods
     Optional<List<Measure>> findAllByPositionWithin(
             GeoJsonPolygon polygon
     );

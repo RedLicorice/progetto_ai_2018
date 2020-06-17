@@ -101,54 +101,19 @@ public class StoreController {
     }
 
     @PreAuthorize("hasAnyRole('CUSTOMER')")
-    @PostMapping(path="/store/search/points", produces="application/json")
-    public ResponseEntity<?> searchPoints(
-            @RequestParam GeoJsonPolygon rect,
+    @PostMapping(path="/store/search", produces="application/json")
+    public ResponseEntity<?> search(
+            @RequestBody StoreSearchRequest req,
             Authentication authentication
     ) {
         Account account = accountService.findAccountByUsername(authentication.getName());
 
         try {
-            List<GeoJsonPoint> points = storeService.searchPointsInRect(rect);
-            return new ResponseEntity<>(points, HttpStatus.OK);
+            StoreSearchResult res = storeService.searchInRect(req.getRect());
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
         catch(NoResultsException  e){
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
         }
     }
-
-    @PreAuthorize("hasAnyRole('CUSTOMER')")
-    @PostMapping(path="/store/search/users", produces="application/json")
-    public ResponseEntity<?> searchUsers(
-            @RequestParam GeoJsonPolygon rect,
-            Authentication authentication
-    ) {
-        Account account = accountService.findAccountByUsername(authentication.getName());
-
-        try {
-            List<String> points = storeService.searchUsernamesInRect(rect);
-            return new ResponseEntity<>(points, HttpStatus.OK);
-        }
-        catch(NoResultsException  e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
-        }
-    }
-
-    @PreAuthorize("hasAnyRole('CUSTOMER')")
-    @PostMapping(path="/store/search/timestamps", produces="application/json")
-    public ResponseEntity<?> searchTimestamps(
-            @RequestParam GeoJsonPolygon rect,
-            Authentication authentication
-    ) {
-        Account account = accountService.findAccountByUsername(authentication.getName());
-
-        try {
-            List<Long> timestamps = storeService.searchTimestampsInRect(rect);
-            return new ResponseEntity<>(timestamps, HttpStatus.OK);
-        }
-        catch(NoResultsException  e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
-        }
-    }
-
 }

@@ -58,7 +58,7 @@ public class ArchiveController {
     }
 
     @PreAuthorize("hasAnyRole('USER')")
-    @GetMapping(path="archives/{archiveId}", produces="application/json")
+    @GetMapping(path="/archive/{archiveId}", produces="application/json")
     public ResponseEntity<?> show(
             @PathVariable String archiveId,
             Authentication authentication
@@ -87,19 +87,17 @@ public class ArchiveController {
     }
 
     @PreAuthorize("hasAnyRole('USER')")
-    @RequestMapping(path="archives/{archiveId}", produces="application/json", method=RequestMethod.DELETE)
+    @RequestMapping(path="/archive/{archiveId}", produces="application/json", method=RequestMethod.DELETE)
     public ResponseEntity<?> delete(
             @PathVariable String archiveId,
             Authentication authentication
     ) {
-        Account account = accountService.findAccountByUsername(authentication.getName());
-        String userId = account.getId();
         try {
-            archiveService.deleteArchive(userId, archiveId);
+            Archive a = archiveService.toggleDeleteArchive(authentication.getName(), archiveId);
+            return new ResponseEntity<Archive>(a, HttpStatus.OK);
         }
         catch(ArchiveNotFoundException | MeasuresNotFoundException e){
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<Object>(HttpStatus.OK);
     }
 }
