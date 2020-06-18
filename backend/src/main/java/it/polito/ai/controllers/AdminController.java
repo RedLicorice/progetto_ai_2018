@@ -1,9 +1,7 @@
 package it.polito.ai.controllers;
-
-import it.polito.ai.exceptions.MeasuresNotFoundException;
-import it.polito.ai.exceptions.UserHasNoArchivesException;
-import it.polito.ai.exceptions.UserNotFoundException;
 import it.polito.ai.models.*;
+import it.polito.ai.models.archive.Archive;
+import it.polito.ai.models.store.Invoice;
 import it.polito.ai.services.AccountService;
 import it.polito.ai.services.ArchiveService;
 import it.polito.ai.services.StoreService;
@@ -14,12 +12,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.security.auth.login.AccountException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class AdminController {
@@ -45,16 +41,8 @@ public class AdminController {
     public ResponseEntity<?> getPositions(
             @PathVariable String username
     ) {
-        try {
-            List<Archive> result = archiveService.getArchivesByUsername(username);
-            return new ResponseEntity<List<Archive>>(result, HttpStatus.OK);
-        }
-        catch(MeasuresNotFoundException e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-        }
-        catch(UserHasNoArchivesException e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-        }
+        List<Archive> result = archiveService.findUserArchives(username);
+        return new ResponseEntity<List<Archive>>(result, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -76,10 +64,7 @@ public class AdminController {
             acc.grantAuthority("ROLE_"+role);
             return new ResponseEntity<Object>(accountService.update(acc), HttpStatus.OK);
         }
-        catch(AccountException e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND );
-        }
-        catch(UsernameNotFoundException e){
+        catch(AccountException | UsernameNotFoundException e){
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND );
         }
     }

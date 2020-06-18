@@ -11,8 +11,8 @@ import java.util.Optional;
 public interface AccountRepo extends Repository<Account, String> {
 
     List<Account> findAll();
-    Optional<Account> findByUsername(String username);
-    Optional<Account> findById(String id);
+    Account findByUsername(String username);
+    Account findById(String id);
     
     Account save(Account account);
     

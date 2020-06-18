@@ -1,4 +1,4 @@
-package it.polito.ai.models;
+package it.polito.ai.models.store;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -12,8 +12,9 @@ public class Invoice {
     private String id;
     private String username;
     private double amount;
-    private String archiveId;
+    private String itemId;
     private Boolean isPaid;
+
     @CreatedDate
     private Long createdAt;
 
@@ -23,9 +24,9 @@ public class Invoice {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-    public String getArchiveId() { return archiveId; }
-    public void setArchiveId(String archiveId) {
-        this.archiveId = archiveId;
+    public String getItemId() { return itemId; }
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
     public Boolean getPaid() {
@@ -41,7 +42,6 @@ public class Invoice {
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }

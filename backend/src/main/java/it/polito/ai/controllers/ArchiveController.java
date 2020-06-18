@@ -1,7 +1,13 @@
 package it.polito.ai.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import it.polito.ai.exceptions.*;
 import it.polito.ai.models.*;
+import it.polito.ai.models.archive.Archive;
+import it.polito.ai.models.archive.ArchiveSearchRequest;
+import it.polito.ai.models.archive.ArchiveView;
+import it.polito.ai.models.archive.MeasureSubmission;
+import it.polito.ai.models.store.Invoice;
 import it.polito.ai.services.AccountService;
 import it.polito.ai.services.ArchiveService;
 import it.polito.ai.services.StoreService;
@@ -13,12 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ArchiveController {
-
-    @Autowired
-    private AccountService accountService;
 
     @Autowired
     private ArchiveService archiveService;
@@ -26,26 +30,38 @@ public class ArchiveController {
     @Autowired
     private StoreService storeService;
 
+    /*
+    *   Return all archives "public" summary (both purchased and uploaded)
+     */
     @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(path="/archives", produces="application/json")
-    public ResponseEntity<?> index(Authentication authentication
-    ) {
-
-        try{
-            List<Archive> archives = archiveService.getArchivesByUsername(authentication.getName());
-            return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
-        }
-        catch(MeasuresNotFoundException e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-        }
-        catch(UserHasNoArchivesException e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
-        }
+    @JsonView(ArchiveView.Summary.class)
+    public ResponseEntity<?> purchasedArchives(Authentication authentication)
+    {
+        List<Archive> archives = archiveService.findPurchasedArchives(authentication.getName());
+        archives.addAll(archiveService.findUserArchives(authentication.getName()));
+        return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
     }
 
+    /*
+     *   Return uploaded archives "owner" summary which includes number of purchases
+     */
     @PreAuthorize("hasAnyRole('USER')")
-    @PostMapping(path="/archives", produces="application/json")
-    public ResponseEntity<?> store(
+    @GetMapping(path="/archives/upload", produces="application/json")
+    @JsonView(ArchiveView.OwnerSummary.class)
+    public ResponseEntity<?> userArchives(Authentication authentication)
+    {
+        List<Archive> archives = archiveService.findUserArchives(authentication.getName());
+        return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
+    }
+
+    /*
+     *   Upload a new archive and return it as resource
+     */
+    @PreAuthorize("hasAnyRole('USER')")
+    @PostMapping(path="/archives/upload", produces="application/json")
+    @JsonView(ArchiveView.Resource.class)
+    public ResponseEntity<?> uploadArchive(
             @RequestBody List<MeasureSubmission> positionEntries,
             Authentication authentication
     ) {
@@ -57,37 +73,42 @@ public class ArchiveController {
         }
     }
 
+    /*
+     *   Download an uploaded or purchased archive as resource
+     */
     @PreAuthorize("hasAnyRole('USER')")
-    @GetMapping(path="/archive/{archiveId}", produces="application/json")
-    public ResponseEntity<?> show(
+    @GetMapping(path="/archives/download/{archiveId}", produces="application/json")
+    @JsonView(ArchiveView.Resource.class)
+    public ResponseEntity<?> downloadArchive(
             @PathVariable String archiveId,
             Authentication authentication
     ) {
-        Account account = accountService.findAccountByUsername(authentication.getName());
         // If user has purchased the archive
-        if (storeService.hasPurchasedItem(account.getUsername(), archiveId)){
+        if (storeService.hasPurchasedItem(authentication.getName(), archiveId)){
             try {
                 Archive a = archiveService.getArchive(archiveId);
-                ArchiveDownload ad = archiveService.downloadArchive(a);
-                return new ResponseEntity<ArchiveDownload>(ad, HttpStatus.OK);
-            } catch(ArchiveNotFoundException | MeasuresNotFoundException e){
+                return new ResponseEntity<Archive>(a, HttpStatus.OK);
+            } catch(ArchiveNotFoundException  e){
                 return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
             }
         }
 
         //If the user is the owner of the archive.
         try {
-            Archive a = archiveService.getUserArchive(account.getUsername(), archiveId);
-            ArchiveDownload ad = archiveService.downloadArchive(a);
-            return new ResponseEntity<ArchiveDownload>(ad, HttpStatus.OK);
+            Archive a = archiveService.getUserArchive(authentication.getName(), archiveId);
+            return new ResponseEntity<Archive>(a, HttpStatus.OK);
         }
-        catch(MeasuresNotFoundException | ArchiveNotFoundException e) {
+        catch(ArchiveNotFoundException e) {
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
 
+    /*
+     *   Toggle archive deleted flag and return "owner" summary
+     */
     @PreAuthorize("hasAnyRole('USER')")
     @RequestMapping(path="/archive/{archiveId}", produces="application/json", method=RequestMethod.DELETE)
+    @JsonView(ArchiveView.OwnerSummary.class)
     public ResponseEntity<?> delete(
             @PathVariable String archiveId,
             Authentication authentication
@@ -96,8 +117,43 @@ public class ArchiveController {
             Archive a = archiveService.toggleDeleteArchive(authentication.getName(), archiveId);
             return new ResponseEntity<Archive>(a, HttpStatus.OK);
         }
-        catch(ArchiveNotFoundException | MeasuresNotFoundException e){
+        catch(ArchiveNotFoundException e){
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
         }
+    }
+
+    /*
+     *   Search archives in specific area
+     */
+    @PreAuthorize("hasAnyRole('USER')")
+    @PostMapping(path="/archives/search", produces="application/json")
+    @JsonView(ArchiveView.PublicResource.class)
+    public ResponseEntity<?> searchAvailableArchives(
+            @RequestBody ArchiveSearchRequest req,
+            Authentication authentication
+    ) {
+       List<Archive> archives = archiveService.findPurchasableArchives(authentication.getName(), req.getRect(), req.getFrom(), req.getTo(), req.getUsers());
+       return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
+    }
+
+    /*
+     *   Generate invoice for archives:
+     *   - Not belonging to current user
+     *   - Not deleted
+     *   - Within a specified polygon
+     *   - Whose positions contain timestamps between from and to
+     *   - Uploaded by users in specified list
+     */
+    @PreAuthorize("hasAnyRole('USER')")
+    @PostMapping(path="/archives/buy", produces="application/json")
+    public ResponseEntity<?> buyAvailableArchives(
+            @RequestBody ArchiveSearchRequest req,
+            Authentication authentication
+    ) {
+        List<Archive> archives = archiveService.findPurchasableArchives(authentication.getName(), req.getRect(), req.getFrom(), req.getTo(), req.getUsers());
+        List<Invoice> invoices = archives.stream()
+            .map( a -> storeService.createInvoice(authentication.getName(), a.getPrice(), a.getId()))
+                .collect(Collectors.toList());
+        return new ResponseEntity<List<Invoice>>(invoices, HttpStatus.OK);
     }
 }

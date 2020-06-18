@@ -6,17 +6,14 @@ import it.polito.ai.repositories.AccountRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.security.auth.login.AccountException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -31,18 +28,18 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Optional<Account> account = accountRepo.findByUsername(s);
-        if (account.isPresent()) {
-            return account.get();
+        Account account = accountRepo.findByUsername(s);
+        if (account != null) {
+            return account;
         } else {
             throw new UsernameNotFoundException("Username " + s + " not found");
         }
     }
 
     public Account findAccountByUsername(String username) throws UsernameNotFoundException {
-        Optional<Account> account = accountRepo.findByUsername(username);
-        if (account.isPresent()) {
-            return account.get();
+        Account account = accountRepo.findByUsername(username);
+        if (account != null) {
+            return account;
         } else {
             throw new UsernameNotFoundException("Username " + username + " not found");
         }
@@ -50,9 +47,9 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account findAccountById(String id) throws UsernameNotFoundException {
-        Optional<Account> account = accountRepo.findById(id);
-        if (account.isPresent()) {
-            return account.get();
+        Account account = accountRepo.findById(id);
+        if (account != null) {
+            return account;
         } else {
             throw new UsernameNotFoundException("Account with ID " + id + " not found");
         }
@@ -66,8 +63,8 @@ public class AccountService implements UserDetailsService {
 
     @Transactional
     public Account register(Account account) throws AccountException {
-    	Optional<Account> existingAccount = accountRepo.findByUsername(account.getUsername());
-    	if (!existingAccount.isPresent()) {
+    	Account existingAccount = accountRepo.findByUsername(account.getUsername());
+    	if (existingAccount == null) {
     		account.setPassword(passwordEncoder.encode(account.getPassword()));
             return accountRepo.save(account);
     	} else {
@@ -77,8 +74,8 @@ public class AccountService implements UserDetailsService {
 
     @Transactional
     public Account update(Account account) throws AccountException {
-        Optional<Account> existingAccount = accountRepo.findByUsername(account.getUsername());
-        if (existingAccount.isPresent()) {
+        Account existingAccount = accountRepo.findByUsername(account.getUsername());
+        if (existingAccount == null) {
             return accountRepo.save(account);
         } else {
             throw new AccountException("Account does not exist");
@@ -87,11 +84,6 @@ public class AccountService implements UserDetailsService {
 
     public List<Account> findAll() {
         return accountRepo.findAll();
-    }
-
-    @Transactional
-    public Account saveAccount(Account account) {
-        return accountRepo.save(account);
     }
 
 }

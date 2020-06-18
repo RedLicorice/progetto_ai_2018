@@ -2,10 +2,11 @@ package it.polito.ai.controllers;
 
 import it.polito.ai.exceptions.*;
 import it.polito.ai.models.*;
+import it.polito.ai.models.archive.ArchiveSearchRequest;
+import it.polito.ai.models.store.Invoice;
 import it.polito.ai.services.AccountService;
 import it.polito.ai.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,33 +36,7 @@ public class StoreController {
         return new ResponseEntity<List<Invoice>>(invoices, HttpStatus.OK);
     }
 
-    /*
-    * Client sends list of selected users, time interval and polygon
-    * Server creates an invoice for each of the archives intersecting
-    * the received parameters.
-    * Invoices are initially in an "unpaid" state.
-    * */
-    @PreAuthorize("hasAnyRole('CUSTOMER')")
-    @PostMapping(path="/store/invoices", produces="application/json")
-    public ResponseEntity<?> createInvoices(
-            @RequestBody List<String> users,
-            @RequestParam Long from,
-            @RequestParam Long to,
-            @RequestParam GeoJsonPolygon polygon,
-            Authentication authentication
-    ) {
-        Account account = accountService.findAccountByUsername(authentication.getName());
-
-        try {
-            List<Invoice> invoices = storeService.createInvoices(account.getUsername(), users, from, to, polygon);
-            return new ResponseEntity<List<Invoice>>(invoices, HttpStatus.OK);
-        }
-        catch(NoResultsException e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
-        }
-    }
-
-    /*
+   /*
     * Each invoice shall be paid individually,
     * the client sends a request for each invoice.
     * Once the invoice is paid, the archive is accessible through the Archives API
@@ -96,23 +71,6 @@ public class StoreController {
             return new ResponseEntity<Invoice>(invoice, HttpStatus.OK);
         }
         catch(InvoiceNotFoundException  e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
-        }
-    }
-
-    @PreAuthorize("hasAnyRole('CUSTOMER')")
-    @PostMapping(path="/store/search", produces="application/json")
-    public ResponseEntity<?> search(
-            @RequestBody StoreSearchRequest req,
-            Authentication authentication
-    ) {
-        Account account = accountService.findAccountByUsername(authentication.getName());
-
-        try {
-            StoreSearchResult res = storeService.searchInRect(req.getRect());
-            return new ResponseEntity<>(res, HttpStatus.OK);
-        }
-        catch(NoResultsException  e){
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
         }
     }

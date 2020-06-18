@@ -1,11 +1,10 @@
-package it.polito.ai.models;
+package it.polito.ai.models.archive;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /*
-*   MrLicorice:
-*   Used for positions ingestion, this is not persisted.
+*   This model is not persisted, it is used for archive submission
 * */
 public class MeasureSubmission {
 
