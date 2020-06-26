@@ -10,9 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.AccountException;
 import java.util.List;
@@ -42,6 +40,15 @@ public class AdminController {
             @PathVariable String username
     ) {
         List<Archive> result = archiveService.findUserArchives(username);
+        return new ResponseEntity<List<Archive>>(result, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @RequestMapping(path="/admin/users/{username}/archives", produces="application/json", method= RequestMethod.DELETE)
+    public ResponseEntity<?> deleteUserArchives(
+            @PathVariable String username
+    ) {
+        List<Archive> result = archiveService.deleteUserArchives(username);
         return new ResponseEntity<List<Archive>>(result, HttpStatus.OK);
     }
 

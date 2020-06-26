@@ -1,4 +1,5 @@
 package it.polito.ai.models.archive;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import it.polito.ai.models.store.Purchasable;
@@ -34,7 +35,16 @@ public class Archive implements Purchasable {
     private Integer price;
 
     @JsonView(ArchiveView.PublicResource.class)
-    private List<Measure> approxMeasures;
+    private List<Position> positions;
+
+    @JsonView(ArchiveView.PublicResource.class)
+    private List<Long> timestamps;
+
+    @JsonGetter("count")
+    @JsonView(ArchiveView.PublicResource.class)
+    public int getCount() {
+        return measures.size();
+    }
 
     @JsonIgnore
     private Long lastTimestamp;
@@ -87,12 +97,20 @@ public class Archive implements Purchasable {
                 .get();
     }
 
-    public List<Measure> getApproxMeasures() {
-        return approxMeasures;
+    public List<Position> getPositions() {
+        return positions;
     }
 
-    public void setApproxMeasures(List<Measure> approxMeasures) {
-        this.approxMeasures = approxMeasures;
+    public void setPositions(List<Position> positions) {
+        this.positions = positions;
+    }
+
+    public List<Long> getTimestamps() {
+        return timestamps;
+    }
+
+    public void setTimestamps(List<Long> timestamps) {
+        this.timestamps = timestamps;
     }
 
     public Boolean getDeleted() {

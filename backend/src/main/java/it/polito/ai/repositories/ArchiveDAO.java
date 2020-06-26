@@ -33,7 +33,8 @@ public class ArchiveDAO {
         Query query = new Query(Criteria.where("measures.position").within(area));
         query.addCriteria(Criteria.where("deleted").is(false));
         query.addCriteria(Criteria.where("username").ne(username));
-        query.addCriteria(Criteria.where("id").nin(purchasedIds));
+        if(!purchasedIds.isEmpty())
+            query.addCriteria(Criteria.where("id").nin(purchasedIds));
         if(from != null && to != null)
             query.addCriteria(Criteria.where("measures.timestamp").gt(from).andOperator(Criteria.where("measures.timestamp").lte(to)));
         if(usernames != null && !usernames.isEmpty())

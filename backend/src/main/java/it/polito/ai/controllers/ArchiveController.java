@@ -3,12 +3,8 @@ package it.polito.ai.controllers;
 import com.fasterxml.jackson.annotation.JsonView;
 import it.polito.ai.exceptions.*;
 import it.polito.ai.models.*;
-import it.polito.ai.models.archive.Archive;
-import it.polito.ai.models.archive.ArchiveSearchRequest;
-import it.polito.ai.models.archive.ArchiveView;
-import it.polito.ai.models.archive.MeasureSubmission;
+import it.polito.ai.models.archive.*;
 import it.polito.ai.models.store.Invoice;
-import it.polito.ai.services.AccountService;
 import it.polito.ai.services.ArchiveService;
 import it.polito.ai.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +27,7 @@ public class ArchiveController {
     private StoreService storeService;
 
     /*
-    *   Return all archives "public" summary (both purchased and uploaded)
+     *   Return all archives "public" summary (both purchased and uploaded)
      */
     @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(path="/archives", produces="application/json")
@@ -62,11 +58,11 @@ public class ArchiveController {
     @PostMapping(path="/archives/upload", produces="application/json")
     @JsonView(ArchiveView.Resource.class)
     public ResponseEntity<?> uploadArchive(
-            @RequestBody List<MeasureSubmission> positionEntries,
+            @RequestBody List<Measure> measures,
             Authentication authentication
     ) {
         try {
-            Archive a = archiveService.createArchive(authentication.getName(), positionEntries);
+            Archive a = archiveService.createArchive(authentication.getName(), measures);
             return new ResponseEntity<Object>(a, HttpStatus.CREATED);
         } catch (InvalidPositionException e) {
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -96,9 +92,25 @@ public class ArchiveController {
         //If the user is the owner of the archive.
         try {
             Archive a = archiveService.getUserArchive(authentication.getName(), archiveId);
+            System.out.println(a.toString());
             return new ResponseEntity<Archive>(a, HttpStatus.OK);
         }
         catch(ArchiveNotFoundException e) {
+            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('USER')")
+    @GetMapping(path="/archives/public/{archiveId}", produces="application/json")
+    @JsonView(ArchiveView.PublicResource.class)
+    public ResponseEntity<?> showPublicArchive(
+            @PathVariable String archiveId,
+            Authentication authentication
+    ) {
+        try {
+            Archive a = archiveService.getArchive(archiveId);
+            return new ResponseEntity<Archive>(a, HttpStatus.OK);
+        } catch(ArchiveNotFoundException  e){
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
@@ -132,7 +144,14 @@ public class ArchiveController {
             @RequestBody ArchiveSearchRequest req,
             Authentication authentication
     ) {
-       List<Archive> archives = archiveService.findPurchasableArchives(authentication.getName(), req.getRect(), req.getFrom(), req.getTo(), req.getUsers());
+       List<Archive> archives = archiveService.findPurchasableArchives(
+               authentication.getName(),
+               req.getRect(),
+               req.getFrom(),
+               req.getTo(),
+               req.getUsers()
+
+       );
        return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
     }
 
