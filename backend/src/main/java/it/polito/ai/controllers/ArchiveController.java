@@ -119,7 +119,7 @@ public class ArchiveController {
      *   Toggle archive deleted flag and return "owner" summary
      */
     @PreAuthorize("hasAnyRole('USER')")
-    @RequestMapping(path="/archive/{archiveId}", produces="application/json", method=RequestMethod.DELETE)
+    @RequestMapping(path="/archives/{archiveId}", produces="application/json", method=RequestMethod.DELETE)
     @JsonView(ArchiveView.OwnerSummary.class)
     public ResponseEntity<?> delete(
             @PathVariable String archiveId,
@@ -166,13 +166,13 @@ public class ArchiveController {
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(path="/archives/buy", produces="application/json")
     public ResponseEntity<?> buyAvailableArchives(
-            @RequestBody ArchiveSearchRequest req,
+            @RequestBody List<String> archiveIds,
             Authentication authentication
     ) {
-        List<Archive> archives = archiveService.findPurchasableArchives(authentication.getName(), req.getRect(), req.getFrom(), req.getTo(), req.getUsers());
+        List<Archive> archives = archiveService.getArchives(archiveIds);
         List<Invoice> invoices = archives.stream()
             .map( a -> storeService.createInvoice(authentication.getName(), a.getPrice(), a.getId()))
                 .collect(Collectors.toList());
-        return new ResponseEntity<List<Invoice>>(invoices, HttpStatus.OK);
+        return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 }

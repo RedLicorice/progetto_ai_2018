@@ -49,4 +49,12 @@ public class ArchiveDAO {
         Query query = new Query(Criteria.where("id").in(purchasedIds));
         return mongoTemplate.find(query, Archive.class);
     }
+
+    public List<Archive> findNotDeletedByIdIn(
+            List<String> archiveIds
+    ) {
+        Query query = new Query(Criteria.where("id").in(archiveIds));
+        query.addCriteria(Criteria.where("deleted").is(false));
+        return mongoTemplate.find(query, Archive.class);
+    }
 }

@@ -30,10 +30,8 @@ public class StoreController {
     public ResponseEntity<?> showInvoices(
             Authentication authentication
     ) {
-        Account account = accountService.findAccountByUsername(authentication.getName());
-
-        List<Invoice> invoices = storeService.getInvoices(account.getUsername());
-        return new ResponseEntity<List<Invoice>>(invoices, HttpStatus.OK);
+        List<Invoice> invoices = storeService.getInvoices(authentication.getName());
+        return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
    /*

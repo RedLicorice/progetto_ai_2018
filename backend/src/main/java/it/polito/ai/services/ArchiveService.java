@@ -121,6 +121,11 @@ public class ArchiveService {
         return a;
     }
 
+    public List<Archive> getArchives(List<String> archiveIds) {
+        List<Archive> a = archiveDao.findNotDeletedByIdIn(archiveIds);
+        return a;
+    }
+
     // Set the deleted flag on the measures belonging to the archive with specified id
     @Transactional
     public Archive toggleDeleteArchive(String username, String archiveId) throws ArchiveNotFoundException {

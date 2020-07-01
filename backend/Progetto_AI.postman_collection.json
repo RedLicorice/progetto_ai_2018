@@ -1,0 +1,966 @@
+{
+	"info": {
+		"_postman_id": "9f4ad887-6764-486b-b4ef-2cb7ea4589f8",
+		"name": "Progetto_AI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Client credentials for registration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bbfd2bae-4b7d-4555-9a07-9f01d6460d95",
+						"exec": [
+							"pm.test(\"Save registration token in env\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"registration_token\", jsonData.access_token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "register-app",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/oauth/token?grant_type=client_credentials&client_id=register-app",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"oauth",
+						"token"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials"
+						},
+						{
+							"key": "client_id",
+							"value": "register-app"
+						}
+					]
+				},
+				"description": "Use basic authentication with client credentials to obtain a token for user registration"
+			},
+			"response": []
+		},
+		{
+			"name": "User registration using client credentials",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{registration_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"neslinesli93\",\n\t\"password\":\"password\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				},
+				"description": "Use the bearer token obtained by client credentials to register a new user"
+			},
+			"response": []
+		},
+		{
+			"name": "User 2 registration using client credentials",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{registration_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"buyer\",\n\t\"password\":\"password\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				},
+				"description": "Use the bearer token obtained by client credentials to register a new user"
+			},
+			"response": []
+		},
+		{
+			"name": "Admin registration using client credentials",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{registration_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"admin\",\n\t\"password\":\"password\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/register-admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register-admin"
+					]
+				},
+				"description": "Use the bearer token obtained by client credentials to register a new user"
+			},
+			"response": []
+		},
+		{
+			"name": "Request new access token (Login)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5853d2b1-139a-45ad-ba31-23e9b0b2230d",
+						"exec": [
+							"pm.test(\"Save access token in env\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"token\", jsonData.access_token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "trusted-app",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "neslinesli93",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/oauth/token",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"oauth",
+						"token"
+					]
+				},
+				"description": "Use the trusted app basic auth credentials to request a new access token for accessing the API"
+			},
+			"response": []
+		},
+		{
+			"name": "Request new admin token (Login)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bb15631e-570d-497b-b273-d59eac957e23",
+						"exec": [
+							"pm.test(\"Save admin token in env\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"admin_token\", jsonData.access_token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "trusted-app",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/oauth/token",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"oauth",
+						"token"
+					]
+				},
+				"description": "Use the trusted app basic auth credentials to request a new access token for accessing the API"
+			},
+			"response": []
+		},
+		{
+			"name": "Request new buyer token (Login)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "178b9070-2535-4b7d-9403-2ce41e547b58",
+						"exec": [
+							"pm.test(\"Save admin token in env\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"buyer_token\", jsonData.access_token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "trusted-app",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "buyer",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/oauth/token",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"oauth",
+						"token"
+					]
+				},
+				"description": "Use the trusted app basic auth credentials to request a new access token for accessing the API"
+			},
+			"response": []
+		},
+		{
+			"name": "Check account details (/me)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/me",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"me"
+					]
+				},
+				"description": "Use the bearer token to view account details for the corresponding user"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user Archives",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInVzZXJfbmFtZSI6Im5lc2xpbmVzbGk5MyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1OTIzNjMxMjksImF1dGhvcml0aWVzIjpbIlJPTEVfQ1VTVE9NRVIiLCJST0xFX1VTRVIiXSwianRpIjoiZjU2YjM4ZTUtZDVkMy00OGU1LWE4NmMtNDUwZTNmYzliZDNmIiwiY2xpZW50X2lkIjoidHJ1c3RlZC1hcHAifQ.PDlDlExg5aNlvQjHOizQofHWNo5ekaav2xTcGdqfg6U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/archives",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives"
+					]
+				},
+				"description": "Show the archives the user has uploaded or purchased"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user uploaded Archives",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/archives/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"upload"
+					]
+				},
+				"description": "Show the archives the user has uploaded or purchased"
+			},
+			"response": []
+		},
+		{
+			"name": "Submit user archive (Path 1)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\"latitude\":38.12233, \"longitude\":15.65334, \"timestamp\":1592324706},\n\t{\"latitude\":38.12223, \"longitude\":15.65409, \"timestamp\":1592324766},\n\t{\"latitude\":38.12298, \"longitude\":15.65421, \"timestamp\":1592324796},\n\t{\"latitude\":38.12288, \"longitude\":15.65494, \"timestamp\":1592324856},\n\t{\"latitude\":38.12218, \"longitude\":15.65477, \"timestamp\":1592324916},\n\t{\"latitude\":38.12174, \"longitude\":15.65469, \"timestamp\":1592324976}\n]"
+				},
+				"url": {
+					"raw": "localhost:8080/archives/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"upload"
+					]
+				},
+				"description": "Submit a new archive (as a list of measures)"
+			},
+			"response": []
+		},
+		{
+			"name": "Submit user archive (Path 2)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\"latitude\":38.12306, \"longitude\":15.65347, \"timestamp\":1592324706},\n\t{\"latitude\":38.12300, \"longitude\":15.65431, \"timestamp\":1592324766},\n\t{\"latitude\":38.12292, \"longitude\":15.65494, \"timestamp\":1592324796},\n\t{\"latitude\":38.12359, \"longitude\":15.65504, \"timestamp\":1592324856},\n\t{\"latitude\":38.12351, \"longitude\":15.65573, \"timestamp\":1592324916},\n\t{\"latitude\":38.12286, \"longitude\":15.65559, \"timestamp\":1592324976}\n]"
+				},
+				"url": {
+					"raw": "localhost:8080/archives/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"upload"
+					]
+				},
+				"description": "Submit a new archive (as a list of measures)"
+			},
+			"response": []
+		},
+		{
+			"name": "Submit user archive (Path 3)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\"latitude\":38.12376, \"longitude\":15.6536, \"timestamp\":1592324706},\n\t{\"latitude\":38.12367, \"longitude\":15.65437, \"timestamp\":1592324766},\n\t{\"latitude\":38.12298, \"longitude\":15.65425, \"timestamp\":1592324796},\n\t{\"latitude\":38.12221, \"longitude\":15.65414, \"timestamp\":1592324856},\n\t{\"latitude\":38.12157, \"longitude\":15.65404, \"timestamp\":1592324916},\n\t{\"latitude\":38.1215, \"longitude\":15.65381, \"timestamp\":1592324976}\n]"
+				},
+				"url": {
+					"raw": "localhost:8080/archives/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"upload"
+					]
+				},
+				"description": "Submit a new archive (as a list of measures)"
+			},
+			"response": []
+		},
+		{
+			"name": "Submit user archive (Path 4)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\"latitude\":38.12211, \"longitude\":15.65545, \"timestamp\":1592324706},\n\t{\"latitude\":38.12216, \"longitude\":15.65483, \"timestamp\":1592324766},\n\t{\"latitude\":38.12288, \"longitude\":15.65489, \"timestamp\":1592324796},\n\t{\"latitude\":38.12362, \"longitude\":15.655, \"timestamp\":1592324856},\n\t{\"latitude\":38.12364, \"longitude\":15.65472, \"timestamp\":1592324916}\n]"
+				},
+				"url": {
+					"raw": "localhost:8080/archives/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"upload"
+					]
+				},
+				"description": "Submit a new archive (as a list of measures)"
+			},
+			"response": []
+		},
+		{
+			"name": "Submit user archive (Path 5)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\"latitude\":38.12264, \"longitude\":15.65374, \"timestamp\":1592324706},\n\t{\"latitude\":38.12271, \"longitude\":15.65337, \"timestamp\":1592324766},\n\t{\"latitude\":38.12309, \"longitude\":15.65345, \"timestamp\":1592324796},\n\t{\"latitude\":38.12372, \"longitude\":15.65355, \"timestamp\":1592324856},\n\t{\"latitude\":38.12369, \"longitude\":15.65398, \"timestamp\":1592324916}\n]"
+				},
+				"url": {
+					"raw": "localhost:8080/archives/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"upload"
+					]
+				},
+				"description": "Submit a new archive (as a list of measures)"
+			},
+			"response": []
+		},
+		{
+			"name": "Submit user archive (Path 6)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\"latitude\":38.12212, \"longitude\":15.65285, \"timestamp\":1592324706},\n\t{\"latitude\":38.12237, \"longitude\":15.65301, \"timestamp\":1592324766},\n\t{\"latitude\":38.12233, \"longitude\":15.65322, \"timestamp\":1592324796},\n\t{\"latitude\":38.12191, \"longitude\":15.65324, \"timestamp\":1592324856},\n\t{\"latitude\":38.12153, \"longitude\":15.65317, \"timestamp\":1592324916},\n\t{\"latitude\":38.1215, \"longitude\":15.65359, \"timestamp\":1592324916}\n]"
+				},
+				"url": {
+					"raw": "localhost:8080/archives/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"upload"
+					]
+				},
+				"description": "Submit a new archive (as a list of measures)"
+			},
+			"response": []
+		},
+		{
+			"name": "Submit user archive (Path 7 - Out)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\"latitude\":38.12356, \"longitude\":15.65736, \"timestamp\":1592324706},\n\t{\"latitude\":38.12304, \"longitude\":15.65736, \"timestamp\":1592324766},\n\t{\"latitude\":38.12266, \"longitude\":15.6574, \"timestamp\":1592324796},\n\t{\"latitude\":38.12236, \"longitude\":15.6575, \"timestamp\":1592324856}\n]"
+				},
+				"url": {
+					"raw": "localhost:8080/archives/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"upload"
+					]
+				},
+				"description": "Submit a new archive (as a list of measures)"
+			},
+			"response": []
+		},
+		{
+			"name": "Show archive",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/archives/download/5ef36495075a7a47401dcc9b",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"download",
+						"5ef36495075a7a47401dcc9b"
+					]
+				},
+				"description": "Show an archive by ID, only seen if either the user is the author or has purchased it."
+			},
+			"response": []
+		},
+		{
+			"name": "Show archive (Public)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/archives/public/5ef36495075a7a47401dcc9b",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"public",
+						"5ef36495075a7a47401dcc9b"
+					]
+				},
+				"description": "Show an archive by ID, only seen if either the user is the author or has purchased it."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete archive",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/archive/5ee8f69e2a8fc11f1832c1cb",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archive",
+						"5ee8f69e2a8fc11f1832c1cb"
+					]
+				},
+				"description": "Show an archive by ID, only seen if either the user is the author or has purchased it."
+			},
+			"response": []
+		},
+		{
+			"name": "Get invoices",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{buyer_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/store/invoices",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"store",
+						"invoices"
+					]
+				},
+				"description": "Show user's current invoices"
+			},
+			"response": []
+		},
+		{
+			"name": "Search archives in area",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{buyer_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topLeft\": { \"longitude\" : 38.12386, \"latitude\" : 15.65228 },\r\n    \"bottomRight\": {\"longitude\" : 38.12154, \"latitude\" : 15.65676 },\r\n    \"from\": null,\r\n    \"to\": null,\r\n    \"users\": []\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/archives/search",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"archives",
+						"search"
+					]
+				},
+				"description": "Search for positions in a rectangle area\r\n/* Basically, we have a rectangle like this:\r\n        *       A --------- B\r\n        *       |           |\r\n        *       C --------- D\r\n        *  And this model only contains points A and D.\r\n        *  A ( lon1, lat1 ), D ( lon2, lat2)\r\n        *  Therefore, we can derive pointd B and C by crossing:\r\n        *  C ( lon1, lat2 ) and B ( lon2, lat1 )\r\n        * */"
+			},
+			"response": []
+		},
+		{
+			"name": "[ADMIN] Delete all archives for specific user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/admin/users/neslinesli93/archives",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"users",
+						"neslinesli93",
+						"archives"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
