@@ -4,9 +4,19 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://localhost:8080/api',
+  api_url: 'http://localhost:8080/',
   trusted_url: 'http://trusted-app:secret@localhost:8080/oauth/token',
-  register_url: 'http://register-app:secret@localhost:8080/oauth/token'
+  register_url: 'http://register-app:secret@localhost:8080/oauth/token',
+  archives_url: 'http://localhost:8080/archives',
+  archives_uploaded_url: 'http://localhost:8080/archives/upload',
+  archives_upload_url: 'http://localhost:8080/archives/upload',
+  archives_download_url: 'http://localhost:8080/archives/download/{id}',
+  archives_public_url: 'http://localhost:8080/archives/public/{id}',
+  archives_search_url: 'http://localhost:8080/archives/search',
+  archives_buy_url: 'http://localhost:8080/archives/buy',
+  store_invoices_url: 'http://localhost:8080/store/invoices',
+  store_invoice_detail_url: 'http://localhost:8080/store/invoices/{id}',
+  store_invoice_pay_url: 'http://localhost:8080/store/invoices/{id}'
 };
 
 /*

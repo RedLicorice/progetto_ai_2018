@@ -3,7 +3,6 @@ import { Observable, of } from 'rxjs';
 import * as L from 'leaflet';
 
 import { Position } from '../_models/Position';
-import { POSITIONS } from './mock-positions';//ToDo: Recuperare le posizioni dall'API REST, dopo l'autenticazione
 import PointInPolygon from 'point-in-polygon';
 import { PurchaseRequest } from '../_models/PurchaseRequest';
 import { Purchase } from '../_models/Purchase';

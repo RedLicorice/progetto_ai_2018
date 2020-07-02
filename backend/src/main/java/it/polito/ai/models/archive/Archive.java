@@ -41,7 +41,7 @@ public class Archive implements Purchasable {
     private List<Long> timestamps;
 
     @JsonGetter("count")
-    @JsonView(ArchiveView.PublicResource.class)
+    @JsonView(ArchiveView.Summary.class)
     public int getCount() {
         return measures.size();
     }

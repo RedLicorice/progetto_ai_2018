@@ -5,87 +5,68 @@ import * as L from 'leaflet';
 import PointInPolygon from 'point-in-polygon';
 import { PurchaseRequest } from '../_models/PurchaseRequest';
 import { Purchase } from '../_models/Purchase';
-import {Archive} from '../_models/Archive';
+import { ArchiveResource, PublicArchiveResource, ArchiveSummary, ArchiveOwnerSummary } from '../_models/Archive';
+import { Measure } from '../_models/Measure';
+import { Position } from '../_models/Position';
+import { Invoice } from '../_models/Invoice';
 import {environment} from '../../environments/environment';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class ArchiveService {
-  private dateFrom: number = null;
-  private dateTo: number = null;
-  private polygonCoordinates: L.LatLng[] = [];
 
-  // internal stuff, used for routing
-  canPurchase = false; // Why is this hardwired?
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
-
-  getDateFrom(): number {
-    return this.dateFrom;
+  getArchives(): Observable<ArchiveSummary[]> {
+    return this.http.get<ArchiveSummary[]>(environment.archives_url);
   }
-
-  setDateFrom(dateFrom: number): void {
-    this.dateFrom = dateFrom;
+  getUploadedArchives(): Observable<ArchiveOwnerSummary[]> {
+    return this.http.get<ArchiveOwnerSummary[]>(environment.archives_uploaded_url);
   }
-
-  getDateTo(): number {
-    return this.dateTo;
-  }
-
-  setDateTo(dateTo: number): void {
-    this.dateTo = dateTo;
-  }
-
-  getPolygonCoordinates(): L.LatLng[] {
-    return this.polygonCoordinates;
-  }
-
-  setPolygonCoordinates(polygonCoordinates: L.LatLng[]): void {
-    this.polygonCoordinates = polygonCoordinates;
-  }
-
-  private computePositions(): Position[] {
-    return POSITIONS.filter(p => {
-      if (this.dateFrom === null || p.timestamp < this.dateFrom) {
-        return false;
-      }
-
-      if (this.dateTo === null || p.timestamp > this.dateTo) {
-        return false;
-      }
-
-      if (this.polygonCoordinates.length > 0) {
-        const coords = this.polygonCoordinates.map(c => [c.lat, c.lng]);
-        // coords = coords.slice(0, coords.length - 1);
-        return PointInPolygon([p.latitude, p.longitude], coords);
-      }
-
-      return false;
-    });
-  }
-
-  getPositionsNumber(): Observable<PurchaseRequest> {
-    const positions: Position[] = this.computePositions();
-    const request: PurchaseRequest = {
-      number: positions.length,
-      cost: this.COST_PER_POSITION * positions.length
+  uploadArchive(measures: Measure[]): Observable<ArchiveResource> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json; charset=utf-8',
+      })
     };
-
-    return of(request);
+    return this.http.post<ArchiveResource>(environment.archives_upload_url, measures.toString(), httpOptions);
   }
-
-  purchasePositions(): Observable<Purchase> {
-    const positions: Position[] = this.computePositions();
-    const purchase: Purchase = {
-      number: positions.length,
-      cost: this.COST_PER_POSITION * positions.length,
-      positions: positions
+  downloadArchive(archiveId: string): Observable<ArchiveResource> {
+    return this.http.get<ArchiveResource>(environment.archives_download_url.replace('{id}', archiveId));
+  }
+  downloadPublicArchive(archiveId: string): Observable<PublicArchiveResource> {
+    return this.http.get<PublicArchiveResource>(environment.archives_public_url.replace('{id}', archiveId));
+  }
+  searchArchives(topLeft: Position, bottomRight: Position, from: number, to: number, users: string[]): Observable<PublicArchiveResource[]> {
+    const requestBody = {
+      'topLeft': topLeft,
+      'bottomRight' : bottomRight,
+      'from': from,
+      'to': to,
+      'users': users
     };
-
-    return of(purchase);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json; charset=utf-8',
+      })
+    };
+    return this.http.post<PublicArchiveResource[]>(
+      environment.archives_search_url,
+      requestBody.toString(),
+      httpOptions
+    );
   }
-
-  search() {
-    return this.http.get<User>(environment.api_url + '/me');
+  buyArchives(archiveIds: string[]): Observable<Invoice[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json; charset=utf-8',
+      })
+    };
+    return this.http.post<Invoice[]>(
+      environment.archives_search_url,
+      archiveIds.toString(),
+      httpOptions
+    );
   }
-
 }
