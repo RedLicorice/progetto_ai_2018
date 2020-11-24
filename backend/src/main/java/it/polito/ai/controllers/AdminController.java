@@ -43,6 +43,7 @@ public class AdminController {
         return new ResponseEntity<List<Archive>>(result, HttpStatus.OK);
     }
 
+
     @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(path="/admin/users/{username}/archives", produces="application/json", method= RequestMethod.DELETE)
     public ResponseEntity<?> deleteUserArchives(

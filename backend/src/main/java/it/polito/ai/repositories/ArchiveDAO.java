@@ -30,7 +30,8 @@ public class ArchiveDAO {
             List<String> usernames
     ) {
         List<String> purchasedIds = storeService.getPurchasedItemIdsByUser(username);
-        Query query = new Query(Criteria.where("measures.position").within(area));
+        Query query = new Query();
+        query.addCriteria(Criteria.where("measures.position").within(area));
         query.addCriteria(Criteria.where("deleted").is(false));
         query.addCriteria(Criteria.where("username").ne(username));
         if(!purchasedIds.isEmpty())
@@ -39,7 +40,8 @@ public class ArchiveDAO {
             query.addCriteria(Criteria.where("measures.timestamp").gt(from).andOperator(Criteria.where("measures.timestamp").lte(to)));
         if(usernames != null && !usernames.isEmpty())
             query.addCriteria(Criteria.where("username").in(username));
-        return mongoTemplate.find(query, Archive.class);
+        List<Archive> result = mongoTemplate.find(query, Archive.class);
+        return result;
     }
 
     public List<Archive> findPurchasedArchives(String username) {

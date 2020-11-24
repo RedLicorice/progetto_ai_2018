@@ -60,7 +60,7 @@ public class ArchiveService {
     }
 
     @Transactional
-    public Archive createArchive(String username, List<Measure> measures) throws InvalidPositionException {
+    public Archive createArchive(String username, ArrayList<Measure> measures) throws InvalidPositionException {
         checkPositions(username, measures); // Will throw if any position is not valid.
         Archive a = new Archive();
         a.setUsername(username);
@@ -90,8 +90,11 @@ public class ArchiveService {
     }
 
     public List<Archive> findPurchasableArchives(String username, GeoJsonPolygon area, Long from, Long to, List<String> usernames)
+            throws ArchiveNotFoundException
     {
         //ArchiveDAO dao = new ArchiveDAO();
+        if(to != null && to > new Date().getTime())
+            throw new ArchiveNotFoundException("Cannot purchase future archives!");
         return archiveDao.findArchivesByPositionInAndTimestampBetweenAndNotDeleted(username, area, from, to, usernames);
     }
 

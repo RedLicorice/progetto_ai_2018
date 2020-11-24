@@ -10,7 +10,7 @@ services:
       # Map ./frontend to ./app for development (remove and rebuild for production)
       - ./frontend:/app
       # Use a persistent volume for node_modules so that it does not get mapped
-      #- node_modules:/app/node_modules
+      - node_modules:/app/node_modules
     expose:
       - 80
     ports:

@@ -4,9 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import it.polito.ai.models.store.Purchasable;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.geo.GeoJsonLineString;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
+import java.util.*;
 
 /*
 * This model represents the stores archive, it also is the resource which is shown to the users.
@@ -29,7 +34,7 @@ public class Archive implements Purchasable {
     private Boolean deleted;
 
     @JsonView(ArchiveView.Resource.class)
-    private List<Measure> measures;
+    private ArrayList<Measure> measures;
 
     @JsonView(ArchiveView.PublicResource.class)
     private Integer price;
@@ -85,11 +90,11 @@ public class Archive implements Purchasable {
         this.price = price;
     }
 
-    public List<Measure> getMeasures() {
+    public ArrayList<Measure> getMeasures() {
         return measures;
     }
 
-    public void setMeasures(List<Measure> measures) {
+    public void setMeasures(ArrayList<Measure> measures) {
         this.measures = measures;
         this.lastTimestamp = this.measures.stream()// Using measures as stream
                 .map(Measure::getTimestamp) // Map to timestamps

@@ -432,7 +432,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyX2FwcGxpY2F0aW9uIl0sInVzZXJfbmFtZSI6Im5lc2xpbmVzbGk5MyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1OTIzNjMxMjksImF1dGhvcml0aWVzIjpbIlJPTEVfQ1VTVE9NRVIiLCJST0xFX1VTRVIiXSwianRpIjoiZjU2YjM4ZTUtZDVkMy00OGU1LWE4NmMtNDUwZTNmYzliZDNmIiwiY2xpZW50X2lkIjoidHJ1c3RlZC1hcHAifQ.PDlDlExg5aNlvQjHOizQofHWNo5ekaav2xTcGdqfg6U",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -507,7 +507,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\"latitude\":38.12233, \"longitude\":15.65334, \"timestamp\":1592324706},\n\t{\"latitude\":38.12223, \"longitude\":15.65409, \"timestamp\":1592324766},\n\t{\"latitude\":38.12298, \"longitude\":15.65421, \"timestamp\":1592324796},\n\t{\"latitude\":38.12288, \"longitude\":15.65494, \"timestamp\":1592324856},\n\t{\"latitude\":38.12218, \"longitude\":15.65477, \"timestamp\":1592324916},\n\t{\"latitude\":38.12174, \"longitude\":15.65469, \"timestamp\":1592324976}\n]"
+					"raw": "[\n\t{\"latitude\":38.10447413150222, \"longitude\":15.637772083282469, \"timestamp\":1592324706},\n\t{\"latitude\":38.103967586954425, \"longitude\":15.638737678527832, \"timestamp\":1592324766},\n\t{\"latitude\":38.10558851714524, \"longitude\":15.640754699707031, \"timestamp\":1592324796},\n\t{\"latitude\":38.10712499068652, \"longitude\":15.642535686492918, \"timestamp\":1592324856},\n\t{\"latitude\":38.107513325037125, \"longitude\":15.642127990722654, \"timestamp\":1592324916},\n\t{\"latitude\":38.1084757099653, \"longitude\":15.643136501312256, \"timestamp\":1592324976}\n]"
 				},
 				"url": {
 					"raw": "localhost:8080/archives/upload",
@@ -548,7 +548,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\"latitude\":38.12306, \"longitude\":15.65347, \"timestamp\":1592324706},\n\t{\"latitude\":38.12300, \"longitude\":15.65431, \"timestamp\":1592324766},\n\t{\"latitude\":38.12292, \"longitude\":15.65494, \"timestamp\":1592324796},\n\t{\"latitude\":38.12359, \"longitude\":15.65504, \"timestamp\":1592324856},\n\t{\"latitude\":38.12351, \"longitude\":15.65573, \"timestamp\":1592324916},\n\t{\"latitude\":38.12286, \"longitude\":15.65559, \"timestamp\":1592324976}\n]"
+					"raw": "[\n\t{\"latitude\":38.1055209791053, \"longitude\":15.639070272445677, \"timestamp\":1592324706},\n\t{\"latitude\":38.10571515080185, \"longitude\":15.63926339149475, \"timestamp\":1592324766},\n\t{\"latitude\":38.10559695939583, \"longitude\":15.63955843448639, \"timestamp\":1592324796},\n\t{\"latitude\":38.10586711090003, \"longitude\":15.63976764678955, \"timestamp\":1592324856},\n\t{\"latitude\":38.10597263856004, \"longitude\":15.63950479030609, \"timestamp\":1592324916}\n]"
 				},
 				"url": {
 					"raw": "localhost:8080/archives/upload",
@@ -589,7 +589,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\"latitude\":38.12376, \"longitude\":15.6536, \"timestamp\":1592324706},\n\t{\"latitude\":38.12367, \"longitude\":15.65437, \"timestamp\":1592324766},\n\t{\"latitude\":38.12298, \"longitude\":15.65425, \"timestamp\":1592324796},\n\t{\"latitude\":38.12221, \"longitude\":15.65414, \"timestamp\":1592324856},\n\t{\"latitude\":38.12157, \"longitude\":15.65404, \"timestamp\":1592324916},\n\t{\"latitude\":38.1215, \"longitude\":15.65381, \"timestamp\":1592324976}\n]"
+					"raw": "[\n\t{\"latitude\":38.10579113089045, \"longitude\":15.63851237297058, \"timestamp\":1592324706},\n\t{\"latitude\":38.10663534878039, \"longitude\":15.639113187789917, \"timestamp\":1592324766},\n\t{\"latitude\":38.107344484268765, \"longitude\":15.640143156051634, \"timestamp\":1592324796},\n\t{\"latitude\":38.106297662795086, \"longitude\":15.641548633575438, \"timestamp\":1592324856},\n\t{\"latitude\":38.10715031690273, \"longitude\":15.642567873001099, \"timestamp\":1592324916},\n\t{\"latitude\":38.107513325037125, \"longitude\":15.642031431198118, \"timestamp\":1592324976}\n]"
 				},
 				"url": {
 					"raw": "localhost:8080/archives/upload",
@@ -630,7 +630,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\"latitude\":38.12211, \"longitude\":15.65545, \"timestamp\":1592324706},\n\t{\"latitude\":38.12216, \"longitude\":15.65483, \"timestamp\":1592324766},\n\t{\"latitude\":38.12288, \"longitude\":15.65489, \"timestamp\":1592324796},\n\t{\"latitude\":38.12362, \"longitude\":15.655, \"timestamp\":1592324856},\n\t{\"latitude\":38.12364, \"longitude\":15.65472, \"timestamp\":1592324916}\n]"
+					"raw": "[\n\t{\"latitude\":38.10667755941879, \"longitude\":15.639204382896423, \"timestamp\":1592324706},\n\t{\"latitude\":38.10597263856004, \"longitude\":15.64052402973175, \"timestamp\":1592324766},\n\t{\"latitude\":38.10656359063913, \"longitude\":15.641167759895325, \"timestamp\":1592324796},\n\t{\"latitude\":38.10681685435251, \"longitude\":15.640819072723387, \"timestamp\":1592324856},\n\t{\"latitude\":38.107082780306634, \"longitude\":15.641162395477295, \"timestamp\":1592324916}\n]"
 				},
 				"url": {
 					"raw": "localhost:8080/archives/upload",
@@ -671,7 +671,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\"latitude\":38.12264, \"longitude\":15.65374, \"timestamp\":1592324706},\n\t{\"latitude\":38.12271, \"longitude\":15.65337, \"timestamp\":1592324766},\n\t{\"latitude\":38.12309, \"longitude\":15.65345, \"timestamp\":1592324796},\n\t{\"latitude\":38.12372, \"longitude\":15.65355, \"timestamp\":1592324856},\n\t{\"latitude\":38.12369, \"longitude\":15.65398, \"timestamp\":1592324916}\n]"
+					"raw": "[\n\t{\"latitude\":38.10373119829691, \"longitude\":15.636720657348635, \"timestamp\":1592324706},\n\t{\"latitude\":38.10343571139949, \"longitude\":15.637128353118898, \"timestamp\":1592324766},\n\t{\"latitude\":38.103832507815206, \"longitude\":15.637643337249756, \"timestamp\":1592324796},\n\t{\"latitude\":38.103469481391095, \"longitude\":15.638222694396973, \"timestamp\":1592324856},\n\t{\"latitude\":38.10391693230649, \"longitude\":15.638737678527832, \"timestamp\":1592324916}\n]"
 				},
 				"url": {
 					"raw": "localhost:8080/archives/upload",
@@ -712,7 +712,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\"latitude\":38.12212, \"longitude\":15.65285, \"timestamp\":1592324706},\n\t{\"latitude\":38.12237, \"longitude\":15.65301, \"timestamp\":1592324766},\n\t{\"latitude\":38.12233, \"longitude\":15.65322, \"timestamp\":1592324796},\n\t{\"latitude\":38.12191, \"longitude\":15.65324, \"timestamp\":1592324856},\n\t{\"latitude\":38.12153, \"longitude\":15.65317, \"timestamp\":1592324916},\n\t{\"latitude\":38.1215, \"longitude\":15.65359, \"timestamp\":1592324916}\n]"
+					"raw": "[\n\t{\"latitude\":38.10345259639724, \"longitude\":15.637090802192688, \"timestamp\":1592324706},\n\t{\"latitude\":38.10375230445813, \"longitude\":15.636747479438782, \"timestamp\":1592324766},\n\t{\"latitude\":38.104545891695835, \"longitude\":15.637670159339905, \"timestamp\":1592324796},\n\t{\"latitude\":38.104710517756004, \"longitude\":15.637696981430052, \"timestamp\":1592324856},\n\t{\"latitude\":38.10582912090514, \"longitude\":15.6385338306427, \"timestamp\":1592324916},\n\t{\"latitude\":38.10496800905496, \"longitude\":15.639923214912416, \"timestamp\":1592324916}\n]"
 				},
 				"url": {
 					"raw": "localhost:8080/archives/upload",
@@ -753,7 +753,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\"latitude\":38.12356, \"longitude\":15.65736, \"timestamp\":1592324706},\n\t{\"latitude\":38.12304, \"longitude\":15.65736, \"timestamp\":1592324766},\n\t{\"latitude\":38.12266, \"longitude\":15.6574, \"timestamp\":1592324796},\n\t{\"latitude\":38.12236, \"longitude\":15.6575, \"timestamp\":1592324856}\n]"
+					"raw": "[\n\t{\"latitude\":38.12306188671673, \"longitude\":15.65348446369171, \"timestamp\":1592324706},\n\t{\"latitude\":38.12299014471342, \"longitude\":15.654230117797853, \"timestamp\":1592324766},\n\t{\"latitude\":38.12224739983046, \"longitude\":15.654122829437254, \"timestamp\":1592324796},\n\t{\"latitude\":38.12220519818979, \"longitude\":15.654809474945068, \"timestamp\":1592324856}\n]"
 				},
 				"url": {
 					"raw": "localhost:8080/archives/upload",
@@ -786,7 +786,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/archives/download/5ef36495075a7a47401dcc9b",
+					"raw": "localhost:8080/archives/download/5fb98a35616c464228607df5",
 					"host": [
 						"localhost"
 					],
@@ -794,7 +794,7 @@
 					"path": [
 						"archives",
 						"download",
-						"5ef36495075a7a47401dcc9b"
+						"5fb98a35616c464228607df5"
 					]
 				},
 				"description": "Show an archive by ID, only seen if either the user is the author or has purchased it."
@@ -909,7 +909,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"topLeft\": { \"longitude\" : 38.12386, \"latitude\" : 15.65228 },\r\n    \"bottomRight\": {\"longitude\" : 38.12154, \"latitude\" : 15.65676 },\r\n    \"from\": null,\r\n    \"to\": null,\r\n    \"users\": []\r\n}\r\n",
+					"raw": "{\r\n    \"topLeft\": { \"latitude\" :38.09434257329174, \"longitude\" : 15.624618530273436 },\r\n    \"bottomRight\": { \"latitude\" : 38.114941932509694, \"longitude\" : 15.660924911499023 },\r\n    \"from\": null,\r\n    \"to\": null,\r\n    \"users\": []\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"

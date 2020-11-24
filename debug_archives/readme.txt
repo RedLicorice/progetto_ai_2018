@@ -1,0 +1,1 @@
+These files are for showing archives' paths and search viewport on geojson.io

@@ -22,6 +22,7 @@ public class ArchiveSearchRequest {
     }
 
     public GeoJsonPolygon getRect(){
+        // IT STARTS FROM BOTTOM LEFT
         /* Basically, we have a rectangle like this:
         *       A --------- B
         *       |           |
@@ -32,16 +33,19 @@ public class ArchiveSearchRequest {
         *  C ( lon1, lat2 ) and B ( lon2, lat1 )
         * */
         GeoJsonPolygon result = new GeoJsonPolygon(
+                //ToDO: This results in a WRONG rectangle which hinders results. check it
 //                new GeoJsonPoint(lon1, lat1), // A
 //                new GeoJsonPoint(lon2, lat1), // B
 //                new GeoJsonPoint(lon2, lat2), // D
 //                new GeoJsonPoint(lon1, lat2), // C
 //                new GeoJsonPoint(lon1, lat1) // A - Again, need to close the loop or mongo will cry
-                new GeoJsonPoint(topLeft.getLongitude(), topLeft.getLatitude()), // A
-                new GeoJsonPoint(bottomRight.getLongitude(), topLeft.getLatitude()), // B
-                new GeoJsonPoint(bottomRight.getLongitude(), bottomRight.getLatitude()), // D
                 new GeoJsonPoint(topLeft.getLongitude(), bottomRight.getLatitude()), // C
-                new GeoJsonPoint(topLeft.getLongitude(), topLeft.getLatitude()) // A - Again, need to close the loop or mongo will cry
+                new GeoJsonPoint(bottomRight.getLongitude(), bottomRight.getLatitude()), // D
+                new GeoJsonPoint(bottomRight.getLongitude(), topLeft.getLatitude()), // B
+                new GeoJsonPoint(topLeft.getLongitude(), topLeft.getLatitude()), // A
+                // Repeat first point again, need to close the loop or mongo will cry
+                new GeoJsonPoint(topLeft.getLongitude(), bottomRight.getLatitude()) // C
+                //new GeoJsonPoint(topLeft.getLongitude(), topLeft.getLatitude())
         );
         return result;
     }

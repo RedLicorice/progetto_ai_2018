@@ -8,12 +8,14 @@ import it.polito.ai.models.store.Invoice;
 import it.polito.ai.services.ArchiveService;
 import it.polito.ai.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.geo.GeoJsonLineString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +60,7 @@ public class ArchiveController {
     @PostMapping(path="/archives/upload", produces="application/json")
     @JsonView(ArchiveView.Resource.class)
     public ResponseEntity<?> uploadArchive(
-            @RequestBody List<Measure> measures,
+            @RequestBody ArrayList<Measure> measures,
             Authentication authentication
     ) {
         try {
@@ -144,15 +146,20 @@ public class ArchiveController {
             @RequestBody ArchiveSearchRequest req,
             Authentication authentication
     ) {
-       List<Archive> archives = archiveService.findPurchasableArchives(
-               authentication.getName(),
-               req.getRect(),
-               req.getFrom(),
-               req.getTo(),
-               req.getUsers()
+        try {
+           List<Archive> archives = archiveService.findPurchasableArchives(
+                   authentication.getName(),
+                   req.getRect(),
+                   req.getFrom(),
+                   req.getTo(),
+                   req.getUsers()
 
-       );
-       return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
+           );
+           return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
+        }
+        catch(ArchiveNotFoundException e){
+            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     /*
