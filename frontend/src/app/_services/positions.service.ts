@@ -7,6 +7,8 @@ import PointInPolygon from 'point-in-polygon';
 import { PurchaseRequest } from '../_models/PurchaseRequest';
 import { Purchase } from '../_models/Purchase';
 
+import { POSITIONS } from './mock-positions';
+
 @Injectable()
 export class PositionsService {
   private COST_PER_POSITION = 1;
@@ -46,13 +48,13 @@ export class PositionsService {
 
   private computePositions(): Position[] {
     return POSITIONS.filter(p => {
-      if (this.dateFrom === null || p.timestamp < this.dateFrom) {
-        return false;
-      }
-
-      if (this.dateTo === null || p.timestamp > this.dateTo) {
-        return false;
-      }
+      // if (this.dateFrom === null || p.timestamp < this.dateFrom) {
+      //   return false;
+      // }
+      //
+      // if (this.dateTo === null || p.timestamp > this.dateTo) {
+      //   return false;
+      // }
 
       if (this.polygonCoordinates.length > 0) {
         const coords = this.polygonCoordinates.map(c => [c.lat, c.lng]);
