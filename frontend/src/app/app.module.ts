@@ -22,12 +22,10 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { AuthenticationService } from './_services/authentication.service';
 import { UserService } from './_services/user.service';
 
-import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatRippleModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatRippleModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
