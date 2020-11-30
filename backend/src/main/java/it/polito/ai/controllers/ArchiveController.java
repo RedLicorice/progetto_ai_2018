@@ -137,7 +137,10 @@ public class ArchiveController {
     }
 
     /*
-     *   Search archives in specific area
+     *   Search archives in a square/rectangular area defined by two (lng, lat) tuples
+     *   Server-side filtering is supported to reduce traffic, but since our aim is
+     *   to SELL archives, it would be wise to do the filtering on the client-side
+     *   so constraints can be relapsed if there are no archives satisfying them in the area.
      */
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(path="/archives/search", produces="application/json")

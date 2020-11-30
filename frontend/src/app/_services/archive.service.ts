@@ -53,7 +53,7 @@ export class ArchiveService {
     };
     return this.http.post<PublicArchiveResource[]>(
       environment.archives_search_url,
-      requestBody.toString(),
+      JSON.stringify(requestBody),
       httpOptions
     );
   }

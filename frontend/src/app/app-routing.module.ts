@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './_guards/auth.guard';
 import {RegisterComponent} from './register/register.component';
+import {ShopComponent} from './shop/shop.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
   {
     path: 'purchase',
     component: PurchaseComponent
+  },
+  {
+    path: 'shop',
+    component: ShopComponent
   }
 ];
 

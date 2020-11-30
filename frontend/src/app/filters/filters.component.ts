@@ -24,7 +24,7 @@ export class FiltersComponent implements OnInit {
   polygonCreated: boolean = false;
   mapOptions: any = {
     layers: [
-      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: 'Open Street Map' })
+      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: 'Open Street Map' }),
     ],
     zoom: 12,
     center: L.latLng(41.892824, 12.4948653)
@@ -89,6 +89,13 @@ export class FiltersComponent implements OnInit {
         this.featureGroups.addLayer(layer);
         this.showControlLayer = false;
       });
+    });
+    // Request archives in current area when map is repositioned
+    this.map.on('moveend', function(event) {
+      // event.target is the map which has been moved,
+      // getBounds returns the _southWest and _northEast geopoints pair
+      // These will be used to request archives crossing the current viewport to the server
+      console.log('map move end', event.target.getBounds());
     });
   }
 

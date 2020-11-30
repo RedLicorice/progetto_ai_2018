@@ -1,0 +1,11 @@
+app-archive-map {
+  width:100%; /*Give a width to the map container else it will be zero*/
+  min-height:100%;
+}
+#map-tile {
+  max-height:560px !important;
+}
+app-time-chart {
+  display:block;
+  min-height:100px;
+}

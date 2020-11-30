@@ -1,4 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import { NgModule } from '@angular/core';
 import { SharedModule } from './shared/shared.module';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -26,15 +27,31 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatIconModule} from '@angular/material/icon';
+import {MatGridListModule} from '@angular/material/grid-list';
+
+
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
+import { ShopComponent } from './shop/shop.component';
+
+import { ArchiveMapComponent } from './components/archive-map/archive-map.component';
+import { TimeChartComponent } from './components/time-chart/time-chart.component';
+import {ArchiveService} from './_services/archive.service';
 
 @NgModule({
   declarations: [AppComponent, FiltersComponent, FormatTimestampPipe, ResultsComponent, PurchaseComponent,
-    UserComponent, LoginComponent, HomeComponent, RegisterComponent],
+    UserComponent, LoginComponent, HomeComponent, RegisterComponent, NavbarComponent, ArchiveMapComponent,
+    TimeChartComponent, ShopComponent],
   imports: [
     // angular
     BrowserModule,
     BrowserAnimationsModule,
+    FlexLayoutModule,
     // angular material
     SharedModule,
     // HttpClient
@@ -45,16 +62,24 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     AppRoutingModule,
     ReactiveFormsModule,
     // Modules for Material forms
+    MatMenuModule,
+    MatDividerModule,
+    MatIconModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     MatRippleModule,
     MatSnackBarModule,
+    MatSidenavModule,
+    MatGridListModule,
+    // Google Charts
+    Ng2GoogleChartsModule
   ],
   providers: [
     AuthGuard,
     AuthenticationService,
     UserService,
+    ArchiveService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

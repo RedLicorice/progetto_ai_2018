@@ -1,0 +1,4 @@
+<div style="height: 560px;" leaflet [leafletOptions]="mapOptions" (leafletMapReady)="onMapReady($event)">
+  <div *ngIf="showControlLayer" leafletDraw [leafletDrawOptions]="mapDrawOptions">
+  </div>
+</div>
