@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {PublicArchiveResource} from '../../_models/Archive';
-import {GoogleChartInterface} from "ng2-google-charts";
+import {GoogleChartInterface} from 'ng2-google-charts';
 
 @Component({
   selector: 'app-time-chart',
@@ -76,25 +76,32 @@ export class TimeChartComponent implements OnInit {
 
   constructor() { }
 
-  // The archives to plot
-  private _archives: PublicArchiveResource[];
-
-  @Input()
-  set archives(archives: PublicArchiveResource[]) {
-    this._archives = archives;
-  }
-
   ngOnInit(): void {
-    this.refresh();
+    this.clear();
   }
 
-  refresh(): void {
+  clear(): void {
     // Set the header row
     this.chartData.dataTable = [this.chartDataHeader];
+  }
 
-    this._archives.forEach(a => {
+  setPublicArchives(archives: PublicArchiveResource[]): void {
+    // Set the header row
+    this.chartData.dataTable = [this.chartDataHeader];
+    const users: string[] = archives.map(a => a.username); // Get a list of users
+    const usersIndex = [];
+    users.forEach(u => {
+      if (usersIndex.indexOf(u) === -1) {
+          usersIndex.push(u);
+          this.chartData.options.vAxis.ticks.push(usersIndex.length);
+        }
+      });
+    this.chartData.options.vAxis.ticks.push(usersIndex.length + 1);
+
+    archives.forEach(a => {
       const from = new Date(Math.min.apply(null, a.timestamps));
       const to = new Date(Math.max.apply(null, a.timestamps));
+      console.log("timeChart", a.username, a.id, from, to);
       this.chartData.dataTable.push([ a.username, a.id, from, to, this.createTooltip(a.id, from, to, a.username)]);
     });
   }
@@ -118,5 +125,4 @@ export class TimeChartComponent implements OnInit {
     return tooltip;
   }
 
-  //ToDo: method for seting shown archives setArchives(...)
 }

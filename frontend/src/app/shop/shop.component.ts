@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import {ArchiveMapComponent} from '../components/archive-map/archive-map.component';
 import {ArchiveService} from '../_services/archive.service';
 import {Position} from '../_models/Position';
+import {TimeChartComponent} from "../components/time-chart/time-chart.component";
 
 @Component({
   selector: 'app-shop',
@@ -11,6 +12,7 @@ import {Position} from '../_models/Position';
 })
 export class ShopComponent implements OnInit {
   @ViewChild(ArchiveMapComponent) mapComponent: ArchiveMapComponent;
+  @ViewChild(TimeChartComponent) timeChartComponent: TimeChartComponent;
   constructor(
     private location: Location,
     private archiveService: ArchiveService
@@ -38,6 +40,7 @@ export class ShopComponent implements OnInit {
           console.log('Got Archive: ', x.id, 'User: ', x.username, 'Archive: ', x);
         });
         that.mapComponent.setPublicArchives(a);
+        that.timeChartComponent.setPublicArchives(a);
       },
       error(msg) {
         console.log('Error Getting Archives: ', msg);

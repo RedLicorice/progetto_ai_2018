@@ -5,29 +5,14 @@
     </button>
     <div class="col-md-8 offset-md-2">
       <mat-card>
-        <mat-grid-list cols="2">
-          <mat-grid-tile
-            [colspan]="2"
-            [rowspan]="1"
-            id="map-tile"
-          >
             <app-archive-map (positionChanged)="onPositionChanged($event)" (areaSelected)="onAreaSelected($event)"></app-archive-map>
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="1"
-            [rowspan]="1"
-          >
-            FILTER TILE 2w
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="1"
-            [rowspan]="1"
-          >
-            RESULT TILE
-            <button (click)="clearMarkers()">Clear Markers</button>
-            <button (click)="clearGeo()">Clear Polygon</button>
-          </mat-grid-tile>
-        </mat-grid-list>
+      </mat-card>
+      <mat-card>
+        <app-time-chart archives=""></app-time-chart>
+      </mat-card>
+      <mat-card>
+        <button (click)="clearMarkers()">Clear Markers</button>
+        <button (click)="clearGeo()">Clear Polygon</button>
       </mat-card>
     </div>
   </div>

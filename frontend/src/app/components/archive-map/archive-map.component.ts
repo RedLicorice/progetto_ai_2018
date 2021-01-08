@@ -104,112 +104,36 @@ export class ArchiveMapComponent implements OnInit {
     this.location.back();
   }
 
-  hsvToRgb(h, s, v) {
-    let r, g, b;
-    let i;
-    let f, p, q, t;
-
-    // Make sure our arguments stay in-range
-    h = Math.max(0, Math.min(360, h));
-    s = Math.max(0, Math.min(100, s));
-    v = Math.max(0, Math.min(100, v));
-
-    // We accept saturation and value arguments from 0 to 100 because that's
-    // how Photoshop represents those values. Internally, however, the
-    // saturation and value are calculated from a range of 0 to 1. We make
-    // That conversion here.
-    s /= 100;
-    v /= 100;
-
-    if (s === 0) {
-      // Achromatic (grey)
-      r = g = b = v;
-      // return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-      return '#' + Math.round(r * 255).toString(16) + Math.round(g * 255).toString(16) + Math.round(b * 255).toString(16);
+  strToColor(str): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      // tslint:disable-next-line:no-bitwise
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
-
-    h /= 60; // sector 0 to 5
-    i = Math.floor(h);
-    f = h - i; // factorial part of h
-    p = v * (1 - s);
-    q = v * (1 - s * f);
-    t = v * (1 - s * (1 - f));
-
-    switch (i) {
-      case 0:
-        r = v;
-        g = t;
-        b = p;
-        break;
-
-      case 1:
-        r = q;
-        g = v;
-        b = p;
-        break;
-
-      case 2:
-        r = p;
-        g = v;
-        b = t;
-        break;
-
-      case 3:
-        r = p;
-        g = q;
-        b = v;
-        break;
-
-      case 4:
-        r = t;
-        g = p;
-        b = v;
-        break;
-
-      default: // case 5:
-        r = v;
-        g = p;
-        b = q;
+    let colour = '#';
+    for (let i = 0; i < 3; i++) {
+      // tslint:disable-next-line:no-bitwise
+      const value = (hash >> (i * 8)) & 0xFF;
+      colour += ('00' + value.toString(16)).substr(-2);
     }
-
-    // return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-    return '#' + Math.round(r * 255).toString(16) + Math.round(g * 255).toString(16) + Math.round(b * 255).toString(16);
-  }
-
-  // Use HSL to get a different color for each user
-  getColors(count): string[] {
-    const i = 360 / ( count - 1); // Evenly distribute colors among the hue range
-    const result: string[] = [];
-    for (let x = 0; x < count; x++) {
-      result.push(this.hsvToRgb(i * x, 100, 100));
-    }
-    return result;
+    return colour;
   }
 
   addMarker(lat, lng, color) {
-    // ToDo: How to set the marker color?
     const marker = L.circleMarker([lat, lng], { color: color, fillColor: color});
-    // const marker = L.marker([lat, lng], {
-    //   icon: L.icon({
-    //     iconSize: [25, 41],
-    //     iconAnchor: [13, 41],
-    //     iconUrl: 'assets/marker-icon.png',
-    //     shadowUrl: 'assets/marker-shadow.png'
-    //   })
-    // });
-
     marker.addTo(this.markers);
   }
 
   clearMarkers() {
     this.markers.clearLayers();
-    console.log('markers cleared');
+    console.log('Markers cleared');
   }
 
   setPublicArchives(archives: PublicArchiveResource[]): void {
     // Assign an unique color to each user, by index
     const users: string[] = archives.map(a => a.username); // Get a list of users
-    const colors = this.getColors(users.length);
+    // const colors = this.getColors(users.length);
+    const colors = users.map( u => this.strToColor(u));
     const that = this;
     archives.forEach( a => {
       a.positions.forEach( p => {
@@ -219,10 +143,11 @@ export class ArchiveMapComponent implements OnInit {
     });
   }
 
+  // Reggio Calabria - Lat: 38.110X Lng: 15.661X
   setArchives(archives: ArchiveResource[]): void {
     // Assign an unique color to each user, by index
     const users: string[] = archives.map(a => a.username); // Get a list of users
-    const colors = this.getColors(users.length);
+    const colors = users.map( u => this.strToColor(u));
     const that = this;
     archives.forEach( a => {
       a.measures.forEach( m => that.addMarker(m.latitude, m.longitude, colors[users.indexOf(a.username)]));
