@@ -81,5 +81,6 @@ export class TimeChartComponent implements OnInit {
         });
       });
     });
+    // ToDO: Force view update
   }
 }

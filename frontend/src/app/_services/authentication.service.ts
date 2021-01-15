@@ -89,6 +89,8 @@ export class AuthenticationService {
                   console.log('GOT USER token: ' + res.access_token);
                   // store username and jwt token in local storage to keep user logged in between page refreshes
                   localStorage.setItem('currentUser', JSON.stringify({ username, token: res.access_token }));
+                  // ToDO: Store refresh token and refresh at next request or change status to logged out
+                  // when token expires
               } else {
                 console.log('Error logging in');
                 console.log(res);

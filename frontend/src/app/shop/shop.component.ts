@@ -3,7 +3,10 @@ import { Location } from '@angular/common';
 import {ArchiveMapComponent} from '../components/archive-map/archive-map.component';
 import {ArchiveService} from '../_services/archive.service';
 import {Position} from '../_models/Position';
-import {TimeChartComponent} from "../components/time-chart/time-chart.component";
+import {TimeChartComponent} from '../components/time-chart/time-chart.component';
+
+// ToDo: Add datetimepickers for filter selection
+// https://www.npmjs.com/package/@angular-material-components/datetime-picker
 
 @Component({
   selector: 'app-shop',
@@ -36,9 +39,9 @@ export class ShopComponent implements OnInit {
     const that = this;
     archives.subscribe({
       next(a) {
-        a.forEach( x => {
-          console.log('Got Archive: ', x.id, 'User: ', x.username, 'Archive: ', x);
-        });
+        // a.forEach( x => {
+        //   console.log('Got Archive: ', x.id, 'User: ', x.username, 'Archive: ', x);
+        // });
         that.mapComponent.setPublicArchives(a);
         that.timeChartComponent.setPublicArchives(a);
       },

@@ -37,7 +37,7 @@ export class ArchiveMapComponent implements OnInit {
     position: 'bottomleft',
     draw: {
       polygon: true,
-      polyline: true,
+      polyline: false,
       rectangle: false,
       circle: false,
       marker: false,

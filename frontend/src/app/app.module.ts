@@ -34,6 +34,8 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { NgxMatDatetimePickerModule } from '@angular-material-components/datetime-picker';
+
 
 import { ChartsModule } from '@carbon/charts-angular';
 
@@ -73,6 +75,8 @@ import {ArchiveService} from './_services/archive.service';
     MatSnackBarModule,
     MatSidenavModule,
     MatGridListModule,
+    // Datetime Picker
+    NgxMatDatetimePickerModule,
     // Charts
     ChartsModule
   ],
