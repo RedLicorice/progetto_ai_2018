@@ -37,7 +37,7 @@ export class ArchiveMapComponent implements OnInit {
     position: 'bottomleft',
     draw: {
       polygon: true,
-      polyline: false,
+      polyline: true,
       rectangle: false,
       circle: false,
       marker: false,
@@ -134,11 +134,11 @@ export class ArchiveMapComponent implements OnInit {
     const users: string[] = archives.map(a => a.username); // Get a list of users
     // const colors = this.getColors(users.length);
     const colors = users.map( u => this.strToColor(u));
-    const that = this;
+
     archives.forEach( a => {
       a.positions.forEach( p => {
         console.log('Add marker: ', p);
-        that.addMarker(p.latitude, p.longitude, colors[users.indexOf(a.username)]);
+        this.addMarker(p.latitude, p.longitude, colors[users.indexOf(a.username)]);
       });
     });
   }
@@ -148,9 +148,9 @@ export class ArchiveMapComponent implements OnInit {
     // Assign an unique color to each user, by index
     const users: string[] = archives.map(a => a.username); // Get a list of users
     const colors = users.map( u => this.strToColor(u));
-    const that = this;
+
     archives.forEach( a => {
-      a.measures.forEach( m => that.addMarker(m.latitude, m.longitude, colors[users.indexOf(a.username)]));
+      a.measures.forEach( m => this.addMarker(m.latitude, m.longitude, colors[users.indexOf(a.username)]));
     });
   }
 }

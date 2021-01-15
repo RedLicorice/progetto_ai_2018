@@ -8,6 +8,10 @@
 
 @import 'styles-reset.css';
 
+/* import '@carbon/charts/styles.css';  */
+@import '../node_modules/@carbon/charts/styles.css';
+@import './ibm-plex-font.css';
+
 body {
   margin: 0;
   font-family: Roboto, sans-serif;

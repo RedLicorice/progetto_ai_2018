@@ -35,8 +35,9 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import {MatGridListModule} from '@angular/material/grid-list';
 
+import { ChartsModule } from '@carbon/charts-angular';
 
-import { Ng2GoogleChartsModule } from 'ng2-google-charts';
+
 import { ShopComponent } from './shop/shop.component';
 
 import { ArchiveMapComponent } from './components/archive-map/archive-map.component';
@@ -72,8 +73,8 @@ import {ArchiveService} from './_services/archive.service';
     MatSnackBarModule,
     MatSidenavModule,
     MatGridListModule,
-    // Google Charts
-    Ng2GoogleChartsModule
+    // Charts
+    ChartsModule
   ],
   providers: [
     AuthGuard,
