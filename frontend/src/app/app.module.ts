@@ -35,10 +35,6 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
-import { NgxMatDatetimePickerModule } from '@angular-material-components/datetime-picker';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 
 
 import { ChartsModule } from '@carbon/charts-angular';
@@ -92,11 +88,6 @@ import { ArchiveDeleteComponent } from './archives/archive-delete/archive-delete
     MatTableModule,
     MatDialogModule,
     MatPaginatorModule,
-    // Datetime Picker
-    MatDatepickerModule,
-    MatNativeDateModule,
-    NgxMatMomentModule,
-    NgxMatDatetimePickerModule,
     // Charts
     ChartsModule
   ],
@@ -110,8 +101,7 @@ import { ArchiveDeleteComponent } from './archives/archive-delete/archive-delete
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true
-    },
-    NgxMatDatetimePickerModule
+    }
   ],
   bootstrap: [AppComponent]
 })

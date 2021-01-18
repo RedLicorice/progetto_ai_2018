@@ -7,6 +7,7 @@ import {Location} from '@angular/common';
 import {ArchiveService} from '../_services/archive.service';
 import {ArchiveDetailComponent} from './archive-detail/archive-detail.component';
 import {ArchiveDeleteComponent} from './archive-delete/archive-delete.component';
+import {ArchiveUploadComponent} from './archive-upload/archive-upload.component';
 
 @Component({
   selector: 'app-archives',
@@ -44,6 +45,10 @@ export class ArchivesComponent implements OnInit, AfterViewInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  uploadArchive(): void {
+    this.dialog.open(ArchiveUploadComponent);
   }
 
   detailsArchive(archiveId: string): void {

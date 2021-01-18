@@ -1,0 +1,9 @@
+app-archive-map {
+  width:540px; /*Give a width to the map container else it will be zero*/
+  min-height:100%;
+}
+#map-tile {
+  display:block;
+  width:540px;
+  max-height:560px !important;
+}

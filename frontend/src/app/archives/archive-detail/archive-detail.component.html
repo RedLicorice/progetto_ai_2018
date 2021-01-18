@@ -1,1 +1,10 @@
-<p>archive-detail works!</p>
+<div mat-dialog-content>
+  <div id="map-tile"><app-archive-map></app-archive-map></div>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button color="primary" aria-label="Download Archivio" (click)="downloadArchive()">
+      <mat-icon>download</mat-icon>&nbsp;Download
+    </button>
+    <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Chiudi</button>
+</div>
+

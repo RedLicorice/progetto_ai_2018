@@ -37,7 +37,9 @@ public class ArchiveController {
     public ResponseEntity<?> purchasedArchives(Authentication authentication)
     {
         List<Archive> archives = archiveService.findPurchasedArchives(authentication.getName());
-        archives.addAll(archiveService.findUserArchives(authentication.getName()));
+        // Also include user-owned archives in search results
+        // I prefer keeping things separed so this is out.
+        //archives.addAll(archiveService.findUserArchives(authentication.getName()));
         return new ResponseEntity<List<Archive>>(archives, HttpStatus.OK);
     }
 

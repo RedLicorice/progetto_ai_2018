@@ -1,1 +1,9 @@
-<p>archive-delete works!</p>
+<h1 mat-dialog-title>Eliminazione Archivio</h1>
+<div mat-dialog-content>
+  <p>Confermi l'eliminazione dell'archivio {{archiveId}}?</p>
+  <p>Rimarrà disponibile per gli utenti che lo hanno già acquistato, ma non sarà più visibile nel negozio.</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="false">No</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Conferma</button>
+</div>

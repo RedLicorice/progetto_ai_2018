@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { FiltersComponent } from './filters/filters.component';
 import { ResultsComponent } from './results/results.component';
 import { PurchaseComponent } from './purchase/purchase.component';
 import { UserComponent } from './user/user.component';
@@ -30,10 +28,6 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-  },
-  {
-    path: 'filter',
-    component: FiltersComponent,
   },
   {
     path: 'results',

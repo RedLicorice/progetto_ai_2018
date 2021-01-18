@@ -35,7 +35,7 @@ export class NavbarComponent implements OnInit {
       login: false
     },
     {
-      label: 'User',
+      label: 'Utente',
       icon: 'account_circle',
       link: '/user',
       login: true
