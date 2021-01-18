@@ -21,23 +21,28 @@ export class ArchiveService {
   getArchives(): Observable<ArchiveSummary[]> {
     return this.http.get<ArchiveSummary[]>(environment.archives_url);
   }
+
   getUploadedArchives(): Observable<ArchiveOwnerSummary[]> {
     return this.http.get<ArchiveOwnerSummary[]>(environment.archives_uploaded_url);
   }
+
   uploadArchive(measures: Measure[]): Observable<ArchiveResource> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-type': 'application/json; charset=utf-8',
       })
     };
-    return this.http.post<ArchiveResource>(environment.archives_upload_url, measures.toString(), httpOptions);
+    return this.http.post<ArchiveResource>(environment.archives_upload_url, JSON.stringify(measures), httpOptions);
   }
+
   downloadArchive(archiveId: string): Observable<ArchiveResource> {
     return this.http.get<ArchiveResource>(environment.archives_download_url.replace('{id}', archiveId));
   }
+
   downloadPublicArchive(archiveId: string): Observable<PublicArchiveResource> {
     return this.http.get<PublicArchiveResource>(environment.archives_public_url.replace('{id}', archiveId));
   }
+
   searchArchives(topLeft: Position, bottomRight: Position, from: number, to: number, users: string[]): Observable<PublicArchiveResource[]> {
     const requestBody = {
       'topLeft': topLeft,
@@ -57,6 +62,11 @@ export class ArchiveService {
       httpOptions
     );
   }
+
+  deleteArchive(archiveId: string): Observable<ArchiveOwnerSummary> {
+    return this.http.delete<ArchiveOwnerSummary>(environment.archives_delete_url.replace('{id}', archiveId));
+  }
+
   buyArchives(archiveIds: string[]): Observable<Invoice[]> {
     const httpOptions = {
       headers: new HttpHeaders({

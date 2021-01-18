@@ -13,6 +13,7 @@ export const environment = {
   archives_upload_url: 'http://localhost:8080/archives/upload', // POST
   archives_download_url: 'http://localhost:8080/archives/download/{id}',
   archives_public_url: 'http://localhost:8080/archives/public/{id}',
+  archives_delete_url: 'http://localhost:8080/archives/{id}',
   archives_search_url: 'http://localhost:8080/archives/search',
   archives_buy_url: 'http://localhost:8080/archives/buy',
   store_invoices_url: 'http://localhost:8080/store/invoices',

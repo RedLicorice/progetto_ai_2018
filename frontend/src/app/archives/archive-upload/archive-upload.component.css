@@ -27,8 +27,6 @@
   position: absolute;
 }
 
-#map-tile {
-  display:block;
-  width:540px;
-  max-height:560px !important;
+table {
+  width: 100%;
 }

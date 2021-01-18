@@ -28,14 +28,7 @@ export class ArchivesComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    const uploadedArchives = this.archiveService.getUploadedArchives();
-    uploadedArchives.subscribe( items => {
-        console.log('Uploaded archives retrieved', items);
-        this.dataSource.data = items;
-      },
-      err => {
-        console.log('Error retrieving invoices', err);
-      });
+    this.reloadData()
   }
 
   ngAfterViewInit() {
@@ -47,8 +40,29 @@ export class ArchivesComponent implements OnInit, AfterViewInit {
     this.location.back();
   }
 
+  reloadData(): void {
+    const uploadedArchives = this.archiveService.getUploadedArchives();
+    uploadedArchives.subscribe( items => {
+        console.log('Uploaded archives retrieved', items);
+        this.dataSource.data = items;
+      },
+      err => {
+        console.log('Error retrieving invoices', err);
+      });
+  }
+
   uploadArchive(): void {
-    this.dialog.open(ArchiveUploadComponent);
+    const dialogRef = this.dialog.open(ArchiveUploadComponent);
+    dialogRef.afterClosed()
+      .subscribe(res => {
+        if (res) {
+          console.log('Upload confirm', res);
+          return this.archiveService.uploadArchive(res).subscribe(upl => {
+            console.log('Upload result', upl);
+            this.reloadData();
+          });
+        }
+      });
   }
 
   detailsArchive(archiveId: string): void {
@@ -58,8 +72,17 @@ export class ArchivesComponent implements OnInit, AfterViewInit {
   }
 
   deleteArchive(archiveId: string): void {
-    this.dialog.open(ArchiveDeleteComponent, {
+    const dialogRef = this.dialog.open(ArchiveDeleteComponent, {
       data: archiveId
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        console.log('Deleting archive', archiveId);
+        this.archiveService.deleteArchive(archiveId).subscribe(del => {
+            this.reloadData();
+          }
+        );
+      }
     });
   }
 
