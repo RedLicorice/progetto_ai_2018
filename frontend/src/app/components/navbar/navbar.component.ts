@@ -49,13 +49,13 @@ export class NavbarComponent implements OnInit {
     {
       label: 'Negozio',
       icon: 'shopping_bag',
-      link: '/filter',
+      link: '/shop',
       login: true
     },
     {
-      label: 'Negozio (Nuovo)',
-      icon: 'shopping_bag',
-      link: '/shop',
+      label: 'Ordini',
+      icon: 'receipt',
+      link: '/invoices',
       login: true
     },
     {

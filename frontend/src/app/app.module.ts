@@ -5,8 +5,6 @@ import { SharedModule } from './shared/shared.module';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { AppComponent } from './app.component';
-import { FiltersComponent } from './filters/filters.component';
-import { FormatTimestampPipe } from './filters/format-timestamp.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { ResultsComponent } from './results/results.component';
 import { PurchaseComponent } from './purchase/purchase.component';
@@ -34,7 +32,13 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 import { NgxMatDatetimePickerModule } from '@angular-material-components/datetime-picker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 import { ChartsModule } from '@carbon/charts-angular';
@@ -45,11 +49,21 @@ import { ShopComponent } from './shop/shop.component';
 import { ArchiveMapComponent } from './components/archive-map/archive-map.component';
 import { TimeChartComponent } from './components/time-chart/time-chart.component';
 import {ArchiveService} from './_services/archive.service';
+import { InvoicesComponent } from './invoices/invoices.component';
+import {StoreService} from './_services/store.service';
+import { PayDialogComponent } from './invoices/pay-dialog/pay-dialog.component';
+import { CancelDialogComponent } from './invoices/cancel-dialog/cancel-dialog.component';
+import { DetailsDialogComponent } from './invoices/details-dialog/details-dialog.component';
+import { ArchivesComponent } from './archives/archives.component';
+import { ArchiveDetailComponent } from './archives/archive-detail/archive-detail.component';
+import { ArchiveUploadComponent } from './archives/archive-upload/archive-upload.component';
+import { ArchiveDeleteComponent } from './archives/archive-delete/archive-delete.component';
 
 @NgModule({
-  declarations: [AppComponent, FiltersComponent, FormatTimestampPipe, ResultsComponent, PurchaseComponent,
+  declarations: [AppComponent, ResultsComponent, PurchaseComponent,
     UserComponent, LoginComponent, HomeComponent, RegisterComponent, NavbarComponent, ArchiveMapComponent,
-    TimeChartComponent, ShopComponent],
+    TimeChartComponent, ShopComponent, InvoicesComponent, PayDialogComponent, CancelDialogComponent,
+    DetailsDialogComponent, ArchivesComponent, ArchiveDetailComponent, ArchiveUploadComponent, ArchiveDeleteComponent],
   imports: [
     // angular
     BrowserModule,
@@ -75,7 +89,13 @@ import {ArchiveService} from './_services/archive.service';
     MatSnackBarModule,
     MatSidenavModule,
     MatGridListModule,
+    MatTableModule,
+    MatDialogModule,
+    MatPaginatorModule,
     // Datetime Picker
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMatMomentModule,
     NgxMatDatetimePickerModule,
     // Charts
     ChartsModule
@@ -85,11 +105,13 @@ import {ArchiveService} from './_services/archive.service';
     AuthenticationService,
     UserService,
     ArchiveService,
+    StoreService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true
     },
+    NgxMatDatetimePickerModule
   ],
   bootstrap: [AppComponent]
 })

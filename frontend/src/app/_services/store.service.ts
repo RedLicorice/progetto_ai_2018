@@ -28,4 +28,15 @@ export class StoreService {
       httpOptions
     );
   }
+  cancelInvoice(invoiceId: string): Observable<Invoice> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json; charset=utf-8',
+      })
+    };
+    return this.http.delete<Invoice>(
+      environment.store_invoice_cancel_url.replace('{id}', invoiceId),
+      httpOptions
+    );
+  }
 }

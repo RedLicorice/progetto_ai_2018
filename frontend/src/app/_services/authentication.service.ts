@@ -69,6 +69,22 @@ export class AuthenticationService {
       return null;
     }
 
+    getRefreshToken() {
+      const cur = JSON.parse(localStorage.getItem('currentUser'));
+      if (cur && cur.token) {
+        return cur.refresh_token;
+      }
+      return null;
+    }
+
+    getLoginExpiry() {
+      const cur = JSON.parse(localStorage.getItem('currentUser'));
+      if (cur && cur.token) {
+        return cur.expires_in;
+      }
+      return null;
+    }
+
     login(username: string, password: string) {
       const httpParams = new HttpParams()
       .set('grant_type', 'password')
@@ -88,7 +104,12 @@ export class AuthenticationService {
               if (res && res.access_token) {
                   console.log('GOT USER token: ' + res.access_token);
                   // store username and jwt token in local storage to keep user logged in between page refreshes
-                  localStorage.setItem('currentUser', JSON.stringify({ username, token: res.access_token }));
+                  localStorage.setItem('currentUser', JSON.stringify({
+                    username,
+                    token: res.access_token,
+                    expires_in: res.expires_in,
+                    refresh_token: res.refresh_token
+                  }));
                   // ToDO: Store refresh token and refresh at next request or change status to logged out
                   // when token expires
               } else {
@@ -101,5 +122,12 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
+    }
+
+    refreshToken() {
+      // return this.http.post<any>(environment.refresh_url, {}, { withCredentials: true })
+      //   .pipe(map((user) => {
+      //     return user;
+      //   }));
     }
 }

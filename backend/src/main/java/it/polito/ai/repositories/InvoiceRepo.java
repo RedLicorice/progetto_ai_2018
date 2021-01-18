@@ -17,4 +17,5 @@ public interface InvoiceRepo extends Repository<Invoice, String> {
     Invoice findByUsernameAndItemId(String username, String archiveId);
     List<Invoice> findByUsername(String username);
     List<Invoice> findInvoiceByUsernameAndIsPaidIsTrue(String username);
+    void deleteById(String id);
 }

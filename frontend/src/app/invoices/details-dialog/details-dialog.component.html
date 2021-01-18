@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Invoice {{data.id}}</h1>
+<div mat-dialog-content>
+  <mat-list>
+    <mat-list-item><strong>Archivio:</strong> {{data.itemId}}</mat-list-item>
+    <mat-list-item><strong>Acquistato da:</strong> {{data.username}}</mat-list-item>
+    <mat-list-item><strong>Prezzo:</strong> {{data.amount}}</mat-list-item>
+    <mat-list-item><strong>Data:</strong> {{ timestampToDate(data.createdAt) }}</mat-list-item>
+    <mat-list-item><strong>Stato:</strong> {{data.isPaid ? "Pagato":"Non Pagato"}}</mat-list-item>
+  </mat-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="false">Chiudi</button>
+</div>

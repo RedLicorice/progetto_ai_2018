@@ -4,6 +4,7 @@ import {ArchiveMapComponent} from '../components/archive-map/archive-map.compone
 import {ArchiveService} from '../_services/archive.service';
 import {Position} from '../_models/Position';
 import {TimeChartComponent} from '../components/time-chart/time-chart.component';
+import { FormControl } from '@angular/forms';
 
 // ToDo: Add datetimepickers for filter selection
 // https://www.npmjs.com/package/@angular-material-components/datetime-picker
@@ -20,6 +21,9 @@ export class ShopComponent implements OnInit {
     private location: Location,
     private archiveService: ArchiveService
   ) { }
+
+  dateBegin: string;
+  dateEnd: string;
 
   ngOnInit(): void {
   }

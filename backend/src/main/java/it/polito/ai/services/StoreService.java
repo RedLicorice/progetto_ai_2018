@@ -74,6 +74,20 @@ public class StoreService {
     }
 
     @Transactional
+    public Boolean cancelInvoice(
+            String username,
+            String invoiceId
+    ) throws InvoiceNotFoundException
+    {
+        Invoice invoice = invoiceRepo.findByIdAndUsername(invoiceId, username);
+        if(invoice == null){
+            throw new InvoiceNotFoundException("Invoice " + invoiceId + " not found for user " + username);
+        }
+        invoiceRepo.deleteById(invoiceId);
+        return true;
+    }
+
+    @Transactional
     public List<Invoice> getInvoices(
             String username
     )

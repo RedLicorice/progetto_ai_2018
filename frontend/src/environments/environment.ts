@@ -7,6 +7,7 @@ export const environment = {
   api_url: 'http://localhost:8080/',
   trusted_url: 'http://trusted-app:secret@localhost:8080/oauth/token',
   register_url: 'http://register-app:secret@localhost:8080/oauth/token',
+  refresh_url: 'http://register-app:secret@localhost:8080/oauth/token',
   archives_url: 'http://localhost:8080/archives',
   archives_uploaded_url: 'http://localhost:8080/archives/upload', // GET
   archives_upload_url: 'http://localhost:8080/archives/upload', // POST
@@ -16,7 +17,8 @@ export const environment = {
   archives_buy_url: 'http://localhost:8080/archives/buy',
   store_invoices_url: 'http://localhost:8080/store/invoices',
   store_invoice_detail_url: 'http://localhost:8080/store/invoices/{id}',
-  store_invoice_pay_url: 'http://localhost:8080/store/invoices/{id}'
+  store_invoice_pay_url: 'http://localhost:8080/store/invoices/{id}',
+  store_invoice_cancel_url: 'http://localhost:8080/store/invoices/{id}'
 };
 
 /*

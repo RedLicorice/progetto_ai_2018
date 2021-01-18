@@ -66,7 +66,8 @@ export class LoginComponent implements OnInit {
         error => {
           this.error = error;
           this.loading = false;
-          this.openSnackBar(error.toString());
+          console.log('Login Error', error);
+          this.openSnackBar('Login fallito! Controlla le credenziali e riprova!');
         });
   }
 

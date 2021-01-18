@@ -72,4 +72,21 @@ public class StoreController {
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
         }
     }
+
+    @PreAuthorize("hasAnyRole('CUSTOMER')")
+    @DeleteMapping(path="/store/invoices/{invoiceId}", produces="application/json")
+    public ResponseEntity<?> deleteInvoice(
+            @PathVariable String invoiceId,
+            Authentication authentication
+    ) {
+        Account account = accountService.findAccountByUsername(authentication.getName());
+
+        try {
+            Boolean result = storeService.cancelInvoice(account.getUsername(), invoiceId);
+            return new ResponseEntity<>( result ? HttpStatus.OK : HttpStatus.NOT_MODIFIED);
+        }
+        catch(InvoiceNotFoundException e){
+            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
+        }
+    }
 }

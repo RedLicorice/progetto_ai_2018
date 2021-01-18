@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './_guards/auth.guard';
 import {RegisterComponent} from './register/register.component';
 import {ShopComponent} from './shop/shop.component';
+import {InvoicesComponent} from './invoices/invoices.component';
+import {ArchivesComponent} from './archives/archives.component';
 
 const routes: Routes = [
   {
@@ -43,7 +45,18 @@ const routes: Routes = [
   },
   {
     path: 'shop',
-    component: ShopComponent
+    component: ShopComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'invoices',
+    component: InvoicesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'archives',
+    component: ArchivesComponent,
+    canActivate: [AuthGuard]
   }
 ];
 
