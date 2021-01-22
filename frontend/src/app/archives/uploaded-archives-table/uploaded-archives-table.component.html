@@ -1,0 +1,43 @@
+<ng-container>
+  <table mat-table [dataSource]="dataSource" matSort >
+  <!-- ID Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+    <td mat-cell *matCellDef="let archive"> {{archive.id}} </td>
+  </ng-container>
+  <!-- Purchase count column -->
+  <ng-container matColumnDef="purchases">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Acquisti </th>
+    <td mat-cell *matCellDef="let archive" > {{archive.purchases}} </td>
+  </ng-container>
+  <!-- Position Count Column -->
+  <ng-container matColumnDef="count">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> # Posizioni </th>
+    <td mat-cell *matCellDef="let archive"> {{archive.count}} </td>
+  </ng-container>
+  <!-- Status Column -->
+  <ng-container matColumnDef="deleted">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Stato </th>
+    <td mat-cell *matCellDef="let archive"> {{archive.deleted ? "Non Disponibile" : "Disponibile"}} </td>
+  </ng-container>
+  <!-- Actions Column -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Azioni </th>
+    <td mat-cell *matCellDef="let archive">
+      <button (click)="onArchiveDownload(archive.id)" mat-icon-button color="primary" aria-label="Dettagli">
+        <mat-icon>get_app</mat-icon>
+      </button>
+      <button (click)="onArchiveDetails(archive.id)" mat-icon-button color="accent" aria-label="Dettagli">
+        <mat-icon>visibility</mat-icon>
+      </button>
+      <button *ngIf="!archive.deleted" (click)="onArchiveDelete(archive.id)" mat-icon-button color="warn" aria-label="Elimina">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
+  <tr mat-row *matRowDef="let row; columns: columnNames;"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</ng-container>

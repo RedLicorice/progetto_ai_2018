@@ -22,7 +22,11 @@ export class ArchiveMapComponent implements OnInit {
 
   map: L.Map;
   markers: L.LayerGroup = new L.LayerGroup();
-  polygonCreated = false;
+  featureGroups = new L.FeatureGroup();
+  polygonCoordinates: L.LatLng[] = [];
+  showControlLayer = true; // Wheter to show the control layer (for drawing polygons)
+  polygonCreated = false; // Wheter a polygon has been drawn on the map
+
   mapOptions: any = {
     layers: [
       L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: 'Open Street Map' }),
@@ -30,10 +34,6 @@ export class ArchiveMapComponent implements OnInit {
     zoom: 12,
     center: L.latLng(41.892824, 12.4948653)
   };
-
-  featureGroups = new L.FeatureGroup();
-  polygonCoordinates: L.LatLng[] = [];
-  showControlLayer = true;
 
   mapDrawOptions: any = {
     position: 'bottomleft',
@@ -75,13 +75,23 @@ export class ArchiveMapComponent implements OnInit {
       // @ts-ignore
       const layer: L.Layer = e.layer;
       // @ts-ignore
-      this.polygonCoordinates = layer.getLatLngs()[0];
-      // Emit AreaSelected event on polygon drawn so parent can filter archives
-      that.areaSelected.emit(this.polygonCoordinates);
+      this.polygonCoordinates = layer.getLatLngs()[0]; // First element is the polygon (it's the first object in the group)
+      // Add polygon layer to the map
       this.ngZone.run(() => {
         this.featureGroups.addLayer(layer);
         this.showControlLayer = false;
       });
+      // Count Markers in polygon
+      const polygon = L.polygon(this.polygonCoordinates);
+      let count = 0;
+      this.markers.eachLayer( markerLayer => {
+        if (markerLayer instanceof L.CircleMarker && polygon.getBounds().contains(markerLayer.getLatLng())) {
+          count += 1;
+        }
+      });
+      console.log('selected measures count', count);
+      // Emit AreaSelected event on polygon drawn so parent can handle it
+      that.areaSelected.emit(this.polygonCoordinates);
     });
     // Request archives in new area when map is repositioned
     this.map.on('moveend', function(event) {
@@ -137,10 +147,10 @@ export class ArchiveMapComponent implements OnInit {
     const users: string[] = archives.map(a => a.username); // Get a list of users
     // const colors = this.getColors(users.length);
     const colors = users.map( u => this.strToColor(u));
-
+    this.clearMarkers(); // Clear markers so they don't overlap
     archives.forEach( a => {
       a.positions.forEach( p => {
-        console.log('Add marker: ', p);
+        // console.log('Add marker: ', p);
         this.addMarker(p.latitude, p.longitude, colors[users.indexOf(a.username)]);
       });
     });

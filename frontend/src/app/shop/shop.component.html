@@ -4,32 +4,85 @@
       <mat-icon aria-label="Torna indietro">arrow_back</mat-icon>
     </button>
     <div class="col-md-8 offset-md-2">
+      <!-- Geospatial filter -->
       <mat-card>
-        <h4>Filtro Temporale</h4>
-        <mat-form-field>
-          <input matInput
-                 type="datetime-local"
-                 placeholder="Data Inizio"
-                 ngModel="dateBegin"
+        <mat-card-title>Acquisto Archivi</mat-card-title>
+        <mat-card-subtitle>
+          Seleziona l'intervallo temporale di tuo interesse, quindi traccia un poligono sulla mappa per selezionare gli archivi da acquistare.<br>
+          Puoi escludere dall'acquisto gli archivi di uno specifico utente togliendo il segno di spunta dalla lista.
+        </mat-card-subtitle>
+        <mat-card-content>
+          <app-time-interval-filter (changed)="onTimeFilterChanged" ></app-time-interval-filter>
+
+          <div class="row w-100 no-gutters mb-2">
+            <div class="col-8">
+              <app-archive-time-chart></app-archive-time-chart>
+            </div>
+            <div class="col">
+              <mat-list>
+                <mat-list-item *ngFor="let user of shownUsers">
+                  {{user}}
+                </mat-list-item>
+              </mat-list>
+            </div>
+          </div>
+          <app-archive-search-map
+            (positionChanged)="onBoundsChanged($event)"
+            (areaSelected)="onAreaSelected($event)"
           >
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput
-                 type="datetime-local"
-                 placeholder="Data Fine"
-                 ngModel="dateEnd"
-          >
-        </mat-form-field>
-      </mat-card>
-      <mat-card>
-        <app-archive-map (positionChanged)="onPositionChanged($event)" (areaSelected)="onAreaSelected($event)"></app-archive-map>
-      </mat-card>
-      <mat-card>
-        <app-time-chart archives=""></app-time-chart>
-      </mat-card>
-      <mat-card>
-        <button (click)="clearMarkers()">Clear Markers</button>
-        <button (click)="clearGeo()">Clear Polygon</button>
+          </app-archive-search-map>
+
+          <div class="d-flex w-100 justify-content-center mt-2" *ngIf="polygonCreated">
+            <button mat-flat-button color="warn" (click)="clearPolygon()"><mat-icon>clear</mat-icon> Reimposta filtro Geospaziale</button>&emsp;
+          </div>
+          <div *ngIf="resultingCount && resultingArchives">
+            <div class="row w-100 no-gutters mt-2"><div class="col"><h3>Risultati Ricerca</h3></div></div>
+            <div class="row w-100 no-gutters mt-2">
+              <div class="col">
+                <h4>Utenti</h4>
+                <mat-selection-list #users (selectionChange)="onSelectUser($event)">
+                  <mat-list-option
+                    *ngFor="let user of shownUsers"
+                    selected
+                    [value]="user"
+                  >
+                    {{user}}
+                  </mat-list-option>
+                </mat-selection-list>
+                <p>
+                  Utenti selezionati: {{selectedUsers.length}} / {{shownUsers.length}}
+                </p>
+              </div>
+              <div class="col">
+                <h4>Archivi</h4>
+                <p>Misurazioni all'interno del poligono: {{resultingCount}}</p>
+                <!--<app-archives-filter [archives]="resultingArchives"></app-archives-filter>
+                <button mat-flat-button color="primary" [disabled]="selectedArchives.length <= 0"><mat-icon>shopping_cart</mat-icon> Acquista</button>
+                -->
+                <mat-selection-list #archives (selectionChange)="onSelectArchive($event)">
+                  <mat-list-option
+                    *ngFor="let archive of resultingArchives"
+                    [selected]="isUserSelected(archive.username)"
+                    [value]="archive"
+                  >
+                    {{archive.id}} - {{archive.username}} - ({{archive.count}} Misure)
+                  </mat-list-option>
+                </mat-selection-list>
+                <p>
+                  Archivi selezionati: {{selectedArchives.length}} / {{resultingArchives.length}}
+                </p>
+              </div>
+            </div>
+            <div class="row w-100 no-gutters mt-2">
+              <div class="col">
+                <button mat-flat-button color="primary" (click)="onConfirmPurchase()"><mat-icon>shopping_cart</mat-icon> Conferma Acquisto</button>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+
+        </mat-card-actions>
       </mat-card>
     </div>
   </div>

@@ -3,8 +3,6 @@ import { Observable, of } from 'rxjs';
 import * as L from 'leaflet';
 
 import PointInPolygon from 'point-in-polygon';
-import { PurchaseRequest } from '../_models/PurchaseRequest';
-import { Purchase } from '../_models/Purchase';
 import { ArchiveResource, PublicArchiveResource, ArchiveSummary, ArchiveOwnerSummary } from '../_models/Archive';
 import { Measure } from '../_models/Measure';
 import { Position } from '../_models/Position';
@@ -18,7 +16,7 @@ export class ArchiveService {
 
   constructor(private http: HttpClient) {}
 
-  getArchives(): Observable<ArchiveSummary[]> {
+  getPurchasedArchives(): Observable<ArchiveSummary[]> {
     return this.http.get<ArchiveSummary[]>(environment.archives_url);
   }
 
@@ -43,13 +41,13 @@ export class ArchiveService {
     return this.http.get<PublicArchiveResource>(environment.archives_public_url.replace('{id}', archiveId));
   }
 
-  searchArchives(topLeft: Position, bottomRight: Position, from: number, to: number, users: string[]): Observable<PublicArchiveResource[]> {
+  searchArchives(topLeft: Position, bottomRight: Position, from: number, to: number): Observable<PublicArchiveResource[]> {
     const requestBody = {
       'topLeft': topLeft,
       'bottomRight' : bottomRight,
       'from': from,
       'to': to,
-      'users': users
+      'users': [] // not used since we filter users only before purchase, based on the ones shown in the map
     };
     const httpOptions = {
       headers: new HttpHeaders({
@@ -67,15 +65,15 @@ export class ArchiveService {
     return this.http.delete<ArchiveOwnerSummary>(environment.archives_delete_url.replace('{id}', archiveId));
   }
 
-  buyArchives(archiveIds: string[]): Observable<Invoice[]> {
+  buyArchives(archiveIds: string[]): Observable<Invoice> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-type': 'application/json; charset=utf-8',
       })
     };
-    return this.http.post<Invoice[]>(
-      environment.archives_search_url,
-      archiveIds.toString(),
+    return this.http.post<Invoice>(
+      environment.archives_buy_url,
+      JSON.stringify(archiveIds),
       httpOptions
     );
   }

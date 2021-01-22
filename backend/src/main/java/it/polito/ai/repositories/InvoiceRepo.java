@@ -14,8 +14,9 @@ import java.util.Optional;
 public interface InvoiceRepo extends Repository<Invoice, String> {
     Invoice save(Invoice invoice);
     Invoice findByIdAndUsername(String id, String username);
-    Invoice findByUsernameAndItemId(String username, String archiveId);
+    Invoice findByUsernameAndItemsContaining(String username, String archiveId);
     List<Invoice> findByUsername(String username);
     List<Invoice> findInvoiceByUsernameAndIsPaidIsTrue(String username);
+    List<Invoice> findInvoiceByCreatedAtLessThanAndIsPaidIsFalse(Long timestamp);
     void deleteById(String id);
 }

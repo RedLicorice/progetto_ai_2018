@@ -16,17 +16,6 @@
             <mat-list-item>Nome Utente: {{user.username}}</mat-list-item>
             <mat-list-item>Wallet: {{user.wallet}}</mat-list-item>
         </mat-list>
-
-          <h2 class="margin-top">
-            Posizioni sottomesse:
-          </h2>
-
-          <mat-list>
-            <mat-list-item role="listitem" *ngFor="let p of positions">
-              Coordinate: {{p.latitude}},{{p.longitude}}. Data: {{p.timestamp | formatTimestamp}}
-            </mat-list-item>
-          </mat-list>
-
         </mat-card-content>
       </mat-card>
     </div>

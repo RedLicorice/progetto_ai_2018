@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { JWT } from '../_models/JWT';
 import {User} from '../_models/User';
+import * as moment from 'moment';
 
 @Injectable()
 export class AuthenticationService {
@@ -108,10 +109,9 @@ export class AuthenticationService {
                     username,
                     token: res.access_token,
                     expires_in: res.expires_in,
-                    refresh_token: res.refresh_token
+                    refresh_token: res.refresh_token,
+                    expiry: moment().add(res.expires_in, 'seconds') // When will this token be not valid anymore?
                   }));
-                  // ToDO: Store refresh token and refresh at next request or change status to logged out
-                  // when token expires
               } else {
                 console.log('Error logging in');
                 console.log(res);

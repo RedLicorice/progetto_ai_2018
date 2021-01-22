@@ -6,8 +6,6 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ResultsComponent } from './results/results.component';
-import { PurchaseComponent } from './purchase/purchase.component';
 import { UserComponent } from './user/user.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
@@ -43,7 +41,7 @@ import { ChartsModule } from '@carbon/charts-angular';
 import { ShopComponent } from './shop/shop.component';
 
 import { ArchiveMapComponent } from './components/archive-map/archive-map.component';
-import { TimeChartComponent } from './components/time-chart/time-chart.component';
+import { ArchiveTimeChartComponent } from './shop/archive-time-chart/archive-time-chart.component';
 import {ArchiveService} from './_services/archive.service';
 import { InvoicesComponent } from './invoices/invoices.component';
 import {StoreService} from './_services/store.service';
@@ -54,12 +52,19 @@ import { ArchivesComponent } from './archives/archives.component';
 import { ArchiveDetailComponent } from './archives/archive-detail/archive-detail.component';
 import { ArchiveUploadComponent } from './archives/archive-upload/archive-upload.component';
 import { ArchiveDeleteComponent } from './archives/archive-delete/archive-delete.component';
+import { ArchiveDisplayMapComponent } from './archives/archive-display-map/archive-display-map.component';
+import { ArchiveSearchMapComponent } from './shop/archive-search-map/archive-search-map.component';
+import { UploadedArchivesTableComponent } from './archives/uploaded-archives-table/uploaded-archives-table.component';
+import { PurchasedArchivesTableComponent } from './archives/purchased-archives-table/purchased-archives-table.component';
+import { TimeIntervalFilterComponent } from './shop/time-interval-filter/time-interval-filter.component';
 
 @NgModule({
-  declarations: [AppComponent, ResultsComponent, PurchaseComponent,
+  declarations: [AppComponent,
     UserComponent, LoginComponent, HomeComponent, RegisterComponent, NavbarComponent, ArchiveMapComponent,
-    TimeChartComponent, ShopComponent, InvoicesComponent, PayDialogComponent, CancelDialogComponent,
-    DetailsDialogComponent, ArchivesComponent, ArchiveDetailComponent, ArchiveUploadComponent, ArchiveDeleteComponent],
+    ArchiveTimeChartComponent, ShopComponent, InvoicesComponent, PayDialogComponent, CancelDialogComponent,
+    DetailsDialogComponent, ArchivesComponent, ArchiveDetailComponent, ArchiveUploadComponent,
+    ArchiveDeleteComponent, ArchiveDisplayMapComponent, ArchiveSearchMapComponent, UploadedArchivesTableComponent,
+    PurchasedArchivesTableComponent, TimeIntervalFilterComponent],
   imports: [
     // angular
     BrowserModule,

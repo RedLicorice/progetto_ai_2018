@@ -10,6 +10,7 @@ public interface ArchiveRepo  extends Repository<Archive, String> {
     public Archive save(Archive a);
     public List<Archive> deleteAllByUsername(String username);
     public Archive findById(String id);
+    public List<Archive> findByIdIn(List<String> id);
     //public Archive findTop1ByLastTimestampAndUsername(String username);
     public Archive findFirstByUsernameOrderByLastTimestampDesc(String username);
     public Optional<Archive> findByUsernameAndId(String username, String id);

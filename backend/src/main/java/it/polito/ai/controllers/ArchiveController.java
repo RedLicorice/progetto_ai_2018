@@ -29,7 +29,7 @@ public class ArchiveController {
     private StoreService storeService;
 
     /*
-     *   Return all archives "public" summary (both purchased and uploaded)
+     *   Return all archives "public" summary
      */
     @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(path="/archives", produces="application/json")
@@ -60,7 +60,7 @@ public class ArchiveController {
      */
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(path="/archives/upload", produces="application/json")
-    @JsonView(ArchiveView.Resource.class)
+    @JsonView(ArchiveView.OwnerSummary.class)
     public ResponseEntity<?> uploadArchive(
             @RequestBody ArrayList<Measure> measures,
             Authentication authentication
@@ -182,9 +182,8 @@ public class ArchiveController {
             Authentication authentication
     ) {
         List<Archive> archives = archiveService.getArchives(archiveIds);
-        List<Invoice> invoices = archives.stream()
-            .map( a -> storeService.createInvoice(authentication.getName(), a.getPrice(), a.getId()))
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(invoices, HttpStatus.OK);
+        List<String> archive_ids = archives.stream().map(Archive::getId).collect(Collectors.toList());
+        Invoice invoice =  storeService.createInvoice(authentication.getName(), archive_ids);
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
     }
 }

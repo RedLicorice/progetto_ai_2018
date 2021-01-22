@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TimeChartComponent } from './time-chart.component';
+import { ArchiveDisplayMapComponent } from './archive-display-map.component';
 
-describe('TimeChartComponent', () => {
-  let component: TimeChartComponent;
-  let fixture: ComponentFixture<TimeChartComponent>;
+describe('ArchiveDisplayMapComponent', () => {
+  let component: ArchiveDisplayMapComponent;
+  let fixture: ComponentFixture<ArchiveDisplayMapComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TimeChartComponent ]
+      declarations: [ ArchiveDisplayMapComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TimeChartComponent);
+    fixture = TestBed.createComponent(ArchiveDisplayMapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

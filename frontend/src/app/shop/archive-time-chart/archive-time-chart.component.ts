@@ -2,14 +2,14 @@ import {Component, Input, OnInit} from '@angular/core';
 import {PublicArchiveResource} from '../../_models/Archive';
 
 @Component({
-  selector: 'app-time-chart',
-  templateUrl: './time-chart.component.html',
-  styleUrls: ['./time-chart.component.css']
+  selector: 'app-archive-time-chart',
+  templateUrl: './archive-time-chart.component.html',
+  styleUrls: ['./archive-time-chart.component.css']
 })
-export class TimeChartComponent implements OnInit {
+export class ArchiveTimeChartComponent implements OnInit {
   // Chart options
   options = {
-    'title': 'Scatter (time series)',
+    'title': '',
     'axes': {
       'bottom': {
         'title': 'Measures',
@@ -21,7 +21,7 @@ export class TimeChartComponent implements OnInit {
         'mapsTo': 'value'
       }
     },
-    'height': '400px',
+    'height': '100px',
     'legend': {
       'enabled': false,
     }

@@ -10,15 +10,7 @@ import { PayDialogComponent } from './pay-dialog/pay-dialog.component';
 import { CancelDialogComponent } from './cancel-dialog/cancel-dialog.component';
 import { DetailsDialogComponent } from './details-dialog/details-dialog.component';
 import * as moment from 'moment';
-
-const MOCK_DATA: Invoice[] = [
-  {'id': 'mockinvoice1', 'username': 'Test', 'amount': 10, 'itemId': 'mockitem1', 'isPaid': true, 'createdAt': 1610903485},
-  {'id': 'mockinvoice2', 'username': 'Test', 'amount': 5, 'itemId': 'mockitem2', 'isPaid': false, 'createdAt': 1610903485},
-  {'id': 'mockinvoice3', 'username': 'Test', 'amount': 8, 'itemId': 'mockitem3', 'isPaid': true, 'createdAt': 1610903485},
-  {'id': 'mockinvoice4', 'username': 'Test', 'amount': 42, 'itemId': 'mockitem4', 'isPaid': false, 'createdAt': 1610903485},
-  {'id': 'mockinvoice5', 'username': 'Test', 'amount': 420, 'itemId': 'mockitem5', 'isPaid': true, 'createdAt': 1610903485},
-  {'id': 'mockinvoice6', 'username': 'Test', 'amount': 69, 'itemId': 'mockitem6', 'isPaid': false, 'createdAt': 1610903485}
-];
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-invoices',
@@ -35,20 +27,14 @@ export class InvoicesComponent implements OnInit, AfterViewInit {
   constructor(
     private location: Location,
     private storeService: StoreService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) { }
 
 
 
   ngOnInit(): void {
-    const invoices = this.storeService.getInvoices();
-    invoices.subscribe( items => {
-      console.log('Invoices retrieved', items);
-      this.dataSource.data = items;
-    },
-    err => {
-      console.log('Error retrieving invoices', err);
-    });
+    this.reload();
   }
 
   ngAfterViewInit() {
@@ -58,6 +44,17 @@ export class InvoicesComponent implements OnInit, AfterViewInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  reload(): void {
+    const invoices = this.storeService.getInvoices();
+    invoices.subscribe( items => {
+        console.log('Invoices retrieved', items);
+        this.dataSource.data = items;
+      },
+      err => {
+        console.log('Error retrieving invoices', err);
+      });
   }
 
   detailsInvoice(invoice: Invoice): void {
@@ -72,7 +69,14 @@ export class InvoicesComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe( res => {
       if (res) {
-        this.storeService.payInvoice(invoice.id);
+        const resp = this.storeService.payInvoice(res);
+        resp.subscribe(req => {
+          this._snackBar.open('Invoice pagato!');
+          this.reload();
+        },
+        err => {
+          this._snackBar.open('Errore durante il pagamento dell\'invoice: controlla di avere abbastanza Token!');
+        });
       }
     });
   }
@@ -83,7 +87,14 @@ export class InvoicesComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe( res => {
       if (res) {
-        this.storeService.cancelInvoice(invoice.id);
+        const resp = this.storeService.cancelInvoice(invoice.id);
+        resp.subscribe(req => {
+            this._snackBar.open('Invoice annullato!');
+            this.reload();
+          },
+          err => {
+            this._snackBar.open('Errore durante l\'annullamento dell\'invoice!');
+          });
       }
     });
   }

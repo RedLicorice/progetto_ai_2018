@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ArchiveService} from '../../_services/archive.service';
-import {ArchiveMapComponent} from '../../components/archive-map/archive-map.component';
 import {ArchiveResource} from '../../_models/Archive';
+import {ArchiveDisplayMapComponent} from '../archive-display-map/archive-display-map.component';
 
 @Component({
   selector: 'app-archive-detail',
@@ -10,7 +10,7 @@ import {ArchiveResource} from '../../_models/Archive';
   styleUrls: ['./archive-detail.component.css']
 })
 export class ArchiveDetailComponent implements OnInit {
-  @ViewChild(ArchiveMapComponent) mapComponent: ArchiveMapComponent;
+  @ViewChild(ArchiveDisplayMapComponent) mapComponent: ArchiveDisplayMapComponent;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public archiveId: string,
@@ -23,7 +23,7 @@ export class ArchiveDetailComponent implements OnInit {
     const archive = this.archiveService.downloadArchive(this.archiveId);
     archive.subscribe(a => {
       console.log('Retrieved archive', a);
-      this.mapComponent.setArchive(a);
+      // this.mapComponent.setArchive(a);
       this.archive = a;
     });
   }

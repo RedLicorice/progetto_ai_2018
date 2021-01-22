@@ -1,0 +1,23 @@
+<div class="d-flex justify-content-around">
+  <mat-form-field class="align-self-center">
+    <input matInput
+           type="datetime-local"
+           placeholder="Data Inizio"
+           [(ngModel)]="_dateBegin"
+           min="2018-01-01T00:00"
+           [max]="_dateEndMax"
+           (change)="onDateBeginChange($event)"
+    >
+  </mat-form-field>
+  <mat-form-field class="align-self-center">
+    <input matInput
+           type="datetime-local"
+           placeholder="Data Fine"
+           [(ngModel)]="_dateEnd"
+           [min]="_dateBegin"
+           [max]="_dateEndMax"
+           (change)="onDateEndChange($event)"
+    >
+  </mat-form-field>&emsp;
+  <button mat-flat-button color="warn" (click)="clear()"><mat-icon>clear</mat-icon> Reimposta</button>
+</div>
