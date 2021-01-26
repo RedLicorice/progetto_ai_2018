@@ -1,0 +1,71 @@
+<div>
+  <div class="row">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon aria-label="Torna indietro">arrow_back</mat-icon>
+    </button>
+    <div class="col-md-8 offset-md-2">
+      <mat-card>
+        <mat-card-title>Creazione Archivio</mat-card-title>
+        <mat-card-content>
+          <mat-form-field class="align-self-center">
+            <input matInput
+                   type="datetime-local"
+                   placeholder="Data Inizio Spostamenti"
+                   [(ngModel)]="dateStart"
+                   [max]="dateMax"
+                   (change)="onDateChanged($event)"
+            >
+          </mat-form-field>
+          <mat-form-field class="align-self-center">
+            <input matInput
+                   type="number"
+                   placeholder="Velocità Media (km/h)"
+                   [(ngModel)]="speedAvg"
+            >
+          </mat-form-field>&emsp;
+
+          <div id="mapContainer" class="d-block w-100 mt-2">
+            <div style="min-height:560px;" leaflet
+                 [leafletOptions]="mapOptions"
+                 (leafletMapReady)="onMapReady($event)"
+            >
+              <div *ngIf="!polylineCreated"
+                   leafletDraw
+                   [leafletDrawOptions]="mapDrawOptions"
+                   (leafletDrawCreated)="onDrawCreated($event)"
+                   (leafletDrawDeleted)="onDrawDeleted($event)"
+              >
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-2" *ngIf="polylineCreated">
+            <table mat-table [dataSource]="dataSource" matSort >
+              <ng-container matColumnDef="timestamp">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Timestamp </th>
+                <td mat-cell *matCellDef="let measure"> {{timestampToString(measure.timestamp)}} </td>
+              </ng-container>
+              <ng-container matColumnDef="latitude" mat-sort-header>
+                <th mat-header-cell *matHeaderCellDef> Latitudine </th>
+                <td mat-cell *matCellDef="let measure"> {{measure.latitude}} </td>
+              </ng-container>
+              <ng-container matColumnDef="longitude" mat-sort-header>
+                <th mat-header-cell *matHeaderCellDef> Longitudine </th>
+                <td mat-cell *matCellDef="let measure"> {{measure.longitude}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <div class="d-flex justify-content-around">
+            <button mat-flat-button color="warn" (click)="clear()"><mat-icon>restore</mat-icon> Reimposta</button>
+            <button mat-flat-button color="primary" (click)="confirm()" [disabled]="!polylineCreated"><mat-icon>add_circle</mat-icon> Crea Archivio</button>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

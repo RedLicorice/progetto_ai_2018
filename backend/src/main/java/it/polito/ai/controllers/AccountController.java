@@ -1,5 +1,6 @@
 package it.polito.ai.controllers;
 
+import it.polito.ai.exceptions.InvalidDataException;
 import it.polito.ai.models.Account;
 import it.polito.ai.models.RestErrorResponse;
 import it.polito.ai.models.RestGenericResponse;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.AccountException;
+import javax.security.auth.login.AccountNotFoundException;
 
 @RestController
 public class AccountController {
@@ -25,6 +27,36 @@ public class AccountController {
     public Account me() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return accountService.findAccountByUsername(username);
+    }
+
+    @PostMapping(path = "/topup", produces = "application/json")
+    public ResponseEntity<?> topup(@RequestBody Double amount) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            Account acc = accountService.topupTokens(username, amount);
+            return new ResponseEntity<Object>(acc, HttpStatus.OK);
+        }
+        catch(AccountException e){
+            return new ResponseEntity<Object>(new RestErrorResponse("Account not found"), HttpStatus.NOT_FOUND);
+        }
+        catch(InvalidDataException e){
+            return new ResponseEntity<Object>(new RestErrorResponse("Amount not valid"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(path = "/change-password", produces = "application/json")
+    public ResponseEntity<?> changePassword(@RequestBody String password) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if( password.isEmpty() ){
+            return new ResponseEntity<Object>(new RestErrorResponse("Invalid password"), HttpStatus.BAD_REQUEST);
+        }
+        try {
+            Account acc = accountService.setPassword(username, password);
+            return new ResponseEntity<Object>(acc, HttpStatus.OK);
+        }
+        catch(AccountException e){
+            return new ResponseEntity<Object>(new RestErrorResponse("Account not found"), HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping(path = "/register", produces = "application/json")

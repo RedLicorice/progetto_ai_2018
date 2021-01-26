@@ -8,6 +8,7 @@ import {RegisterComponent} from './register/register.component';
 import {ShopComponent} from './shop/shop.component';
 import {InvoicesComponent} from './invoices/invoices.component';
 import {ArchivesComponent} from './archives/archives.component';
+import {ArchiveEditorComponent} from './archive-editor/archive-editor.component';
 
 const routes: Routes = [
   {
@@ -38,8 +39,18 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'invoices/:id',
+    component: InvoicesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'archives',
     component: ArchivesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'editor',
+    component: ArchiveEditorComponent,
     canActivate: [AuthGuard]
   }
 ];

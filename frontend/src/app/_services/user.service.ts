@@ -9,13 +9,14 @@ import {Observable} from 'rxjs';
 @Injectable()
 export class UserService {
   constructor(private http: HttpClient) {}
-  getAll() {
-    return this.http.get<User[]>(environment.api_url + '/users');
-  }
+
   me() {
-    return this.http.get<User>(environment.api_url + '/me');
+    return this.http.get<User>(environment.user_url);
   }
-  positions() {
-    return this.http.get<Position[]>(environment.api_url + '/positions');
+  topup(amount: number) {
+    return this.http.post<User>(environment.user_topup_url, amount);
+  }
+  changePassword(password: string) {
+    return this.http.post<User>(environment.user_changepw_url, password);
   }
 }

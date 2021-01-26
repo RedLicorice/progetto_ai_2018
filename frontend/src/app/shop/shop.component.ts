@@ -9,33 +9,33 @@ import * as moment from 'moment';
 import {PublicArchiveResource} from '../_models/Archive';
 import {ArchiveSearchMapComponent, ArchiveSearchResult} from './archive-search-map/archive-search-map.component';
 import {TimeIntervalFilterComponent} from './time-interval-filter/time-interval-filter.component';
-import {MatSnackBar} from "@angular/material/snack-bar";
-
-// ToDo: Add datetimepickers for filter selection
-// https://www.npmjs.com/package/@angular-material-components/datetime-picker
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.css']
 })
-export class ShopComponent implements OnInit, AfterViewInit {
+export class ShopComponent implements OnInit {
   @ViewChild(ArchiveSearchMapComponent) mapComponent: ArchiveSearchMapComponent;
   @ViewChild(ArchiveTimeChartComponent) timeChartComponent: ArchiveTimeChartComponent;
   @ViewChild(TimeIntervalFilterComponent) timeIntervalFilterComponent: TimeIntervalFilterComponent;
 
   constructor(
     private location: Location,
+    private router: Router,
     private archiveService: ArchiveService,
     private cdr: ChangeDetectorRef,
     private _snackBar: MatSnackBar
   ) { }
 
-  shownUsers: string[] = [];
-  shownArchives: PublicArchiveResource[] = [];
-  selectedArchives: PublicArchiveResource[] = [];
-  selectedUsers: string[] = [];
-  resultingArchives: PublicArchiveResource[];
+  shownArchives: PublicArchiveResource[] = []; // Archives shown on the map
+  resultingArchives: PublicArchiveResource[]; // Archives containing at least one position within the polygon
+  selectedArchives: PublicArchiveResource[] = []; // Archives selected for purchase
+  shownUsers: string[] = []; // Users owning the archives shown on the map
+  resultingUsers: string[] = []; // Users owning the archives containing at least one position within the polygon
+  selectedUsers: string[] = []; // Selected users among the ones owning the archives containing at least one position within the polygon
   polygonCreated = false;
   resultingCount = 0;
   dateBegin: number;
@@ -44,11 +44,6 @@ export class ShopComponent implements OnInit, AfterViewInit {
   bottomRight: Position;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
-    this.dateBegin = this.timeIntervalFilterComponent.dateBegin;
-    this.dateEnd = this.timeIntervalFilterComponent.dateEnd;
   }
 
   searchArea() {
@@ -90,6 +85,7 @@ export class ShopComponent implements OnInit, AfterViewInit {
   }
 
   onTimeFilterChanged(times: number[]): void {
+    console.log('time filter changed', times);
     this.dateBegin = times[0];
     this.dateEnd = times[1];
     this.searchArea();
@@ -101,10 +97,12 @@ export class ShopComponent implements OnInit, AfterViewInit {
       this.resultingArchives = searchResults.selected_archives;
       this.resultingCount = searchResults.position_count;
       this.polygonCreated = true;
+      this.resultingUsers = [... new Set(searchResults.selected_archives.map(a => a.username))];
       this.selectedUsers = [... new Set(searchResults.selected_archives.map(a => a.username))];
       this.selectedArchives = this.resultingArchives.filter(a => this.selectedUsers.includes(a.username));
     } else {
       this.selectedUsers = [];
+      this.resultingUsers = [];
       this.selectedArchives = [];
       this.resultingArchives = [];
       this.resultingCount = 0;
@@ -148,14 +146,19 @@ export class ShopComponent implements OnInit, AfterViewInit {
 
   onConfirmPurchase() {
     console.log('confirm purchase', this.selectedArchives);
+    this.cdr.detectChanges();
     const purchase = this.archiveService.buyArchives(this.selectedArchives.map(a => a.id));
     purchase.subscribe( res => {
         console.log('purchase success', res);
-        this._snackBar.open('Ordine effettuato!');
+        this._snackBar.open('Ordine effettuato!', 'Chiudi', {duration: 800})
+          .afterDismissed()
+          .subscribe(
+            x => this.router.navigateByUrl('/invoices/' + res.id)
+          );
       },
       err => {
         console.log('purchase error', err);
-        this._snackBar.open('Errore durante l\'ordine!');
+        this._snackBar.open('Errore durante l\'ordine!', 'Chiudi', {duration: 800});
       });
   }
 

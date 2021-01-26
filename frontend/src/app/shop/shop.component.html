@@ -12,16 +12,16 @@
           Puoi escludere dall'acquisto gli archivi di uno specifico utente togliendo il segno di spunta dalla lista.
         </mat-card-subtitle>
         <mat-card-content>
-          <app-time-interval-filter (changed)="onTimeFilterChanged" ></app-time-interval-filter>
+          <app-time-interval-filter (changed)="onTimeFilterChanged($event)" ></app-time-interval-filter>
 
           <div class="row w-100 no-gutters mb-2">
             <div class="col-8">
               <app-archive-time-chart></app-archive-time-chart>
             </div>
-            <div class="col">
-              <mat-list>
+            <div class="col user-list">
+              <mat-list dense>
                 <mat-list-item *ngFor="let user of shownUsers">
-                  {{user}}
+                  <mat-icon>face</mat-icon> {{user}}
                 </mat-list-item>
               </mat-list>
             </div>
@@ -42,7 +42,7 @@
                 <h4>Utenti</h4>
                 <mat-selection-list #users (selectionChange)="onSelectUser($event)">
                   <mat-list-option
-                    *ngFor="let user of shownUsers"
+                    *ngFor="let user of resultingUsers"
                     selected
                     [value]="user"
                   >
@@ -50,16 +50,13 @@
                   </mat-list-option>
                 </mat-selection-list>
                 <p>
-                  Utenti selezionati: {{selectedUsers.length}} / {{shownUsers.length}}
+                  Utenti selezionati: {{selectedUsers.length}} / {{resultingUsers.length}}
                 </p>
               </div>
               <div class="col">
                 <h4>Archivi</h4>
                 <p>Misurazioni all'interno del poligono: {{resultingCount}}</p>
-                <!--<app-archives-filter [archives]="resultingArchives"></app-archives-filter>
-                <button mat-flat-button color="primary" [disabled]="selectedArchives.length <= 0"><mat-icon>shopping_cart</mat-icon> Acquista</button>
-                -->
-                <mat-selection-list #archives (selectionChange)="onSelectArchive($event)">
+                <mat-selection-list #archives (selectionChange)="onSelectArchive($event)" dense>
                   <mat-list-option
                     *ngFor="let archive of resultingArchives"
                     [selected]="isUserSelected(archive.username)"

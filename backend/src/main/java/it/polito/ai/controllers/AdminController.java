@@ -76,4 +76,21 @@ public class AdminController {
             return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND );
         }
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PostMapping(path="/admin/users/topup/{userId}", produces="application/json")
+    public ResponseEntity<?> grantRole(
+            @PathVariable String userId,
+            @RequestBody Double amount
+    ) {
+        try {
+            Account acc = accountService.findAccountById(userId);
+            acc.addWallet(amount);
+            accountService.update(acc);
+            return new ResponseEntity<Object>(accountService.update(acc), HttpStatus.OK);
+        }
+        catch(AccountException | UsernameNotFoundException e){
+            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND );
+        }
+    }
 }

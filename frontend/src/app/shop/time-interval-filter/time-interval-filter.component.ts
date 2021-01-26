@@ -46,11 +46,13 @@ export class TimeIntervalFilterComponent implements OnInit {
 
   onDateBeginChange(event: any) {
     const newValue = moment('YYYY-MM-DD[T]hh:mm', event.target.value).unix();
+    console.log('Date begin changed', newValue, event);
     this.changed.emit([this.dateBegin, this.dateEnd]);
   }
 
   onDateEndChange(event: any) {
     const newValue = moment('YYYY-MM-DD[T]hh:mm', event.target.value).unix();
+    console.log('Date end changed', newValue, event);
     this.changed.emit([this.dateBegin, this.dateEnd]);
   }
 }

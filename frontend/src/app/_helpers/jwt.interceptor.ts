@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { AuthenticationService } from '../_services/authentication.service';
+import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -14,7 +15,7 @@ export class JwtInterceptor implements HttpInterceptor {
             // console.log('Appending authenticated user\'s token!');
             request = request.clone({
               setHeaders: {
-                Authorization: `Bearer ${curToken}`
+                Authorization: 'Bearer ' + curToken
               }
             });
           }

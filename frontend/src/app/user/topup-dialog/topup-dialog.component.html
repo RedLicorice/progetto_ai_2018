@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Ricarica Token</h1>
+<div mat-dialog-content>
+  <mat-form-field class="align-self-center">
+    <input matInput
+           type="number"
+           placeholder="Importo"
+           min="10"
+           max="1000"
+           [(ngModel)]="amount"
+    >
+  </mat-form-field>&emsp;
+  <p>Costo totale: {{amount * exchangeRate}} &euro;</p>
+  <p>Confermi la ricarica? Sarai reindirizzato al portale per il pagamento.</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="0">No</button>
+  <button mat-button [mat-dialog-close]="amount" cdkFocusInitial>Conferma</button>
+</div>

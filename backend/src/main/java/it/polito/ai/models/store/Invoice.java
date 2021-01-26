@@ -16,9 +16,7 @@ public class Invoice {
     private double amount;
     private List<String> items;
     private Boolean isPaid;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
+    private Long createdAt;
 
     public double getAmount() {
         return amount;
@@ -39,10 +37,10 @@ public class Invoice {
         isPaid = paid;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
     }
 

@@ -33,9 +33,9 @@ export class ArchivesComponent implements OnInit {
           console.log('Upload confirm', res);
           return this.archiveService.uploadArchive(res).subscribe(upl => {
             console.log('Upload result', upl);
-            this._snackBar.open('Upload completato!');
+            this._snackBar.open('Upload completato!', 'Chiudi', {duration: 800});
           },
-          err => this._snackBar.open('Upload fallito!'));
+          err => this._snackBar.open('Upload fallito!', 'Chiudi', {duration: 800}));
         }
       });
   }

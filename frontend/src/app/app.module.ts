@@ -57,6 +57,9 @@ import { ArchiveSearchMapComponent } from './shop/archive-search-map/archive-sea
 import { UploadedArchivesTableComponent } from './archives/uploaded-archives-table/uploaded-archives-table.component';
 import { PurchasedArchivesTableComponent } from './archives/purchased-archives-table/purchased-archives-table.component';
 import { TimeIntervalFilterComponent } from './shop/time-interval-filter/time-interval-filter.component';
+import { ArchiveEditorComponent } from './archive-editor/archive-editor.component';
+import { TopupDialogComponent } from './user/topup-dialog/topup-dialog.component';
+import { ChangePasswordDialogComponent } from './user/change-password-dialog/change-password-dialog.component';
 
 @NgModule({
   declarations: [AppComponent,
@@ -64,7 +67,7 @@ import { TimeIntervalFilterComponent } from './shop/time-interval-filter/time-in
     ArchiveTimeChartComponent, ShopComponent, InvoicesComponent, PayDialogComponent, CancelDialogComponent,
     DetailsDialogComponent, ArchivesComponent, ArchiveDetailComponent, ArchiveUploadComponent,
     ArchiveDeleteComponent, ArchiveDisplayMapComponent, ArchiveSearchMapComponent, UploadedArchivesTableComponent,
-    PurchasedArchivesTableComponent, TimeIntervalFilterComponent],
+    PurchasedArchivesTableComponent, TimeIntervalFilterComponent, ArchiveEditorComponent, TopupDialogComponent, ChangePasswordDialogComponent],
   imports: [
     // angular
     BrowserModule,

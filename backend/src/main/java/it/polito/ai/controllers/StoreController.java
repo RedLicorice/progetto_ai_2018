@@ -52,7 +52,7 @@ public class StoreController {
             return new ResponseEntity<Invoice>(invoice, HttpStatus.OK);
         }
         catch(InvoiceNotFoundException | UserNotFoundException | NotEnoughFundsException | ArchiveNotFoundException e){
-            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new RestErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         }
     }
 

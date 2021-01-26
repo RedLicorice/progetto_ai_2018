@@ -18,16 +18,4 @@ export class HomeComponent {
     return this.auth.isLogin();
   }
 
-  goFilter(): void {
-    this.router.navigate(['/filter']);
-  }
-  goLogin(): void {
-    this.router.navigate(['/login']);
-  }
-  goUser(): void {
-    this.router.navigate(['/user']);
-  }
-  goRegister(): void {
-    this.router.navigate(['/register']);
-  }
 }

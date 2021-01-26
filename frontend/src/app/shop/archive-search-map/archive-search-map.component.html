@@ -1,6 +1,13 @@
 <div id="mapContainer" class="d-block w-100">
-  <div style="min-height:560px;" leaflet [leafletOptions]="mapOptions" (leafletMapReady)="onMapReady($event)">
-    <div *ngIf="showControlLayer" leafletDraw [leafletDrawOptions]="mapDrawOptions">
+  <div style="min-height:560px;" leaflet
+       [leafletOptions]="mapOptions"
+       (leafletMapReady)="onMapReady($event)"
+       (leafletMapMoveEnd)="onMapMoveEnd($event)"
+  >
+    <div *ngIf="showControlLayer" leafletDraw
+         [leafletDrawOptions]="mapDrawOptions"
+         (leafletDrawCreated)="onDrawCreated($event)"
+    >
     </div>
   </div>
 </div>

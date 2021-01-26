@@ -13,6 +13,11 @@ export class StoreService {
   getInvoices(): Observable<Invoice[]> {
     return this.http.get<Invoice[]>(environment.store_invoices_url);
   }
+
+  getInvoice(invoiceId: string): Observable<Invoice> {
+    return this.http.get<Invoice>(environment.store_invoice_detail_url.replace('{id}', invoiceId));
+  }
+
   viewInvoice(invoiceId: string): Observable<Invoice> {
     return this.http.get<Invoice>(environment.store_invoice_detail_url);
   }

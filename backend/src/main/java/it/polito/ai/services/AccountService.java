@@ -1,5 +1,6 @@
 package it.polito.ai.services;
 
+import it.polito.ai.exceptions.InvalidDataException;
 import it.polito.ai.models.Account;
 import it.polito.ai.repositories.AccountDAO;
 import it.polito.ai.repositories.AccountRepo;
@@ -79,6 +80,31 @@ public class AccountService implements UserDetailsService {
             return accountRepo.save(account);
         } else {
             throw new AccountException("Account does not exist");
+        }
+    }
+
+    @Transactional
+    public Account setPassword(String username, String password) throws AccountException {
+        Account existingAccount = accountRepo.findByUsername(username);
+        if (existingAccount != null) {
+            existingAccount.setPassword(passwordEncoder.encode(password));
+            return accountRepo.save(existingAccount);
+        } else {
+            throw new AccountException("Account not found!");
+        }
+    }
+
+    @Transactional
+    public Account topupTokens(String username, Double amount) throws AccountException, InvalidDataException {
+        if(amount.isInfinite() || amount.isNaN() || amount < 10 || amount > 1000){
+            throw new InvalidDataException("Invalid topup amount");
+        }
+        Account existingAccount = accountRepo.findByUsername(username);
+        if (existingAccount != null) {
+            existingAccount.addWallet(amount);
+            return accountRepo.save(existingAccount);
+        } else {
+            throw new AccountException("Account not found!");
         }
     }
 

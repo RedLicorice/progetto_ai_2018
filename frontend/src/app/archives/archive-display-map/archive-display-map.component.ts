@@ -75,11 +75,9 @@ export class ArchiveDisplayMapComponent implements OnInit, OnChanges {
       marker.bindPopup(label);
     });
     archiveLayer.addTo(this.map);
-    // Pan the map to the path's centroid and set an adequate zoom level
-    // We could use flyTo to do so in a single operation, but that also
-    // includes an animation which gets cringey
-    this.map.panTo(polyline.getBounds().getCenter());
-    this.map.setZoom(16);
+    // Fit the map viewport to the polyline bounds
+    // Not very accurate but does the job
+    this.map.fitBounds(polyline.getBounds());
     return archiveLayer;
   }
 

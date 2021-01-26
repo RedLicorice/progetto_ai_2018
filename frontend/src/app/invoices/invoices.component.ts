@@ -11,6 +11,7 @@ import { CancelDialogComponent } from './cancel-dialog/cancel-dialog.component';
 import { DetailsDialogComponent } from './details-dialog/details-dialog.component';
 import * as moment from 'moment';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-invoices',
@@ -28,13 +29,24 @@ export class InvoicesComponent implements OnInit, AfterViewInit {
     private location: Location,
     private storeService: StoreService,
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private activatedRoute: ActivatedRoute
   ) { }
 
 
 
   ngOnInit(): void {
     this.reload();
+    this.activatedRoute.paramMap.subscribe(params => {
+      const currentId = params.get('id');
+      if ( currentId ) {
+        console.log('Invoice parameters', params, currentId);
+        this.storeService.getInvoice(currentId).subscribe(
+          invoice => this.detailsInvoice(invoice),
+          err => console.log('Error getting invoice', err)
+        );
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -58,8 +70,13 @@ export class InvoicesComponent implements OnInit, AfterViewInit {
   }
 
   detailsInvoice(invoice: Invoice): void {
-    this.dialog.open(DetailsDialogComponent, {
+    const dialogRef = this.dialog.open(DetailsDialogComponent, {
       data: invoice
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.payInvoice(invoice);
+      }
     });
   }
 
@@ -67,15 +84,16 @@ export class InvoicesComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(PayDialogComponent, {
       data: invoice
     });
-    dialogRef.afterClosed().subscribe( res => {
-      if (res) {
-        const resp = this.storeService.payInvoice(res);
-        resp.subscribe(req => {
-          this._snackBar.open('Invoice pagato!');
+    dialogRef.afterClosed().subscribe( conf => {
+      if (conf) {
+        const resp = this.storeService.payInvoice(conf);
+        resp.subscribe(res => {
+          console.log('Invoice paid', res);
+          this._snackBar.open('Invoice pagato!', 'Chiudi', {duration: 800});
           this.reload();
         },
         err => {
-          this._snackBar.open('Errore durante il pagamento dell\'invoice: controlla di avere abbastanza Token!');
+          this._snackBar.open('Errore durante il pagamento dell\'invoice: controlla di avere abbastanza Token!', 'Chiudi', {duration: 800});
         });
       }
     });
@@ -89,11 +107,11 @@ export class InvoicesComponent implements OnInit, AfterViewInit {
       if (res) {
         const resp = this.storeService.cancelInvoice(invoice.id);
         resp.subscribe(req => {
-            this._snackBar.open('Invoice annullato!');
+            this._snackBar.open('Invoice annullato!', 'Chiudi', {duration: 800});
             this.reload();
           },
           err => {
-            this._snackBar.open('Errore durante l\'annullamento dell\'invoice!');
+            this._snackBar.open('Errore durante l\'annullamento dell\'invoice!', 'Chiudi', {duration: 800});
           });
       }
     });

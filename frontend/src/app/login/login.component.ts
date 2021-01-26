@@ -40,12 +40,6 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  openSnackBar(message: string) {
-    this.snackBar.open(message, 'Chiudi', {
-      duration: 2000,
-    });
-  }
-
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
@@ -53,12 +47,13 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.loginForm.invalid) {
-      this.openSnackBar('Form is invalid.');
+      this.snackBar.open('I dati inseriti non sono validi.', 'Chiudi', {
+        duration: 2000,
+      });
       return;
     }
     this.loading = true;
     this.authenticationService.login(this.f.username.value, this.f.password.value)
-      .pipe(first())
       .subscribe(
         data => {
           this.router.navigate([this.returnUrl]);
@@ -67,7 +62,9 @@ export class LoginComponent implements OnInit {
           this.error = error;
           this.loading = false;
           console.log('Login Error', error);
-          this.openSnackBar('Login fallito! Controlla le credenziali e riprova!');
+          this.snackBar.open('Login fallito! Controlla le credenziali e riprova!', 'Chiudi', {
+            duration: 2000,
+          });
         });
   }
 

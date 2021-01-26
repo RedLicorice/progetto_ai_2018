@@ -3,6 +3,6 @@ export class Invoice {
   username: string;
   amount: number;
   items: string[];
-  isPaid: boolean;
+  paid: boolean;
   createdAt: number;
 }

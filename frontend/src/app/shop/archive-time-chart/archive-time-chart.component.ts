@@ -12,7 +12,7 @@ export class ArchiveTimeChartComponent implements OnInit {
     'title': '',
     'axes': {
       'bottom': {
-        'title': 'Measures',
+        // 'title': 'Measures',
         'scaleType': 'time',
         'mapsTo': 'date',
       },
@@ -21,7 +21,7 @@ export class ArchiveTimeChartComponent implements OnInit {
         'mapsTo': 'value'
       }
     },
-    'height': '100px',
+    // 'height': '100px',
     'legend': {
       'enabled': false,
     }

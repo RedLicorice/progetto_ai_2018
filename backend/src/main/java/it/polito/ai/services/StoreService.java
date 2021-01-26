@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class StoreService {
         invoice.setItems(itemId);
         invoice.setPaid(false);
         invoice.setAmount(items.stream().map(Archive::getPrice).mapToDouble(Double::valueOf).sum());
-        invoice.setCreatedAt(LocalDateTime.now());
+        invoice.setCreatedAt((new Date()).getTime() / 1000);
         invoiceRepo.save(invoice);
         return invoice;
     }
@@ -64,7 +65,7 @@ public class StoreService {
 
         List<Archive> items = archiveRepo.findByIdIn(invoice.getItems());
         if(items.size() != invoice.getItems().size())
-            throw new ArchiveNotFoundException("Some of the itemms from the invoice can not be found or are invlaid.");
+            throw new ArchiveNotFoundException("Some of the items from the invoice can not be found or are invlaid.");
         for(Archive item: items){
             Account seller = accountRepo.findByUsername(item.getUsername());
             if(seller == null)

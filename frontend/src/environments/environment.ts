@@ -4,10 +4,14 @@
 
 export const environment = {
   production: false,
+  client_credentials: 'trusted-app:secret',
   api_url: 'http://localhost:8080/',
   trusted_url: 'http://trusted-app:secret@localhost:8080/oauth/token',
   register_url: 'http://register-app:secret@localhost:8080/oauth/token',
   refresh_url: 'http://register-app:secret@localhost:8080/oauth/token',
+  user_url: 'http://localhost:8080/me',
+  user_topup_url: 'http://localhost:8080/topup',
+  user_changepw_url: 'http://localhost:8080/change-password',
   archives_url: 'http://localhost:8080/archives',
   archives_uploaded_url: 'http://localhost:8080/archives/upload', // GET
   archives_upload_url: 'http://localhost:8080/archives/upload', // POST
@@ -19,7 +23,7 @@ export const environment = {
   store_invoices_url: 'http://localhost:8080/store/invoices',
   store_invoice_detail_url: 'http://localhost:8080/store/invoices/{id}',
   store_invoice_pay_url: 'http://localhost:8080/store/invoices/{id}',
-  store_invoice_cancel_url: 'http://localhost:8080/store/invoices/{id}'
+  store_invoice_cancel_url: 'http://localhost:8080/store/invoices/{id}',
 };
 
 /*

@@ -69,45 +69,40 @@ export class ArchiveSearchMapComponent implements OnInit {
     // this.positionChanged.emit(this.map.getBounds());
   }
 
-  // This method is called by Leaflet to set-up map events and callbacks.
+  // On map ready, save map instance and add draw layer
   onMapReady(map: L.Map): void {
     this.map = map;
     this.map.addLayer(this.polygonLayerGroup);
-
-    // save the just drawn polygon coordinates
-    // N.B: can't seem to figure out how the library exposes
-    // the layers/coords stuff, so I need to access the
-    // leaflet native ones, which are not exposed in the library interfaces
-    this.map.on(L.Draw.Event.CREATED, event => {
-      this.polygonCreated = true;
-      // @ts-ignore
-      const layer: L.Layer = event.layer;
-      // @ts-ignore
-      this.polygonCoordinates = layer.getLatLngs()[0]; // First element is the polygon (it's the first object in the group)
-      // Add polygon layer to the map and disable editing
-      this.ngZone.run(() => {
-        this.polygonLayerGroup.addLayer(layer);
-        this.showControlLayer = false;
-      });
-      // Count Markers in polygon
-      const polygon = L.polygon(this.polygonCoordinates);
-      const selectedData = this.getSelectedArchives(polygon);
-
-      console.log('Geo selection result', selectedData);
-      // Emit AreaSelected event on polygon drawn so parent can handle it
-      this.areaSelected.emit(selectedData);
-    });
-    // Emit a PositionChanged event when map is panned (moveend event, from doc) so parent can update shown archives
-    this.map.on('moveend', event => {
-      // event.target is the map which has been moved,
-      // getBounds returns the _southWest and _northEast geopoints pair
-      // These will be used to request archives crossing the current viewport to the server
-      // console.log('map move end', event.target.getBounds());
-      console.log('map move end');
-      this.positionChanged.emit(event.target.getBounds());
-    });
     // Set current location as map center (not very accurate on PC but changes things on mobile)
     this.setCurrentPosition();
+  }
+
+  onDrawCreated(event: any) {
+    this.polygonCreated = true;
+    // @ts-ignore
+    const layer: L.Layer = event.layer;
+    // @ts-ignore
+    this.polygonCoordinates = layer.getLatLngs()[0]; // First element is the polygon (it's the first object in the group)
+    // Add polygon layer to the map and disable editing
+    this.ngZone.run(() => {
+      this.polygonLayerGroup.addLayer(layer);
+      this.showControlLayer = false;
+    });
+    // Count Markers in polygon
+    const polygon = L.polygon(this.polygonCoordinates);
+    const selectedData = this.getSelectedArchives(polygon);
+
+    console.log('Geo selection result', selectedData);
+    // Emit AreaSelected event on polygon drawn so parent can handle it
+    this.areaSelected.emit(selectedData);
+  }
+
+  onMapMoveEnd(event: any) {
+    // event.target is the map which has been moved,
+    // getBounds returns the _southWest and _northEast geopoints pair
+    // These will be used to request archives crossing the current viewport to the server
+    // console.log('map move end', event.target.getBounds());
+    this.positionChanged.emit(event.target.getBounds());
   }
 
   clearPolygon(): void {
@@ -156,7 +151,7 @@ export class ArchiveSearchMapComponent implements OnInit {
   }
 
   // Display markers for an approximated archive
-  displayArchive(archive: PublicArchiveResource, showPopup: boolean = true): void {
+  displayArchive(archive: PublicArchiveResource, showPopup: boolean = true): L.LayerGroup {
     // If a layer already exists for this archive, clear it and remove it from the map
     this.removeDisplayedArchive(archive.id);
     // Instantiate a LayerGroup for this archive
@@ -181,6 +176,7 @@ export class ArchiveSearchMapComponent implements OnInit {
     this.archiveLayers[archive.id] = group;
     // Add the group to the map
     group.addTo(this.map);
+    return group;
   }
 
   // Clear all displayed archives
@@ -191,6 +187,7 @@ export class ArchiveSearchMapComponent implements OnInit {
 
   // Refresh displayed archives when input is updated
   setArchives(archives: PublicArchiveResource[]): void {
+    this.clearArchives();
     archives.forEach(a => this.displayArchive(a));
     this.displayedArchives = archives;
   }

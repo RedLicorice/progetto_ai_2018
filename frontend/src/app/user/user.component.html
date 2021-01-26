@@ -6,17 +6,22 @@
 
     <div class="col-md-8 offset-md-2 account-wrapper">
       <mat-card>
+        <mat-card-title>Profilo Utente</mat-card-title>
         <mat-card-content>
-          <h2>
-            Account
-          </h2>
-
-        <mat-list>
-            <mat-list-item>ID Account: {{user.id}}</mat-list-item>
-            <mat-list-item>Nome Utente: {{user.username}}</mat-list-item>
-            <mat-list-item>Wallet: {{user.wallet}}</mat-list-item>
-        </mat-list>
+          <mat-list>
+            <mat-list-item><strong>ID Account:</strong> {{user.id}}</mat-list-item>
+              <mat-list-item><strong>Nome Utente:</strong> {{user.username}}</mat-list-item>
+            <mat-list-item>
+              <strong>Token Posseduti:</strong> {{user.wallet}}
+            </mat-list-item>
+          </mat-list>
         </mat-card-content>
+        <mat-card-actions>
+          <div class="d-flex justify-content-around">
+            <button mat-flat-button color="primary" (click)="onTopup()"><mat-icon>toll</mat-icon> Ricarica Token</button>
+            <button mat-flat-button color="warn" (click)="onChangePassword()"><mat-icon>vpn_key</mat-icon> Modifica Password</button>
+          </div>
+        </mat-card-actions>
       </mat-card>
     </div>
   </div>

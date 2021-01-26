@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.registerForm.invalid) {
-      this.openSnackBar('Form is invalid.');
+      this.openSnackBar('I dati inseriti non sono validi.');
       return;
     }
     this.loading = true;

@@ -66,9 +66,10 @@ export class UploadedArchivesTableComponent implements OnInit, AfterViewInit {
         console.log('Deleting archive', archiveId);
         this.archiveService.deleteArchive(archiveId).subscribe(
           del => {
-            this._snackBar.open('Archivio eliminato!');
+            this._snackBar.open('Archivio eliminato!', 'Chiudi', {duration: 800});
+            this.reloadData();
           },
-          err => this._snackBar.open('Eliminazione fallita!')
+          err => this._snackBar.open('Eliminazione fallita!', 'Chiudi', {duration: 800})
         );
       }
     });
