@@ -72,14 +72,14 @@ export class RegisterComponent implements OnInit {
               error => {
                 this.error = error;
                 this.loading = false;
-                this.openSnackBar(error.toString());
+                this.openSnackBar(error.message);
               }
             );
         },
         error => {
           this.error = error;
           this.loading = false;
-          this.openSnackBar(error.toString());
+          this.openSnackBar(error.message);
         }
       );
   }
