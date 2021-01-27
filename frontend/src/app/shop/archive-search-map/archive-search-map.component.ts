@@ -62,7 +62,8 @@ export class ArchiveSearchMapComponent implements OnInit {
   setCurrentPosition(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition( position => {
-        this.map.flyTo([position.coords.latitude, position.coords.longitude], 6);
+        // this.map.flyTo([position.coords.latitude, position.coords.longitude], 6);
+        this.map.setView([position.coords.latitude, position.coords.longitude], 6);
       });
     }
     // flyTo already triggers moveend event so there's no need to do this
@@ -118,12 +119,29 @@ export class ArchiveSearchMapComponent implements OnInit {
 
   // Generate a color hashcode using a string as seed
   // We use it to assign a different color for each user's markers
-  strToColor(str): string {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
+  // Here we use FNV32a hash because it has fewer collisions, leading to different
+  //  colors. If we used the base hash, users with similar name would get the same color
+  hashFnv32a(str, seed): number {
+    /*jshint bitwise:false */
+    let i, l,
+      hval = (seed === undefined) ? 0x811c9dc5 : seed;
+
+    for (i = 0, l = str.length; i < l; i++) {
       // tslint:disable-next-line:no-bitwise
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      hval ^= str.charCodeAt(i);
+      // tslint:disable-next-line:no-bitwise
+      hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
     }
+    // tslint:disable-next-line:no-bitwise
+    return hval >>> 0;
+  }
+  strToColor(str): string {
+    // let hash = 0;
+    // for (let i = 0; i < str.length; i++) {
+    //   // tslint:disable-next-line:no-bitwise
+    //   hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    // }
+    const hash = this.hashFnv32a(str, false);
     let colour = '#';
     for (let i = 0; i < 3; i++) {
       // tslint:disable-next-line:no-bitwise
@@ -157,7 +175,7 @@ export class ArchiveSearchMapComponent implements OnInit {
     // Instantiate a LayerGroup for this archive
     const group = new L.LayerGroup();
     // Get color for this user
-    const color = this.strToColor(archive.id + archive.username);
+    const color = this.strToColor(/*archive.id +*/ archive.username);
     // Create a marker for each (approximate) position in the archive and add it to the LayerGroup
     archive.positions.forEach( p => {
       // Add a little bit of randomness to displayed coordinates (avoids full overlaps)
@@ -187,8 +205,9 @@ export class ArchiveSearchMapComponent implements OnInit {
 
   // Refresh displayed archives when input is updated
   setArchives(archives: PublicArchiveResource[]): void {
-    this.clearArchives();
+    this.clearArchives(); // Clear all archives (else archives not included in the array will still be shown)
     archives.forEach(a => this.displayArchive(a));
+
     this.displayedArchives = archives;
   }
 
