@@ -63,6 +63,7 @@ export class AuthenticationService {
                   refresh_token: res.refresh_token,
                   expiry: moment().add(res.expires_in, 'seconds') // When will this token be not valid anymore?
                 }));
+                this.setExpiryTimeout(); // Set a timer for logging out before token expires
             } else {
               console.log('Error logging in');
               console.log(res);
@@ -124,6 +125,20 @@ export class AuthenticationService {
         }
       }
     );
+  }
+
+  setExpiryTimeout(): void {
+    const expiry = this.getLoginExpiry();
+    const ms_until_expiry = moment().diff(expiry);
+    console.log('Login token expires in (ms) ', -1 * ms_until_expiry);
+    if (ms_until_expiry < 0 ) {
+      setTimeout(() => {
+        console.log('Login token expired');
+        this.logout();
+      }, -1 * ms_until_expiry);
+    } else {
+      this.logout();
+    }
   }
 
   /*

@@ -27,5 +27,6 @@ export class AppComponent implements OnInit {
     //   }, (timeout - 60) * 1000);
     // }
     this.auth.checkLogin();
+    this.auth.setExpiryTimeout();
   }
 }
