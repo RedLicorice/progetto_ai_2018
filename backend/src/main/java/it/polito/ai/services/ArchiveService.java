@@ -48,10 +48,12 @@ public class ArchiveService {
             if (previous != null) {
                 if(previous.getTimestamp() > current.getTimestamp())
                     throw new InvalidPositionException("Position " + (i + 1) + " is not valid (timestamp)");
-                double speed = current.getSpeed(previous);
-                if (speed > SPEED_THRESHOLD) {
-                    throw new InvalidPositionException("Position " + (i + 1) + " is not valid (speed "+ (speed) +")");
-                }
+                // Since archives contain weekly measurements, it could happen that user goes by car or train,
+                // making a speed constraint unuseful
+//                double speed = current.getSpeed(previous);
+//                if (speed > SPEED_THRESHOLD) {
+//                    throw new InvalidPositionException("Position " + (i + 1) + " is not valid (speed "+ (speed) +")");
+//                }
             }
             previous = current;
             //previous_timestamp = current.getTimestamp();
