@@ -17,7 +17,7 @@ import {Router} from '@angular/router';
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.css']
 })
-export class ShopComponent implements OnInit {
+export class ShopComponent implements OnInit, AfterViewInit {
   @ViewChild(ArchiveSearchMapComponent) mapComponent: ArchiveSearchMapComponent;
   @ViewChild(ArchiveTimeChartComponent) timeChartComponent: ArchiveTimeChartComponent;
   @ViewChild(TimeIntervalFilterComponent) timeIntervalFilterComponent: TimeIntervalFilterComponent;
@@ -44,6 +44,11 @@ export class ShopComponent implements OnInit {
   bottomRight: Position;
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit() {
+    this.dateBegin = this.timeIntervalFilterComponent.dateBegin;
+    this.dateEnd = this.timeIntervalFilterComponent.dateEnd;
   }
 
   searchArea() {
@@ -88,6 +93,7 @@ export class ShopComponent implements OnInit {
     console.log('time filter changed', times);
     this.dateBegin = times[0];
     this.dateEnd = times[1];
+    this.clearPolygon(); // Clear geospatial filter if it is set (since results have changed)
     this.searchArea();
   }
 

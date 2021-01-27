@@ -8,8 +8,7 @@
       <mat-card>
         <mat-card-title>Acquisto Archivi</mat-card-title>
         <mat-card-subtitle>
-          Seleziona l'intervallo temporale di tuo interesse, quindi traccia un poligono sulla mappa per selezionare gli archivi da acquistare.<br>
-          Puoi escludere dall'acquisto gli archivi di uno specifico utente togliendo il segno di spunta dalla lista.
+          Seleziona l'intervallo temporale di tuo interesse, quindi traccia un poligono sulla mappa per selezionare gli archivi da acquistare.
         </mat-card-subtitle>
         <mat-card-content>
           <app-time-interval-filter (changed)="onTimeFilterChanged($event)" ></app-time-interval-filter>
@@ -36,7 +35,12 @@
             <button mat-flat-button color="warn" (click)="clearPolygon()"><mat-icon>clear</mat-icon> Reimposta filtro Geospaziale</button>&emsp;
           </div>
           <div *ngIf="resultingCount && resultingArchives">
-            <div class="row w-100 no-gutters mt-2"><div class="col"><h3>Risultati Ricerca</h3></div></div>
+            <div class="row w-100 no-gutters mt-2">
+              <div class="col">
+                <h3>Risultati Ricerca</h3>
+                <p>Puoi escludere dall'acquisto gli archivi di uno specifico utente togliendo il segno di spunta dalla lista.</p>
+              </div>
+            </div>
             <div class="row w-100 no-gutters mt-2">
               <div class="col">
                 <h4>Utenti</h4>
