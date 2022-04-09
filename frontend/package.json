@@ -34,7 +34,7 @@
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
     "leaflet.heat": "^0.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "point-in-polygon": "^1.0.1",
     "rxjs": "^6.5.3",
     "zone.js": "^0.10.3"
